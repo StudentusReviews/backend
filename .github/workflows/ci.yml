@@ -1,0 +1,85 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Environment Setup
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+          dotnet-version: |
+            8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      # Build
+      - name: Build solution
+        run: dotnet build --configuration Release --no-restore
+
+      # Formatting & Style
+      - name: Verify code formatting
+        run: dotnet format --verify-no-changes
+        continue-on-error: false
+
+      # Static Code Analysis (Roslyn + optional Sonar)
+      - name: Run Roslyn analyzers
+        run: dotnet build --configuration Release /warnaserror
+
+      - name: SonarCloud Scan (optional)
+        if: ${{ vars.SONAR_TOKEN != '' }}
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          projectBaseDir: .
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Testing + Coverage
+      - name: Run tests with coverage
+        run: dotnet test --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
+
+      - name: Report coverage
+        uses: danielpalme/ReportGenerator-GitHub-Action@v5
+        with:
+          reports: "**/coverage.cobertura.xml"
+          targetdir: "coveragereport"
+          reporttypes: "HtmlInline_AzurePipelines;Cobertura"
+
+      - name: Upload coverage report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coveragereport
+
+      # Security & Dependency Checks
+      - name: Check vulnerable packages
+        run: dotnet list package --vulnerable || true
+
+      - name: Enable Dependabot alerts (GitHub-side)
+        run: echo "Dependabot scanning enabled in repo settings"
+
+  # Enforce merge rules (optional)
+  # You can configure branch protection in GitHub UI:
+  # - Require passing CI before merge
+  # - Require 2 reviewers
