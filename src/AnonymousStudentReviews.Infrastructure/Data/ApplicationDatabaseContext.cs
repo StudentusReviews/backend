@@ -15,7 +15,7 @@ public class ApplicationDbContext : DbContext
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
     }
-    
+
     public DbSet<Dummy> Dummies { get; set; }
     public DbSet<University> Universities { get; set; }
 

@@ -14,7 +14,7 @@ public static class MiddlewareConfig
         }
 
         app.UseExceptionHandler();
-        
+
         app.UseAuthorization();
 
         app.MapControllers();
