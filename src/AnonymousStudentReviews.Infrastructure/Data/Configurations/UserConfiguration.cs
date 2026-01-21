@@ -20,6 +20,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
+            .HasMany(e => e.Roles)
+            .WithMany(e => e.Users);
+
+        builder
             .Property(e => e.EmailConfirmed)
             .HasDefaultValue(false)
             .IsRequired();

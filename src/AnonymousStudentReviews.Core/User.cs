@@ -9,4 +9,5 @@ public class User
     public DateTime CreatedAt { get; set; }
 
     public University? University { get; set; }
+    public ICollection<Role> Roles { get; set; }
 }
