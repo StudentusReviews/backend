@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AnonymousStudentReviews.Infrastructure.Data.Configurations;
 
-public class UniversityConfiguration
+public class UniversityConfiguration : IEntityTypeConfiguration<University>
 {
     public void Configure(EntityTypeBuilder<University> builder)
     {
