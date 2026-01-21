@@ -3,6 +3,7 @@ using System;
 using AnonymousStudentReviews.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260121181004_AddAllowedEmailDomainEntity")]
+    partial class AddAllowedEmailDomainEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,24 +44,6 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
                     b.HasIndex("UniversityId");
 
                     b.ToTable("allowed_email_domains", (string)null);
-                });
-
-            modelBuilder.Entity("AnonymousStudentReviews.Core.DummyAggregate.Dummy", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("dummies", (string)null);
                 });
 
             modelBuilder.Entity("AnonymousStudentReviews.Core.Role", b =>
