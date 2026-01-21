@@ -21,7 +21,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder
             .HasMany(e => e.Roles)
-            .WithMany(e => e.Users);
+            .WithMany(e => e.Users)
+            .UsingEntity(
+                r => r.HasOne(typeof(Role)).WithMany().OnDelete(DeleteBehavior.Restrict),
+                l => l.HasOne(typeof(User)).WithMany().OnDelete(DeleteBehavior.Restrict));
 
         builder
             .Property(e => e.EmailConfirmed)
