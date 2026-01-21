@@ -7,5 +7,5 @@ public class University
     public string? City { get; set; }
     public string? Website { get; set; }
 
-    // public ICollection<User> Users { get; set; }
+    public ICollection<User> Users { get; set; }
 }
