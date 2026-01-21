@@ -16,7 +16,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder
             .HasOne(e => e.University)
             .WithMany(e => e.Users)
-            .HasForeignKey(e => e.UniversityId);
+            .HasForeignKey(e => e.UniversityId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder
             .Property(e => e.EmailConfirmed)
