@@ -1,3 +1,4 @@
+using AnonymousStudentReviews.Core;
 using AnonymousStudentReviews.Core.DummyAggregate;
 using AnonymousStudentReviews.Infrastructure.Data.Configurations;
 
@@ -16,6 +17,7 @@ public class ApplicationDbContext : DbContext
     }
     
     public DbSet<Dummy> Dummies { get; set; }
+    public DbSet<University> Universities { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
