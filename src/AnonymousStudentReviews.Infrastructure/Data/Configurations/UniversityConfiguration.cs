@@ -27,6 +27,7 @@ public class UniversityConfiguration : IEntityTypeConfiguration<University>
             .HasMany(e => e.AllowedEmailDomains)
             .WithOne(e => e.University)
             .HasForeignKey(e => e.UniversityId)
+            .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
     }
 }
