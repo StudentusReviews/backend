@@ -1,5 +1,4 @@
 using AnonymousStudentReviews.Core;
-using AnonymousStudentReviews.Core.DummyAggregate;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -23,5 +22,11 @@ public class UniversityConfiguration : IEntityTypeConfiguration<University>
 
         builder.Property(e => e.Website)
             .HasMaxLength(300);
+
+        builder
+            .HasMany(e => e.AllowedEmailDomains)
+            .WithOne(e => e.University)
+            .HasForeignKey(e => e.UniversityId)
+            .IsRequired();
     }
 }

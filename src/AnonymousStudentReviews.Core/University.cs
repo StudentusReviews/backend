@@ -8,4 +8,5 @@ public class University
     public string? Website { get; set; }
 
     public ICollection<User> Users { get; set; }
+    public ICollection<AllowedEmailDomain> AllowedEmailDomains { get; set; }
 }
