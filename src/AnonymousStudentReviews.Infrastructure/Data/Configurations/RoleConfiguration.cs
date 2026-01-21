@@ -1,3 +1,4 @@
+using AnonymousStudentReviews.Core;
 using AnonymousStudentReviews.Core.DummyAggregate;
 
 using Microsoft.EntityFrameworkCore;
@@ -5,9 +6,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AnonymousStudentReviews.Infrastructure.Data.Configurations;
 
-public class RoleConfiguration : IEntityTypeConfiguration<Dummy>
+public class RoleConfiguration : IEntityTypeConfiguration<Role>
 {
-    public void Configure(EntityTypeBuilder<Dummy> builder)
+    public void Configure(EntityTypeBuilder<Role> builder)
     {
         builder.ToTable("roles");
 
