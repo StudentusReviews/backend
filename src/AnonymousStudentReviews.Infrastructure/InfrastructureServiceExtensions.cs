@@ -1,10 +1,13 @@
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
 using AnonymousStudentReviews.Core.Aggregates.Dummy;
+using AnonymousStudentReviews.Core.Aggregates.User;
+using AnonymousStudentReviews.Infrastructure.AllowedEmailDomains;
 using AnonymousStudentReviews.Infrastructure.Data;
 using AnonymousStudentReviews.Infrastructure.Dummies;
 using AnonymousStudentReviews.Infrastructure.Email;
 using AnonymousStudentReviews.Infrastructure.Password;
+using AnonymousStudentReviews.Infrastructure.Users;
 using AnonymousStudentReviews.UseCases.Users.Create;
 
 using Microsoft.EntityFrameworkCore;
@@ -70,14 +73,14 @@ public static class InfrastructureServiceExtensions
     private static void RegisterEFRepositories(IServiceCollection services)
     {
         services.AddScoped<IDummyRepository, DummyRepository>();
-        services.AddScoped<IAllowedEmailDomainRepository, IAllowedEmailDomainRepository>();
+        services.AddScoped<IAllowedEmailDomainRepository, AllowedEmailDomainRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
     }
 
     private static void RegisterServices(IServiceCollection services)
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IEmailHasher, EmailHasher>();
-        services.AddScoped<IAllowedEmailDomainValidator, AllowedEmailDomainValidator>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
     }
 }
