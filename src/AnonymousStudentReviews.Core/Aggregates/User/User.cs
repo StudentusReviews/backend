@@ -1,4 +1,4 @@
-namespace AnonymousStudentReviews.Core;
+namespace AnonymousStudentReviews.Core.Aggregates.User;
 
 public class User
 {

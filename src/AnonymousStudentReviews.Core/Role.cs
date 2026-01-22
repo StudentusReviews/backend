@@ -1,3 +1,5 @@
+using AnonymousStudentReviews.Core.Aggregates.User;
+
 namespace AnonymousStudentReviews.Core;
 
 public class Role
