@@ -5,6 +5,7 @@ public class User
     public Guid Id { get; set; }
     public Guid UniversityId { get; set; }
     public string EmailHash { get; set; }
+    public string PasswordHash { get; set; }
     public bool EmailConfirmed { get; set; }
     public DateTime CreatedAt { get; set; }
 
