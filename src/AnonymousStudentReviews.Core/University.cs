@@ -1,3 +1,5 @@
+using AnonymousStudentReviews.Core.AllowedEmailDomainAggregate;
+
 namespace AnonymousStudentReviews.Core;
 
 public class University

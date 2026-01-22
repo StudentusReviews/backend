@@ -1,4 +1,5 @@
 using AnonymousStudentReviews.Core;
+using AnonymousStudentReviews.Core.AllowedEmailDomainAggregate;
 using AnonymousStudentReviews.Core.DummyAggregate;
 using AnonymousStudentReviews.Infrastructure.Data.Configurations;
 
@@ -19,6 +20,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Dummy> Dummies { get; set; }
     public DbSet<University> Universities { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<AllowedEmailDomain> AllowedEmailDomains { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
