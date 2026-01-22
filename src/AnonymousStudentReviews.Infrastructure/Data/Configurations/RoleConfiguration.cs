@@ -1,5 +1,4 @@
 using AnonymousStudentReviews.Core;
-using AnonymousStudentReviews.Core.DummyAggregate;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

@@ -1,5 +1,5 @@
 using AnonymousStudentReviews.Core;
-using AnonymousStudentReviews.Core.AllowedEmailDomainAggregate;
+using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

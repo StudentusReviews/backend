@@ -1,6 +1,6 @@
 using AnonymousStudentReviews.Core;
-using AnonymousStudentReviews.Core.AllowedEmailDomainAggregate;
-using AnonymousStudentReviews.Core.DummyAggregate;
+using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
+using AnonymousStudentReviews.Core.Aggregates.Dummy;
 using AnonymousStudentReviews.Infrastructure.Data.Configurations;
 
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,4 @@
-namespace AnonymousStudentReviews.Core.DummyAggregate;
+namespace AnonymousStudentReviews.Core.Aggregates.Dummy;
 
 public interface IDummyRepository
 {

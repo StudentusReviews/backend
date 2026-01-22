@@ -14,7 +14,7 @@ logger.Information("Starting web host");
 builder.AddLoggerConfigs();
 
 var appLogger = new SerilogLoggerFactory(logger)
-    .CreateLogger<Program>();
+    .CreateLogger<AnonymousStudentReviews.Api.Program>();
 
 builder.Services.AddControllers();
 
@@ -34,6 +34,9 @@ app.UseAppMiddleware();
 
 app.Run();
 
-public partial class Program
+namespace AnonymousStudentReviews.Api
 {
+    public partial class Program
+    {
+    }
 }

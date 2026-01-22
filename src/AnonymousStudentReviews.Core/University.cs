@@ -1,4 +1,4 @@
-using AnonymousStudentReviews.Core.AllowedEmailDomainAggregate;
+using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
 
 namespace AnonymousStudentReviews.Core;
 

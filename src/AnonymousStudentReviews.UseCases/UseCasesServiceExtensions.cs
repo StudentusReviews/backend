@@ -1,4 +1,5 @@
 using AnonymousStudentReviews.UseCases.Dummies.Create;
+using AnonymousStudentReviews.UseCases.Users.Create;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,5 +50,6 @@ public static class UseCasesServiceExtensions
     private static void RegisterServices(IServiceCollection services)
     {
         services.AddScoped<ICreateDummyService, CreateDummyService>();
+        services.AddScoped<ICreateUserService, CreateUserService>();
     }
 }
