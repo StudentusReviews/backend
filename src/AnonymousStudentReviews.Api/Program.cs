@@ -5,16 +5,16 @@ using Serilog.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var logger = new LoggerConfiguration()
+Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
 
-logger.Information("Starting web host");
+Log.Information("Starting web host");
+
+var loggerFactory = new SerilogLoggerFactory(Log.Logger);
+var appLogger = loggerFactory.CreateLogger<AnonymousStudentReviews.Api.Program>();
 
 builder.AddLoggerConfigs();
-
-var appLogger = new SerilogLoggerFactory(logger)
-    .CreateLogger<AnonymousStudentReviews.Api.Program>();
 
 builder.Services.AddControllers();
 
