@@ -1,3 +1,4 @@
+using AnonymousStudentReviews.Core;
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
 using AnonymousStudentReviews.Core.Aggregates.Dummy;
@@ -52,6 +53,11 @@ public static class InfrastructureServiceExtensions
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseNpgsql(connectionString);
+            options.UseSeeding((context, _) =>
+            {
+                context.Set<Role>().Add(new Role { Id = Guid.NewGuid(), Name = "Student"});
+                context.Set<Role>().Add(new Role { Id = Guid.NewGuid(), Name = "Admin"});
+            });
         });
     }
 

@@ -22,6 +22,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<University> Universities { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<AllowedEmailDomain> AllowedEmailDomains { get; set; }
+    public DbSet<Role> Roles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
