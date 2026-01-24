@@ -10,5 +10,5 @@ public class User
     public DateTime CreatedAt { get; set; }
 
     public University? University { get; set; }
-    public ICollection<Role> Roles { get; set; }
+    public ICollection<Role.Role> Roles { get; set; }
 }

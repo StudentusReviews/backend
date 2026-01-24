@@ -58,6 +58,7 @@ public class CreateUserService : ICreateUserService
             var universityId =
                 (await _allowedEmailDomainRepository.FindByDomainAsync(emailDomain)).Value.UniversityId;
             createdUser.UniversityId = universityId;
+            // createdUser.Roles.Add();
         }
 
         _userRepository.CreateUser(createdUser);

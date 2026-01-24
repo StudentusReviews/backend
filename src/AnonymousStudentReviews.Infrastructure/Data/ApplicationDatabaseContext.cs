@@ -1,6 +1,7 @@
 using AnonymousStudentReviews.Core;
 using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
 using AnonymousStudentReviews.Core.Aggregates.Dummy;
+using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.Infrastructure.Data.Configurations;
 
