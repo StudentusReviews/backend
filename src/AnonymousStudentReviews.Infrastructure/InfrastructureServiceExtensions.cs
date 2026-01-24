@@ -56,8 +56,21 @@ public static class InfrastructureServiceExtensions
             options.UseNpgsql(connectionString);
             options.UseSeeding((context, _) =>
             {
-                context.Set<Role>().Add(new Role { Id = Guid.NewGuid(), Name = "Student" });
-                context.Set<Role>().Add(new Role { Id = Guid.NewGuid(), Name = "Admin" });
+                void InsertRoleIfNotExists(string name)
+                {
+                    if (context.Set<Role>().FirstOrDefault(role => role.Name == "Student") is null)
+                    {
+                        context.Set<Role>().Add(new Role { Id = Guid.NewGuid(), Name = name });
+                    }
+                }
+
+                var roles = new[] { "Student", "Admin" };
+
+                foreach (var role in roles)
+                {
+                    InsertRoleIfNotExists(role);
+                }
+
                 context.SaveChanges();
             });
         });
