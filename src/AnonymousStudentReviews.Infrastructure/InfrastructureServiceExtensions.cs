@@ -1,4 +1,3 @@
-using AnonymousStudentReviews.Core;
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
 using AnonymousStudentReviews.Core.Aggregates.Dummy;
@@ -9,6 +8,7 @@ using AnonymousStudentReviews.Infrastructure.Data;
 using AnonymousStudentReviews.Infrastructure.Dummies;
 using AnonymousStudentReviews.Infrastructure.Email;
 using AnonymousStudentReviews.Infrastructure.Password;
+using AnonymousStudentReviews.Infrastructure.Roles;
 using AnonymousStudentReviews.Infrastructure.Users;
 using AnonymousStudentReviews.UseCases.Users.Create;
 
@@ -56,8 +56,9 @@ public static class InfrastructureServiceExtensions
             options.UseNpgsql(connectionString);
             options.UseSeeding((context, _) =>
             {
-                context.Set<Role>().Add(new Role { Id = Guid.NewGuid(), Name = "Student"});
-                context.Set<Role>().Add(new Role { Id = Guid.NewGuid(), Name = "Admin"});
+                context.Set<Role>().Add(new Role { Id = Guid.NewGuid(), Name = "Student" });
+                context.Set<Role>().Add(new Role { Id = Guid.NewGuid(), Name = "Admin" });
+                context.SaveChanges();
             });
         });
     }
@@ -82,6 +83,7 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IDummyRepository, DummyRepository>();
         services.AddScoped<IAllowedEmailDomainRepository, AllowedEmailDomainRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
     }
 
     private static void RegisterServices(IServiceCollection services)
