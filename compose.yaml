@@ -2,8 +2,8 @@
   app:
     container_name: anonymousstudentreviews.api
     build:
-      context: src/AnonymousStudentReviews.Api
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: src/AnonymousStudentReviews.Api/Dockerfile
     ports:
       - "8080:8080"
       - "8081:8081"
