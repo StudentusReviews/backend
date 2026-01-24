@@ -38,8 +38,9 @@ public class CreateUserController : ControllerBase
             return result.Error.ToProblemDetails(Request.Path);
         }
 
-        return CreatedAtAction(nameof(CreateUserAsync),
-            new { result.Value.Id }, result.Value);
+        // return CreatedAtAction(nameof(CreateUserAsync),
+        //     new { result.Value.Id }, result.Value);
+        return Created();
     }
 
     private CreateUserDto RequestToDto(CreateUserRequest request)
