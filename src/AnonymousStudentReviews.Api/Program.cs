@@ -32,11 +32,16 @@ if (app.Environment.IsDevelopment() && MigrationConfig.ShouldApplyMigrationsOnSt
 
 app.UseAppMiddleware();
 
+if (app.Environment.IsDevelopment())
+{
+    app.MapGet("/", () => Results.Redirect("/swagger"));
+}
+
 app.Run();
 
 namespace AnonymousStudentReviews.Api
 {
-    public partial class Program
+    public class Program
     {
     }
 }

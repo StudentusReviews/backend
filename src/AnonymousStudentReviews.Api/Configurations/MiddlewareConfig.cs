@@ -10,7 +10,6 @@ public static class MiddlewareConfig
         {
             app.UseOpenApi();
             app.UseSwaggerUi();
-            app.MapGet("/", () => Results.Redirect("/swagger"));
         }
 
         app.UseExceptionHandler();
