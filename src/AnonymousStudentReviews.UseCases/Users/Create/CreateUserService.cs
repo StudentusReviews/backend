@@ -1,3 +1,5 @@
+using System.Net.Mail;
+
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
 using AnonymousStudentReviews.Core.Aggregates.User;
@@ -38,7 +40,8 @@ public class CreateUserService : ICreateUserService
             return Result.Failure<User>(CreateUserErrors.UserAlreadyExists);
         }
 
-        var emailDomain = dto.Email.Split("@")[1];
+        var emailAddress = new MailAddress(dto.Email);
+        var emailDomain = emailAddress.Host;
 
         var userIsConfirmedStudent = await _allowedEmailDomainRepository.IsEmailDomainAllowed(emailDomain);
 
