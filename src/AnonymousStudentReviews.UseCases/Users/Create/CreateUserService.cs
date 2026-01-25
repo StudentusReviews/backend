@@ -71,8 +71,8 @@ public class CreateUserService : ICreateUserService
             }
 
             var role = getRoleResult.Value;
-            
-            createdUser.Roles.Add(role);
+
+            createdUser.Roles = new List<Role> { role };
         }
 
         _userRepository.CreateUser(createdUser);
