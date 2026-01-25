@@ -16,7 +16,9 @@ var appLogger = loggerFactory.CreateLogger<AnonymousStudentReviews.Api.Program>(
 
 builder.AddLoggerConfigs();
 
-builder.Services.AddControllers();
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddRazorPages();
 
 builder.Services.AddSwaggerConfig();
 

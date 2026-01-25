@@ -18,6 +18,11 @@ public static class MiddlewareConfig
 
         app.MapControllers();
 
+        app.MapStaticAssets();
+
+        app.MapRazorPages()
+            .WithStaticAssets();
+
         return app;
     }
 }
