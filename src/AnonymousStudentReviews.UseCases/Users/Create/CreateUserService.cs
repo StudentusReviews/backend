@@ -2,9 +2,11 @@ using System.Net.Mail;
 
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
+using AnonymousStudentReviews.Core.Aggregates.EmailVerificationToken;
 using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.User;
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace AnonymousStudentReviews.UseCases.Users.Create;
@@ -12,7 +14,11 @@ namespace AnonymousStudentReviews.UseCases.Users.Create;
 public class CreateUserService : ICreateUserService
 {
     private readonly IAllowedEmailDomainRepository _allowedEmailDomainRepository;
+    private readonly IConfiguration _configuration;
     private readonly IEmailHasher _emailHasher;
+    private readonly IEmailVerificationTokenGenerator _emailVerificationTokenGenerator;
+    private readonly IEmailVerificationTokenHasher _emailVerificationTokenHasher;
+    private readonly IEmailVerificationTokenRepository _emailVerificationTokenRepository;
     private readonly ILogger<CreateUserService> _logger;
     private readonly IPasswordHasher _passwordHasher;
     private readonly IRoleRepository _roleRepository;
@@ -22,7 +28,9 @@ public class CreateUserService : ICreateUserService
     public CreateUserService(IAllowedEmailDomainRepository allowedEmailDomainRepository, IEmailHasher emailHasher,
         IPasswordHasher passwordHasher,
         IUserRepository userRepository, IUnitOfWork unitOfWork, ILogger<CreateUserService> logger,
-        IRoleRepository roleRepository)
+        IRoleRepository roleRepository, IEmailVerificationTokenRepository emailVerificationTokenRepository,
+        IEmailVerificationTokenGenerator emailVerificationTokenGenerator,
+        IEmailVerificationTokenHasher emailVerificationTokenHasher, IConfiguration configuration)
     {
         _allowedEmailDomainRepository = allowedEmailDomainRepository;
         _emailHasher = emailHasher;
@@ -31,6 +39,10 @@ public class CreateUserService : ICreateUserService
         _unitOfWork = unitOfWork;
         _logger = logger;
         _roleRepository = roleRepository;
+        _emailVerificationTokenRepository = emailVerificationTokenRepository;
+        _emailVerificationTokenGenerator = emailVerificationTokenGenerator;
+        _emailVerificationTokenHasher = emailVerificationTokenHasher;
+        _configuration = configuration;
     }
 
     public async Task<Result<User>> HandleAsync(CreateUserDto dto)
@@ -75,7 +87,32 @@ public class CreateUserService : ICreateUserService
             createdUser.Roles = new List<Role> { role };
         }
 
+        var emailVerificationTokenString = _emailVerificationTokenGenerator.Generate();
+        var emailVerificationTokenStringHash = _emailVerificationTokenHasher.Hash(emailVerificationTokenString);
+
+        var emailVerificationTokenExpirationHoursString = _configuration["EmailVerificationTokenExpirationHours"];
+
+        if (emailVerificationTokenExpirationHoursString is null)
+        {
+            throw new InvalidOperationException(
+                "EmailVerificationTokenExpirationHours is null. EmailVerificationTokenExpirationHours must be set in appsettings.json or any other place where secrets reside");
+        }
+
+        var emailVerificationTokenExpirationHours = double.Parse(emailVerificationTokenExpirationHoursString);
+
+        var emailVerificationToken = new EmailVerificationToken
+        {
+            Id = Guid.NewGuid(),
+            TokenHash = emailVerificationTokenStringHash,
+            ExpiresAt =
+                DateTime.UtcNow.AddHours(emailVerificationTokenExpirationHours),
+            CreatedAt = DateTime.UtcNow,
+            User = createdUser
+        };
+
+        _emailVerificationTokenRepository.Create(emailVerificationToken);
         _userRepository.CreateUser(createdUser);
+
         await _unitOfWork.SaveChangesAsync();
 
         return Result.Success(createdUser);
