@@ -1,12 +1,14 @@
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
 using AnonymousStudentReviews.Core.Aggregates.Dummy;
+using AnonymousStudentReviews.Core.Aggregates.EmailVerificationToken;
 using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.Infrastructure.AllowedEmailDomains;
 using AnonymousStudentReviews.Infrastructure.Data;
 using AnonymousStudentReviews.Infrastructure.Dummies;
 using AnonymousStudentReviews.Infrastructure.Email;
+using AnonymousStudentReviews.Infrastructure.EmailVerificationToken;
 using AnonymousStudentReviews.Infrastructure.Password;
 using AnonymousStudentReviews.Infrastructure.Roles;
 using AnonymousStudentReviews.Infrastructure.Users;
@@ -97,6 +99,7 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IAllowedEmailDomainRepository, AllowedEmailDomainRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IEmailVerificationTokenRepository, EmailVerificationTokenRepository>();
     }
 
     private static void RegisterServices(IServiceCollection services)
@@ -104,6 +107,7 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IEmailHasher, EmailHasher>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
-        services.AddScoped<IEmailVerificationTokenHasher, IEmailVerificationTokenHasher>();
+        services.AddScoped<IEmailVerificationTokenHasher, EmailVerificationTokenHasher>();
+        services.AddScoped<IEmailVerificationTokenGenerator, EmailVerificationTokenGenerator>();
     }
 }
