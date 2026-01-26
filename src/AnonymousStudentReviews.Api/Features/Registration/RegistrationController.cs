@@ -5,24 +5,30 @@ using FluentValidation;
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace AnonymousStudentReviews.Api.Features.Users.Create;
+namespace AnonymousStudentReviews.Api.Features.Registration;
 
-[ApiController]
-[Route("api/users")]
-public class CreateUserController : Controller
+[Route("api/register")]
+public class RegistrationController : Controller
 {
-    private readonly IValidator<CreateUserRequest> _createUserRequestValidator;
+    private readonly IValidator<RegistrationRequest> _createUserRequestValidator;
     private readonly ICreateUserService _createUserService;
 
-    public CreateUserController(IValidator<CreateUserRequest> createUserRequestValidator,
+    public RegistrationController(IValidator<RegistrationRequest> createUserRequestValidator,
         ICreateUserService createUserService)
     {
         _createUserRequestValidator = createUserRequestValidator;
         _createUserService = createUserService;
     }
 
+    [HttpGet]
+    public IActionResult Index()
+    {
+        return View();
+    }
+
     [HttpPost]
-    public async Task<ActionResult> CreateUserAsync([FromBody] CreateUserRequest request)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Register([FromForm] RegistrationRequest request)
     {
         var validationResult = await _createUserRequestValidator.ValidateAsync(request);
 
@@ -38,12 +44,10 @@ public class CreateUserController : Controller
             return result.Error.ToProblemDetails(Request.Path);
         }
 
-        // return CreatedAtAction(nameof(CreateUserAsync),
-        //     new { result.Value.Id }, result.Value);
-        return Created();
+        return View("Sucess");
     }
 
-    private CreateUserDto RequestToDto(CreateUserRequest request)
+    private CreateUserDto RequestToDto(RegistrationRequest request)
     {
         return new CreateUserDto { Email = request.Email, Password = request.Password };
     }
