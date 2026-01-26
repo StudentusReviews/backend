@@ -28,6 +28,7 @@ public class RegistrationController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register([FromForm] CreateUserRequest request)
     {
         var validationResult = await _createUserRequestValidator.ValidateAsync(request);
