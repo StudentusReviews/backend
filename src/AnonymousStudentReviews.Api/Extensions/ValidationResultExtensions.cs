@@ -1,6 +1,7 @@
 using FluentValidation.Results;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace AnonymousStudentReviews.Api.Extensions;
 
@@ -20,5 +21,13 @@ public static class ValidationResultExtensions
         };
 
         return new ObjectResult(problemDetails) { StatusCode = StatusCodes.Status400BadRequest };
+    }
+
+    public static void AddToModelState(this ValidationResult result, ModelStateDictionary modelState)
+    {
+        foreach (var error in result.Errors)
+        {
+            modelState.AddModelError(error.PropertyName, error.ErrorMessage);
+        }
     }
 }

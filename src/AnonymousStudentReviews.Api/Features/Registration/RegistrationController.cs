@@ -28,13 +28,14 @@ public class RegistrationController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Register([FromForm] RegistrationRequest request)
+    public async Task<IActionResult> Index([FromForm] RegistrationRequest request)
     {
         var validationResult = await _createUserRequestValidator.ValidateAsync(request);
 
         if (!validationResult.IsValid)
         {
-            return validationResult.ToProblemDetails(Request.Path);
+            validationResult.AddToModelState(ModelState);
+            return View(request);
         }
 
         var result = await _createUserService.HandleAsync(RequestToDto(request));
