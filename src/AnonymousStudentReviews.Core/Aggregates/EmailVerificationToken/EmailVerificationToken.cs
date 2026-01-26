@@ -1,4 +1,4 @@
-namespace AnonymousStudentReviews.Core.Aggregates;
+namespace AnonymousStudentReviews.Core.Aggregates.EmailVerificationToken;
 
 public class EmailVerificationToken
 {

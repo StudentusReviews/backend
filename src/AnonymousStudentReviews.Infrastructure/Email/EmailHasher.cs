@@ -26,13 +26,6 @@ public class EmailHasher : IEmailHasher
                 "EmailHashKey is null. EmailHashKey must be set in secrets.json or any other place where secrets reside");
         }
 
-        var keyBytes = Convert.FromBase64String(key);
-
-        using var hmac = new HMACSHA256(keyBytes);
-
-        var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(email));
-        var hashString = Convert.ToBase64String(hash);
-
-        return hashString;
+        return HmacSha256Hasher.Hash(email, key);
     }
 }

@@ -104,5 +104,6 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IEmailHasher, EmailHasher>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<IEmailVerificationTokenHasher, IEmailVerificationTokenHasher>();
     }
 }
