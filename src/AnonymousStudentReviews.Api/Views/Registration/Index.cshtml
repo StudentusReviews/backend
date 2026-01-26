@@ -1,8 +1,4 @@
-@model AnonymousStudentReviews.Api.Features.Users.Create.CreateUserRequest
-
-@{
-    Layout = null;
-}
+@model AnonymousStudentReviews.Api.Features.Registration.RegistrationRequest
 
 <!DOCTYPE html>
 <html lang="en">
@@ -88,6 +84,11 @@
         <div>
             <label asp-for="Password">Password</label>
             <input asp-for="Password" type="password"/>
+        </div>
+
+        <div>
+            <label asp-for="ConfirmPassword">Confirm password</label>
+            <input asp-for="ConfirmPassword" type="password"/>
         </div>
 
         <button type="submit">Register</button>
