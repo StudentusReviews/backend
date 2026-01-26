@@ -14,14 +14,11 @@ public static class MiddlewareConfig
 
         app.UseExceptionHandler();
 
+        app.UseStaticFiles();
+
         app.UseAuthorization();
 
         app.MapControllers();
-
-        app.MapStaticAssets();
-
-        app.MapRazorPages()
-            .WithStaticAssets();
 
         return app;
     }
