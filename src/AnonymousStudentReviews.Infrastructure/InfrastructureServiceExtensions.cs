@@ -43,7 +43,7 @@ public static class InfrastructureServiceExtensions
         }
 
         RegisterEFRepositories(services);
-        RegisterServices(services);
+        RegisterServices(services, configuration);
 
         logger.LogInformation("{Project} services registered", "Infrastructure");
 
@@ -102,12 +102,15 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IEmailVerificationTokenRepository, EmailVerificationTokenRepository>();
     }
 
-    private static void RegisterServices(IServiceCollection services)
+    private static void RegisterServices(IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IEmailHasher, EmailHasher>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IEmailVerificationTokenHasher, EmailVerificationTokenHasher>();
         services.AddScoped<IEmailVerificationTokenGenerator, EmailVerificationTokenGenerator>();
+        services
+            .AddFluentEmail(configuration["Email:SenderEmail"], configuration["Email:Sender"])
+            .AddSmtpSender(configuration["Email:Host"], int.Parse(configuration["Email:Port"]!));
     }
 }
