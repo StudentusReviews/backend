@@ -15,12 +15,12 @@ public class EmailVerificationTokenHasher : IEmailVerificationTokenHasher
 
     public string Hash(string token)
     {
-        var key = _configuration["EmailVerificationHashKey"];
+        var key = _configuration["EmailVerificationTokenHashKey"];
 
         if (key is null)
         {
             throw new NullReferenceException(
-                "EmailVerificationHashKey is null. EmailVerificationHashKey must be set in secrets.json or any other place where secrets reside");
+                "EmailVerificationTokenHashKey is null. EmailVerificationTokenHashKey must be set in secrets.json or any other place where secrets reside");
         }
 
         return HmacSha256Hasher.Hash(token, key);
