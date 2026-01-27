@@ -109,8 +109,6 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IEmailVerificationTokenHasher, EmailVerificationTokenHasher>();
         services.AddScoped<IEmailVerificationTokenGenerator, EmailVerificationTokenGenerator>();
-        services
-            .AddFluentEmail(configuration["Email:SenderEmail"], configuration["Email:Sender"])
-            .AddSmtpSender(configuration["Email:Host"], int.Parse(configuration["Email:Port"]!));
+        
     }
 }
