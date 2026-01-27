@@ -16,6 +16,7 @@ public class CreateUserService : ICreateUserService
     private readonly IAllowedEmailDomainRepository _allowedEmailDomainRepository;
     private readonly IConfiguration _configuration;
     private readonly IEmailHasher _emailHasher;
+    private readonly IEmailSender _emailSender;
     private readonly IEmailVerificationTokenGenerator _emailVerificationTokenGenerator;
     private readonly IEmailVerificationTokenHasher _emailVerificationTokenHasher;
     private readonly IEmailVerificationTokenRepository _emailVerificationTokenRepository;
@@ -30,7 +31,8 @@ public class CreateUserService : ICreateUserService
         IUserRepository userRepository, IUnitOfWork unitOfWork, ILogger<CreateUserService> logger,
         IRoleRepository roleRepository, IEmailVerificationTokenRepository emailVerificationTokenRepository,
         IEmailVerificationTokenGenerator emailVerificationTokenGenerator,
-        IEmailVerificationTokenHasher emailVerificationTokenHasher, IConfiguration configuration)
+        IEmailVerificationTokenHasher emailVerificationTokenHasher, IConfiguration configuration,
+        IEmailSender emailSender)
     {
         _allowedEmailDomainRepository = allowedEmailDomainRepository;
         _emailHasher = emailHasher;
@@ -43,6 +45,7 @@ public class CreateUserService : ICreateUserService
         _emailVerificationTokenGenerator = emailVerificationTokenGenerator;
         _emailVerificationTokenHasher = emailVerificationTokenHasher;
         _configuration = configuration;
+        _emailSender = emailSender;
     }
 
     public async Task<Result<User>> HandleAsync(CreateUserDto dto)
@@ -114,6 +117,12 @@ public class CreateUserService : ICreateUserService
         _userRepository.CreateUser(createdUser);
 
         await _unitOfWork.SaveChangesAsync();
+
+        await _emailSender.SendEmailAsync(
+            "onboarding@resend.dev",
+            [dto.Email],
+            "Email verification",
+            $"<p>{emailVerificationTokenString}</p>");
 
         return Result.Success(createdUser);
     }

@@ -114,18 +114,20 @@ public static class InfrastructureServiceExtensions
         services.AddOptions();
         services.AddHttpClient<ResendClient>();
 
-        var resendApiKey = configuration.GetValue<string>("ResentApiKey");
+        var resendApiKey = configuration.GetValue<string>("ResendApiKey");
 
         if (resendApiKey is null)
         {
-            throw new InvalidOperationException("ResentApiKey not set");
+            throw new InvalidOperationException("ResendApiKey not set");
         }
 
         services.Configure<ResendClientOptions>(o =>
         {
-            o.ApiToken = Environment.GetEnvironmentVariable(resendApiKey)!;
+            o.ApiToken = resendApiKey;
         });
-        
+
         services.AddTransient<IResend, ResendClient>();
+
+        services.AddScoped<IEmailSender, EmailSender>();
     }
 }

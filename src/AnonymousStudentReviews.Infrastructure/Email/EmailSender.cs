@@ -13,18 +13,21 @@ public class EmailSender : IEmailSender
         _resend = resend;
     }
 
-    public async Task SendEmailAsync(string from, string to, string subject, string htmlBody)
+    public async Task SendEmailAsync(string fromEmailAddress, IEnumerable<string> toEmailAddresses, string subject,
+        string htmlBody)
     {
+        var toEmailAddressList = new EmailAddressList();
+
+        foreach (var toEmailAddress in toEmailAddresses)
+        {
+            toEmailAddressList.Add(toEmailAddress);
+        }
+
         var message = new EmailMessage
         {
-            From = "Acme <onboarding@resend.dev>",
-            Subject = subject,
-            HtmlBody = htmlBody
+            From = fromEmailAddress, Subject = subject, HtmlBody = htmlBody, To = toEmailAddressList
         };
-        message.To.Add( "delivered@resend.dev" );
-        message.Subject = "hello world";
-        message.HtmlBody = "<strong>it works!</strong>";
 
-        await _resend.EmailSendAsync( message );
+        await _resend.EmailSendAsync(message);
     }
 }

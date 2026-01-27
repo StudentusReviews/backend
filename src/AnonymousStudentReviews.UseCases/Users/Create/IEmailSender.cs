@@ -2,5 +2,5 @@ namespace AnonymousStudentReviews.UseCases.Users.Create;
 
 public interface IEmailSender
 {
-    Task SendEmailAsync(string from, string to, string subject, string htmlBody);
+    Task SendEmailAsync(string fromEmailAddress, IEnumerable<string> toEmailAddresses, string subject, string htmlBody);
 }
