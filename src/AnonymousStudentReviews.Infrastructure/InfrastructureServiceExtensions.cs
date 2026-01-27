@@ -19,6 +19,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
+using Resend;
+
 namespace AnonymousStudentReviews.Infrastructure;
 
 public static class InfrastructureServiceExtensions
@@ -109,6 +111,21 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IEmailVerificationTokenHasher, EmailVerificationTokenHasher>();
         services.AddScoped<IEmailVerificationTokenGenerator, EmailVerificationTokenGenerator>();
+        services.AddOptions();
+        services.AddHttpClient<ResendClient>();
+
+        var resendApiKey = configuration.GetValue<string>("ResentApiKey");
+
+        if (resendApiKey is null)
+        {
+            throw new InvalidOperationException("ResentApiKey not set");
+        }
+
+        services.Configure<ResendClientOptions>(o =>
+        {
+            o.ApiToken = Environment.GetEnvironmentVariable(resendApiKey)!;
+        });
         
+        services.AddTransient<IResend, ResendClient>();
     }
 }
