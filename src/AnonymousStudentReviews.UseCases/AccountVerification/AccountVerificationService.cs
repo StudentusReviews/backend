@@ -37,7 +37,7 @@ public class AccountVerificationService : IAccountVerificationService
 
         var emailVerificationTokenEntity = getEmailVerificationTokenResult.Value;
 
-        if (emailVerificationTokenEntity.ExpiresAt >= DateTime.UtcNow)
+        if (emailVerificationTokenEntity.ExpiresAt <= DateTime.UtcNow)
         {
             return Result.Failure(AccountVerificationErrors.TokenExpired);
         }
