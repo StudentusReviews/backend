@@ -35,19 +35,19 @@ public class AccountVerificationController : Controller
 
         if (result.IsFailure)
         {
-            var errorCode = result.Error.Title;
+            var errorCode = result.Error.Code;
 
-            if (errorCode == AccountVerificationErrors.TokenNotFound.Title)
+            if (errorCode == AccountVerificationErrors.TokenNotFound.Code)
             {
                 return View("Failure");
             }
 
-            if (errorCode == AccountVerificationErrors.TokenAlreadyUsed.Title)
+            if (errorCode == AccountVerificationErrors.TokenAlreadyUsed.Code)
             {
                 return View("Failure");
             }
 
-            if (errorCode == AccountVerificationErrors.TokenExpired.Title)
+            if (errorCode == AccountVerificationErrors.TokenExpired.Code)
             {
                 return View("Failure");
             }
