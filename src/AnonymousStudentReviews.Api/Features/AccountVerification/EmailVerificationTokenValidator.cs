@@ -11,6 +11,6 @@ public class EmailVerificationTokenValidator : AbstractValidator<AccountVerifica
         RuleFor(x => x.EmailVerificationToken)
             .NotNull()
             .NotEmpty()
-            .MaximumLength(64);
+            .MaximumLength(256);
     }
 }
