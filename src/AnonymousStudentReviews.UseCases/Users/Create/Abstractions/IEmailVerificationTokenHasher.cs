@@ -1,4 +1,4 @@
-namespace AnonymousStudentReviews.UseCases.Users.Create;
+namespace AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
 
 public interface IEmailVerificationTokenHasher
 {

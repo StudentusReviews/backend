@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 
 using AnonymousStudentReviews.UseCases.Users.Create;
+using AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
 
 using Microsoft.Extensions.Configuration;
 

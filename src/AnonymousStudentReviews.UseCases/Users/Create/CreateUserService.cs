@@ -5,6 +5,7 @@ using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
 using AnonymousStudentReviews.Core.Aggregates.EmailVerificationToken;
 using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.User;
+using AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
