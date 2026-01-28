@@ -14,6 +14,7 @@ namespace AnonymousStudentReviews.UseCases.Users.Create;
 
 public class CreateUserService : ICreateUserService
 {
+    private readonly IAccountVerificationLinkFactory _accountVerificationLinkFactory;
     private readonly IAllowedEmailDomainRepository _allowedEmailDomainRepository;
     private readonly IConfiguration _configuration;
     private readonly IEmailHasher _emailHasher;
@@ -33,7 +34,7 @@ public class CreateUserService : ICreateUserService
         IRoleRepository roleRepository, IEmailVerificationTokenRepository emailVerificationTokenRepository,
         IEmailVerificationTokenGenerator emailVerificationTokenGenerator,
         IEmailVerificationTokenHasher emailVerificationTokenHasher, IConfiguration configuration,
-        IEmailSender emailSender)
+        IEmailSender emailSender, IAccountVerificationLinkFactory accountVerificationLinkFactory)
     {
         _allowedEmailDomainRepository = allowedEmailDomainRepository;
         _emailHasher = emailHasher;
@@ -47,6 +48,7 @@ public class CreateUserService : ICreateUserService
         _emailVerificationTokenHasher = emailVerificationTokenHasher;
         _configuration = configuration;
         _emailSender = emailSender;
+        _accountVerificationLinkFactory = accountVerificationLinkFactory;
     }
 
     public async Task<Result<User>> HandleAsync(CreateUserDto dto)
@@ -88,7 +90,7 @@ public class CreateUserService : ICreateUserService
 
             var role = getRoleResult.Value;
 
-            createdUser.Roles = new List<Role> { role };
+            createdUser.Roles = [role];
         }
 
         var emailVerificationTokenString = _emailVerificationTokenGenerator.Generate();
@@ -119,12 +121,24 @@ public class CreateUserService : ICreateUserService
 
         await _unitOfWork.SaveChangesAsync();
 
-        await _emailSender.SendEmailAsync(
-            "onboarding@resend.dev",
-            [dto.Email],
-            "Email verification",
-            $"<p>{emailVerificationTokenString}</p>");
+        var accountVerificationLink = GenerateAccountVerificationLink(emailVerificationTokenString);
+        await SendAccountVerificationEmailAsync(dto.Email, accountVerificationLink);
 
         return Result.Success(createdUser);
+    }
+
+    private string GenerateAccountVerificationLink(string emailVerificationToken)
+    {
+        return _accountVerificationLinkFactory.Create(emailVerificationToken);
+    }
+
+    private async Task SendAccountVerificationEmailAsync(string emailAddress, string accountVerificationLink)
+    {
+        await _emailSender.SendEmailAsync(
+            "onboarding@resend.dev",
+            [emailAddress],
+            "Email verification",
+            $"<a href=\"{accountVerificationLink}\">{accountVerificationLink}</a>"
+        );
     }
 }
