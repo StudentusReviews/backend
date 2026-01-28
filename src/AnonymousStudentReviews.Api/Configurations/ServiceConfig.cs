@@ -1,6 +1,8 @@
+using AnonymousStudentReviews.Api.Features.AccountVerification;
 using AnonymousStudentReviews.Api.Features.Dummies.Create;
 using AnonymousStudentReviews.Infrastructure;
 using AnonymousStudentReviews.UseCases;
+using AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
 
 using FluentValidation;
 
@@ -15,11 +17,11 @@ public static class ServiceConfig
         services
             .AddExceptionHandler<GlobalExceptionHandler>()
             .AddProblemDetails()
+            .AddHttpContextAccessor()
+            .AddScoped<IAccountVerificationLinkFactory, AccountVerificationLinkFactory>()
             .AddInfrastructureServices(builder.Configuration, logger, builder.Environment.EnvironmentName)
             .AddUseCasesServices(builder.Configuration, logger, builder.Environment.EnvironmentName)
             .AddValidatorsFromAssemblyContaining<CreateDummyRequestValidator>();
-
-        logger.LogInformation("Infrastructure services registered");
 
         return services;
     }
