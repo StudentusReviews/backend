@@ -24,8 +24,4 @@
         <ProjectReference Include="..\AnonymousStudentReviews.UseCases\AnonymousStudentReviews.UseCases.csproj"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="Views\AccountVerification\"/>
-    </ItemGroup>
-
 </Project>

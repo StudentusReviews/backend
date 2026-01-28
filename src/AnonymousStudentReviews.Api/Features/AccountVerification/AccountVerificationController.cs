@@ -33,6 +33,26 @@ public class AccountVerificationController : Controller
 
         var result = await _accountVerificationService.HandleAsync(queryParameters.EmailVerificationToken);
 
-        return null;
+        if (result.IsFailure)
+        {
+            var errorCode = result.Error.Title;
+
+            if (errorCode == AccountVerificationErrors.TokenNotFound.Title)
+            {
+                return View("Failure");
+            }
+
+            if (errorCode == AccountVerificationErrors.TokenAlreadyUsed.Title)
+            {
+                return View("Failure");
+            }
+
+            if (errorCode == AccountVerificationErrors.TokenExpired.Title)
+            {
+                return View("Failure");
+            }
+        }
+
+        return View("Success");
     }
 }

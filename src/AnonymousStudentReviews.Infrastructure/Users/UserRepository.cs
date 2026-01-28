@@ -23,4 +23,9 @@ public class UserRepository : IUserRepository
     {
         _context.Users.Add(user);
     }
+
+    public void ConfirmUser(User user)
+    {
+        user.EmailConfirmed = true;
+    }
 }

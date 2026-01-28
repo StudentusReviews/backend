@@ -24,6 +24,7 @@ public class EmailVerificationTokenRepository : IEmailVerificationTokenRepositor
         string tokenHash)
     {
         var result = await _context.EmailVerificationTokens
+            .Include(e => e.User)
             .FirstOrDefaultAsync(e => e.TokenHash == tokenHash);
 
         if (result is null)
