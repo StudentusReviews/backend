@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace AnonymousStudentReviews.Api.Features.Dummies.Create;
+namespace AnonymousStudentReviews.Api.Features.AccountVerification;
 
 public class AccountVerificationQueryParameters
 {
