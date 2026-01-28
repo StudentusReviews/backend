@@ -16,7 +16,6 @@
       - ${SSL_CERTIFICATE_FOLDER_PATH}:/https:ro
     depends_on:
       - db
-      - papercut
 
   db:
     image: postgres:17.5-alpine
@@ -29,13 +28,7 @@
       - "5431:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-        
-  papercut:
-    image: changemakerstudiosus/papercut-smtp
-    container_name: papercut
-    ports:
-      - "37408:8080"  
-      - "2525:2525"
+
 
 
 volumes:
