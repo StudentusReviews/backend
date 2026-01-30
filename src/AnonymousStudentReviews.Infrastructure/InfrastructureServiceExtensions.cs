@@ -9,10 +9,10 @@ using AnonymousStudentReviews.Infrastructure.Data;
 using AnonymousStudentReviews.Infrastructure.Dummies;
 using AnonymousStudentReviews.Infrastructure.Email;
 using AnonymousStudentReviews.Infrastructure.EmailVerificationToken;
+using AnonymousStudentReviews.Infrastructure.Options;
 using AnonymousStudentReviews.Infrastructure.Password;
 using AnonymousStudentReviews.Infrastructure.Roles;
 using AnonymousStudentReviews.Infrastructure.Users;
-using AnonymousStudentReviews.UseCases.Users.Create;
 using AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
 
 using Microsoft.EntityFrameworkCore;
@@ -115,20 +115,17 @@ public static class InfrastructureServiceExtensions
         services.AddOptions();
         services.AddHttpClient<ResendClient>();
 
-        var resendApiKey = configuration.GetValue<string>("ResendApiKey");
-
-        if (resendApiKey is null)
-        {
-            throw new InvalidOperationException("ResendApiKey not set");
-        }
+        var resendApiOptions = new ResendApiOptions();
+        configuration.GetSection(ResendApiOptions.SectionName).Bind(resendApiOptions);
 
         services.Configure<ResendClientOptions>(o =>
         {
-            o.ApiToken = resendApiKey;
+            o.ApiToken = resendApiOptions.Key;
         });
 
         services.AddTransient<IResend, ResendClient>();
 
         services.AddScoped<IEmailSender, EmailSender>();
+        services.AddScoped<IUserManager, UserManager>();
     }
 }

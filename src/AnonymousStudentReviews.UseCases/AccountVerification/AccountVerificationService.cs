@@ -1,7 +1,6 @@
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.EmailVerificationToken;
 using AnonymousStudentReviews.Core.Aggregates.User;
-using AnonymousStudentReviews.UseCases.Users.Create;
 using AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
 
 namespace AnonymousStudentReviews.UseCases.AccountVerification;

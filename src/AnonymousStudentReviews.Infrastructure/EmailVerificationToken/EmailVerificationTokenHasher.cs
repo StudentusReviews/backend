@@ -1,28 +1,25 @@
-using AnonymousStudentReviews.UseCases.Users.Create;
+using AnonymousStudentReviews.Infrastructure.Options;
 using AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
 
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace AnonymousStudentReviews.Infrastructure.EmailVerificationToken;
 
 public class EmailVerificationTokenHasher : IEmailVerificationTokenHasher
 {
     private readonly IConfiguration _configuration;
+    private readonly EmailSecretOptions _emailSecretOptions;
 
-    public EmailVerificationTokenHasher(IConfiguration configuration)
+    public EmailVerificationTokenHasher(IConfiguration configuration, IOptions<EmailSecretOptions> emailSecretOptions)
     {
         _configuration = configuration;
+        _emailSecretOptions = emailSecretOptions.Value;
     }
 
     public string Hash(string token)
     {
-        var key = _configuration["EmailVerificationTokenHashKey"];
-
-        if (key is null)
-        {
-            throw new NullReferenceException(
-                "EmailVerificationTokenHashKey is null. EmailVerificationTokenHashKey must be set in secrets.json or any other place where secrets reside");
-        }
+        var key = _emailSecretOptions.EmailVerificationTokenHashKey;
 
         return HmacSha256Hasher.Hash(token, key);
     }
