@@ -15,11 +15,9 @@ public class CreateUserService : ICreateUserService
 
     public CreateUserService(IAllowedEmailDomainRepository allowedEmailDomainRepository,
         ILogger<CreateUserService> logger,
-        IRoleRepository roleRepository,
         IUserManager userManager)
     {
         _logger = logger;
-        _roleRepository = roleRepository;
         _userManager = userManager;
     }
 
