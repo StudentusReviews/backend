@@ -1,5 +1,7 @@
 using AnonymousStudentReviews.Api.Configurations;
 
+using Microsoft.AspNetCore.DataProtection;
+
 using Serilog;
 using Serilog.Extensions.Logging;
 
@@ -14,7 +16,11 @@ Log.Information("Starting web host");
 var loggerFactory = new SerilogLoggerFactory(Log.Logger);
 var appLogger = loggerFactory.CreateLogger<AnonymousStudentReviews.Api.Program>();
 
+
 builder.AddLoggerConfigs();
+
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo("/keys"));
 
 builder.Services.AddControllersWithViews();
 

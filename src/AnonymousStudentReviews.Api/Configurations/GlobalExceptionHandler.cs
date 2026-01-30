@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 
 namespace AnonymousStudentReviews.Api.Configurations;
 
@@ -27,12 +28,35 @@ public class GlobalExceptionHandler : IExceptionHandler
             Status = StatusCodes.Status500InternalServerError,
             Instance = httpContext.Request.Path,
         };
+        
+        if (httpContext.Request.Headers.Accept.Contains("application/json", StringComparer.OrdinalIgnoreCase))
+        {
 
-        httpContext.Response.StatusCode = problemDetails.Status.Value;
+            httpContext.Response.StatusCode = problemDetails.Status.Value;
 
-        await httpContext.Response
-            .WriteAsJsonAsync(problemDetails, cancellationToken);
+            await httpContext.Response
+                .WriteAsJsonAsync(problemDetails, cancellationToken);
+        }
+        else
+        {
+            var viewResult = new ViewResult
+            {
+                ViewName = "Error",
+            };
+            
+            httpContext.Response.StatusCode = problemDetails.Status.Value;
 
+            await viewResult.ExecuteResultAsync(
+                new ActionContext
+                {
+                    ActionDescriptor = new ActionDescriptor(),
+                    HttpContext = httpContext,
+                    RouteData = httpContext.GetRouteData()
+                });
+        }
+        
+        
+        
         return true;
     }
 }

@@ -25,6 +25,7 @@ public class CreateUserService : ICreateUserService
     {
         _logger.LogInformation("Create user service started");
 
+        throw new InvalidOperationException();
 
         var createUserResult = await _userManager.CreateAsync(dto.Email, dto.Password);
 
