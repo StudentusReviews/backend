@@ -1,6 +1,5 @@
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
-using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
 
@@ -34,8 +33,8 @@ public class CreateUserService : ICreateUserService
 
         var createdUser = createUserResult.Value;
 
+        _logger.LogInformation("Requested account verification");
         await _userManager.RequestAccountVerificationAsync(createdUser, dto.Email);
-
 
         return Result.Success(createdUser);
     }
