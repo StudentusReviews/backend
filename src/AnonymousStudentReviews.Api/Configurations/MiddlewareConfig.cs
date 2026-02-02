@@ -16,6 +16,8 @@ public static class MiddlewareConfig
 
         app.UseStaticFiles();
 
+        app.UseAuthentication();
+
         app.UseAuthorization();
 
         app.MapControllers();

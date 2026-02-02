@@ -20,6 +20,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
+using Quartz;
+
 using Resend;
 
 namespace AnonymousStudentReviews.Infrastructure;
@@ -59,6 +61,7 @@ public static class InfrastructureServiceExtensions
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseNpgsql(connectionString);
+            options.UseOpenIddict();
             options.UseSeeding((context, _) =>
             {
                 void InsertRoleIfNotExists(string name)
@@ -127,5 +130,13 @@ public static class InfrastructureServiceExtensions
 
         services.AddScoped<IEmailSender, EmailSender>();
         services.AddScoped<IUserManager, UserManager>();
+
+        services.AddQuartz(options =>
+        {
+            options.UseSimpleTypeLoader();
+            options.UseInMemoryStore();
+        });
+
+        services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
     }
 }
