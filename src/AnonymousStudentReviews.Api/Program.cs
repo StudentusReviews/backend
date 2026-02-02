@@ -1,5 +1,6 @@
 using AnonymousStudentReviews.Api.Configurations;
 
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 
 using Serilog;
@@ -16,6 +17,15 @@ Log.Information("Starting web host");
 var loggerFactory = new SerilogLoggerFactory(Log.Logger);
 var appLogger = loggerFactory.CreateLogger<AnonymousStudentReviews.Api.Program>();
 
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    })
+.AddCookie(options =>
+{
+    options.LoginPath = "api/login";
+    options.LogoutPath = "api/logout";
+});
 
 builder.AddLoggerConfigs();
 
