@@ -1,5 +1,5 @@
 using AnonymousStudentReviews.Api.Extensions;
-using AnonymousStudentReviews.UseCases.Users.Create;
+using AnonymousStudentReviews.UseCases.Registration;
 
 using FluentValidation;
 

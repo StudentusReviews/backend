@@ -1,6 +1,6 @@
 using AnonymousStudentReviews.Core.ErrorTypes;
 
-namespace AnonymousStudentReviews.UseCases.Users.Create;
+namespace AnonymousStudentReviews.UseCases.Registration;
 
 public static class RegistrationErrors
 {

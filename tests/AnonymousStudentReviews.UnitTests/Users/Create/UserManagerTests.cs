@@ -5,8 +5,8 @@ using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.Infrastructure.Options;
 using AnonymousStudentReviews.Infrastructure.Users;
+using AnonymousStudentReviews.UseCases.Registration;
 using AnonymousStudentReviews.UseCases.Registration.Abstractions;
-using AnonymousStudentReviews.UseCases.Users.Create;
 
 using Microsoft.Extensions.Options;
 

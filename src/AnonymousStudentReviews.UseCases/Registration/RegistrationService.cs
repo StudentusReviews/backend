@@ -5,7 +5,7 @@ using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 
 using Microsoft.Extensions.Logging;
 
-namespace AnonymousStudentReviews.UseCases.Users.Create;
+namespace AnonymousStudentReviews.UseCases.Registration;
 
 public class RegistrationService : IRegistrationService
 {

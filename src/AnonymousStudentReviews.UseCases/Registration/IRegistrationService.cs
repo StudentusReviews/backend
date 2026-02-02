@@ -1,7 +1,7 @@
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.User;
 
-namespace AnonymousStudentReviews.UseCases.Users.Create;
+namespace AnonymousStudentReviews.UseCases.Registration;
 
 public interface IRegistrationService
 {
