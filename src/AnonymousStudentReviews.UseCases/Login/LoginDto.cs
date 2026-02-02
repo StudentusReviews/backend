@@ -1,6 +1,6 @@
-namespace AnonymousStudentReviews.Api.Features.Login;
+namespace AnonymousStudentReviews.UseCases.Login;
 
-public class LoginRequest
+public class LoginDto
 {
     public string Email { get; set; }
     public string Password { get; set; }

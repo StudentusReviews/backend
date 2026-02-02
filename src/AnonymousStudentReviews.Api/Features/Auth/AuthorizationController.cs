@@ -1,7 +1,7 @@
 using System.Security.Claims;
 
 using AnonymousStudentReviews.Api.Features.Auth.Helpers;
-using AnonymousStudentReviews.UseCases.Login;
+using AnonymousStudentReviews.UseCases.Login.Abstractions;
 using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 
 using Microsoft.AspNetCore;
@@ -23,8 +23,8 @@ public class AuthorizationController : Controller
     private readonly IOpenIddictApplicationManager _applicationManager;
     private readonly IOpenIddictAuthorizationManager _authorizationManager;
     private readonly IOpenIddictScopeManager _scopeManager;
-    private readonly IUserManager _userManager;
     private readonly ISignInManager _signInManager;
+    private readonly IUserManager _userManager;
 
     public AuthorizationController(
         IOpenIddictApplicationManager applicationManager,
