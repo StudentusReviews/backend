@@ -13,6 +13,7 @@ using AnonymousStudentReviews.Infrastructure.Options;
 using AnonymousStudentReviews.Infrastructure.Password;
 using AnonymousStudentReviews.Infrastructure.Roles;
 using AnonymousStudentReviews.Infrastructure.Users;
+using AnonymousStudentReviews.UseCases.Login;
 using AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
 
 using Microsoft.EntityFrameworkCore;
@@ -131,6 +132,8 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IEmailSender, EmailSender>();
         services.AddScoped<IUserManager, UserManager>();
 
+        services.AddHostedService<Worker>();
+
         services.AddQuartz(options =>
         {
             options.UseSimpleTypeLoader();
@@ -138,5 +141,7 @@ public static class InfrastructureServiceExtensions
         });
 
         services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
+
+        services.AddScoped<ISignInManager, SignInManager>();
     }
 }
