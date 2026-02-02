@@ -24,7 +24,7 @@ public class AuthenticationController : Controller
         // Multiple strategies exist to handle OAuth 2.0/OpenID Connect callbacks, each with their pros and cons:
         //
         //   * Directly using the tokens to perform the necessary action(s) on behalf of the user, which is suitable
-        //     for applications that don't need a long-term access to the user's resources or don't want to store
+        //     for applications that don't need long-term access to the user's resources or don't want to store
         //     access/refresh tokens in a database or in an authentication cookie (which has security implications).
         //     It is also suitable for applications that don't need to authenticate users but only need to perform
         //     action(s) on their behalf by making API calls using the access token returned by the remote server.
@@ -37,12 +37,12 @@ public class AuthenticationController : Controller
         //
         //   * Storing the external claims/tokens in an authentication cookie, which doesn't require having
         //     a user database but may be affected by the cookie size limits enforced by most browser vendors
-        //     (e.g Safari for macOS and Safari for iOS/iPadOS enforce a per-domain 4KB limit for all cookies).
+        //     (e.g. Safari for macOS and Safari for iOS/iPadOS enforce a per-domain 4KB limit for all cookies).
         //
         //     Note: this is the approach used here, but the external claims are first filtered to only persist
         //     a few claims like the user identifier. The same approach is used to store the access/refresh tokens.
 
-        // Important: if the remote server doesn't support OpenID Connect and doesn't expose a userinfo endpoint,
+        // Important: if the remote server doesn't support OpenID Connect and doesn't expose an userinfo endpoint,
         // result.Principal.Identity will represent an unauthenticated identity and won't contain any user claim.
         //
         // Such identities cannot be used as-is to build an authentication cookie in ASP.NET Core (as the
@@ -62,9 +62,9 @@ public class AuthenticationController : Controller
         // By default, OpenIddict will automatically try to map the email/name and name identifier claims from
         // their standard OpenID Connect or provider-specific equivalent, if available. If needed, additional
         // claims can be resolved from the external identity and copied to the final authentication cookie.
-        identity.SetClaim(ClaimTypes.Email, result.Principal.GetClaim(ClaimTypes.Email))
-                .SetClaim(ClaimTypes.Name, result.Principal.GetClaim(ClaimTypes.Name))
-                .SetClaim(ClaimTypes.NameIdentifier, result.Principal.GetClaim(ClaimTypes.NameIdentifier));
+        identity.SetClaim(ClaimTypes.Email, result.Principal.GetClaim(ClaimTypes.Email));
+                // .SetClaim(ClaimTypes.Name, result.Principal.GetClaim(ClaimTypes.Name))
+                // .SetClaim(ClaimTypes.NameIdentifier, result.Principal.GetClaim(ClaimTypes.NameIdentifier));
 
         // Preserve the registration details to be able to resolve them later.
         identity.SetClaim(Claims.Private.RegistrationId, result.Principal.GetClaim(Claims.Private.RegistrationId))
@@ -106,7 +106,7 @@ public class AuthenticationController : Controller
             ExpiresUtc = null,
 
             // Note: this flag controls whether the authentication cookie that will be returned to the
-            // browser will be treated as a session cookie (i.e destroyed when the browser is closed)
+            // browser will be treated as a session cookie (i.e. destroyed when the browser is closed)
             // or as a persistent cookie. In both cases, the lifetime of the authentication ticket is
             // always stored as protected data, preventing malicious users from trying to use an
             // authentication cookie beyond the lifetime of the authentication ticket itself.

@@ -1,4 +1,5 @@
 using System.Net.Mail;
+using System.Security.Claims;
 
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
@@ -10,6 +11,8 @@ using AnonymousStudentReviews.UseCases.Users.Create;
 using AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
 
 using Microsoft.Extensions.Options;
+
+using OpenIddict.Abstractions;
 
 namespace AnonymousStudentReviews.Infrastructure.Users;
 
@@ -102,6 +105,58 @@ public class UserManager : IUserManager
 
         var accountVerificationLink = _accountVerificationLinkFactory.Create(emailVerificationTokenString);
         await SendAccountVerificationEmailAsync(email, accountVerificationLink);
+    }
+
+    public async Task<Result<User>> GetUserAsync(ClaimsPrincipal principal)
+    {
+        var subjectClaim = principal.Claims.FirstOrDefault(claim => claim.Type == OpenIddictConstants.Claims.Subject);
+
+        if (subjectClaim is null)
+        {
+            throw new InvalidOperationException("The user details cannot be retrieved.");
+        }
+
+        var userIdString = subjectClaim.Value;
+        
+        var parseIdResult = Guid.TryParse(userIdString, out var userId);
+
+        if (!parseIdResult)
+        {
+            throw new InvalidOperationException("The user id is in the wrong format");
+        }
+
+        var findUserResult = await _userRepository.FindByIdAsync(userId);
+
+        if (findUserResult.IsFailure)
+        {
+            return Result.Failure<User>(findUserResult.Error);
+        }
+
+        return findUserResult.Value;
+    }
+
+    public async Task<string> GetUserIdAsync(User user)
+    {
+        return user.Id.ToString();
+    }
+
+    public async Task<List<string>> GetRolesAsync(User user)
+    {
+        var roles = await _userRepository.GetRolesAsync(user);
+        var roleNames = roles.Select(role => role.Name).ToList();
+        return roleNames;
+    }
+
+    public async Task<Result<User>> FindByIdAsync(string id)
+    {
+        var parseIdResult = Guid.TryParse(id, out var userId);
+
+        if (!parseIdResult)
+        {
+            throw new InvalidOperationException("The user id is in the wrong format");
+        }
+
+        return await _userRepository.FindByIdAsync(userId);
     }
 
     private async Task SendAccountVerificationEmailAsync(string emailAddress, string accountVerificationLink)
