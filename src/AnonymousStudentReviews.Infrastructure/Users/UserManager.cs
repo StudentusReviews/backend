@@ -117,7 +117,7 @@ public class UserManager : IUserManager
         }
 
         var userIdString = subjectClaim.Value;
-        
+
         var parseIdResult = Guid.TryParse(userIdString, out var userId);
 
         if (!parseIdResult)
@@ -157,6 +157,20 @@ public class UserManager : IUserManager
         }
 
         return await _userRepository.FindByIdAsync(userId);
+    }
+
+    public async Task<Result<User>> FindByEmailAsync(string email)
+    {
+        var emailHash = _emailHasher.Hash(email);
+
+        var findUserResult = await _userRepository.FindByEmailHashAsync(emailHash);
+
+        if (findUserResult.IsFailure)
+        {
+            return Result.Failure<User>(findUserResult.Error);
+        }
+
+        return findUserResult.Value;
     }
 
     private async Task SendAccountVerificationEmailAsync(string emailAddress, string accountVerificationLink)

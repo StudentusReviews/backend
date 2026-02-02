@@ -13,7 +13,7 @@ using AnonymousStudentReviews.Infrastructure.Options;
 using AnonymousStudentReviews.Infrastructure.Password;
 using AnonymousStudentReviews.Infrastructure.Roles;
 using AnonymousStudentReviews.Infrastructure.Users;
-using AnonymousStudentReviews.UseCases.Login;
+using AnonymousStudentReviews.UseCases.Login.Abstractions;
 using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 
 using Microsoft.EntityFrameworkCore;

@@ -43,6 +43,18 @@ public class UserRepository : IUserRepository
         return Result.Success(result);
     }
 
+    public async Task<Result<User>> FindByEmailHashAsync(string emailHash)
+    {
+        var result = await _context.Users.FirstOrDefaultAsync(user => user.EmailHash == emailHash);
+
+        if (result is null)
+        {
+            return Result.Failure<User>(UserErrors.NotFound);
+        }
+
+        return result;
+    }
+
     public async Task<IEnumerable<Role>> GetRolesAsync(User user)
     {
         var roles = await _context.Users
