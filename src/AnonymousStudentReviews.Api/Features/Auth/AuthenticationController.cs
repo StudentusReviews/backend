@@ -10,6 +10,7 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace AnonymousStudentReviews.Api.Features.Auth;
 
+[ApiExplorerSettings(IgnoreApi = true)]
 public class AuthenticationController : Controller
 {
     // Note: this controller uses the same callback action for all providers

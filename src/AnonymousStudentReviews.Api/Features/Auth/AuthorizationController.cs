@@ -17,6 +17,7 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace AnonymousStudentReviews.Api.Features.Auth;
 
+[ApiExplorerSettings(IgnoreApi = true)]
 public class AuthorizationController : Controller
 {
     private readonly IOpenIddictApplicationManager _applicationManager;
