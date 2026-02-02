@@ -2,7 +2,7 @@ using System.Security.Claims;
 
 using AnonymousStudentReviews.Api.Features.Auth.Helpers;
 using AnonymousStudentReviews.UseCases.Login;
-using AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
+using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;

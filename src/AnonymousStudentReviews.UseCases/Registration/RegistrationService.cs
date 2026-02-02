@@ -1,26 +1,26 @@
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
 using AnonymousStudentReviews.Core.Aggregates.User;
-using AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
+using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 
 using Microsoft.Extensions.Logging;
 
 namespace AnonymousStudentReviews.UseCases.Users.Create;
 
-public class CreateUserService : ICreateUserService
+public class RegistrationService : IRegistrationService
 {
-    private readonly ILogger<CreateUserService> _logger;
+    private readonly ILogger<RegistrationService> _logger;
     private readonly IUserManager _userManager;
 
-    public CreateUserService(IAllowedEmailDomainRepository allowedEmailDomainRepository,
-        ILogger<CreateUserService> logger,
+    public RegistrationService(IAllowedEmailDomainRepository allowedEmailDomainRepository,
+        ILogger<RegistrationService> logger,
         IUserManager userManager)
     {
         _logger = logger;
         _userManager = userManager;
     }
 
-    public async Task<Result<User>> HandleAsync(CreateUserDto dto)
+    public async Task<Result<User>> HandleAsync(RegistrationDto dto)
     {
         _logger.LogInformation("Create user service started");
 

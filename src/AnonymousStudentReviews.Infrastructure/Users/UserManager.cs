@@ -7,8 +7,8 @@ using AnonymousStudentReviews.Core.Aggregates.EmailVerificationToken;
 using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.Infrastructure.Options;
+using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 using AnonymousStudentReviews.UseCases.Users.Create;
-using AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
 
 using Microsoft.Extensions.Options;
 
@@ -62,7 +62,7 @@ public class UserManager : IUserManager
 
         if (await _userRepository.UserWithEmailHashExistsAsync(emailHash))
         {
-            return Result.Failure<User>(CreateUserErrors.UserAlreadyExists);
+            return Result.Failure<User>(RegistrationErrors.UserAlreadyExists);
         }
 
         var hashedPassword = _passwordHasher.HashPassword(password);

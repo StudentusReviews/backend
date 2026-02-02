@@ -3,7 +3,7 @@ using AnonymousStudentReviews.Core.Aggregates.User;
 
 namespace AnonymousStudentReviews.UseCases.Users.Create;
 
-public interface ICreateUserService
+public interface IRegistrationService
 {
-    Task<Result<User>> HandleAsync(CreateUserDto dto);
+    Task<Result<User>> HandleAsync(RegistrationDto dto);
 }

@@ -1,6 +1,6 @@
 namespace AnonymousStudentReviews.UseCases.Users.Create;
 
-public class CreateUserDto
+public class RegistrationDto
 {
     public string Email { get; set; }
     public string Password { get; set; }

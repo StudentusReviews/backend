@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 
+using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 using AnonymousStudentReviews.UseCases.Users.Create;
-using AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
 
 namespace AnonymousStudentReviews.Infrastructure.EmailVerificationToken;
 

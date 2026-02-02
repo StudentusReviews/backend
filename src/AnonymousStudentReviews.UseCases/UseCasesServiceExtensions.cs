@@ -51,7 +51,7 @@ public static class UseCasesServiceExtensions
     private static void RegisterServices(IServiceCollection services)
     {
         services.AddScoped<ICreateDummyService, CreateDummyService>();
-        services.AddScoped<ICreateUserService, CreateUserService>();
+        services.AddScoped<IRegistrationService, RegistrationService>();
         services.AddScoped<IAccountVerificationService, AccountVerificationService>();
     }
 }

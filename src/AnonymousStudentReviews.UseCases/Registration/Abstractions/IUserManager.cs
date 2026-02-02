@@ -3,7 +3,7 @@ using System.Security.Claims;
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.User;
 
-namespace AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
+namespace AnonymousStudentReviews.UseCases.Registration.Abstractions;
 
 public interface IUserManager
 {
