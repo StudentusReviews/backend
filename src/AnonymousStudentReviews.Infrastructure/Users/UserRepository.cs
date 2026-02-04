@@ -45,7 +45,9 @@ public class UserRepository : IUserRepository
 
     public async Task<Result<User>> FindByEmailHashAsync(string emailHash)
     {
-        var result = await _context.Users.FirstOrDefaultAsync(user => user.EmailHash == emailHash);
+        var result = await _context.Users
+            .Include(user => user.Roles)
+            .FirstOrDefaultAsync(user => user.EmailHash == emailHash);
 
         if (result is null)
         {
