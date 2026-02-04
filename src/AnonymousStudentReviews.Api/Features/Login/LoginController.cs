@@ -10,31 +10,42 @@ namespace AnonymousStudentReviews.Api.Features.Login;
 [Route("api/login")]
 public class LoginController : Controller
 {
+    private readonly IValidator<LoginRequestQueryParameters> _loginRequestQueryParametersValidator;
     private readonly IValidator<LoginRequest> _loginRequestValidator;
     private readonly ILoginService _loginService;
 
-    public LoginController(ILoginService loginService, IValidator<LoginRequest> loginRequestValidator)
+    public LoginController(ILoginService loginService, IValidator<LoginRequest> loginRequestValidator,
+        IValidator<LoginRequestQueryParameters> loginRequestQueryParametersValidator)
     {
         _loginService = loginService;
         _loginRequestValidator = loginRequestValidator;
+        _loginRequestQueryParametersValidator = loginRequestQueryParametersValidator;
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
         return View();
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login([FromForm] LoginRequest request)
+    public async Task<IActionResult> Login([FromForm] LoginRequest request,
+        [FromQuery] LoginRequestQueryParameters queryParameters)
     {
-        var validationResult = await _loginRequestValidator.ValidateAsync(request);
+        var formValidationResult = await _loginRequestValidator.ValidateAsync(request);
 
-        if (!validationResult.IsValid)
+        if (!formValidationResult.IsValid)
         {
-            validationResult.AddToModelState(ModelState);
+            formValidationResult.AddToModelState(ModelState);
             return View("Index");
+        }
+
+        var queryValidationResult = await _loginRequestQueryParametersValidator.ValidateAsync(queryParameters);
+
+        if (!queryValidationResult.IsValid || !Url.IsLocalUrl(queryParameters.ReturnUrl))
+        {
+            return BadRequest();
         }
 
         var loginResult = await _loginService.HandleAsync(RequestToDto(request));
@@ -45,7 +56,7 @@ public class LoginController : Controller
             return View("Index");
         }
 
-        return Redirect("/connect/authorize");
+        return Redirect(queryParameters.ReturnUrl);
     }
 
     private LoginDto RequestToDto(LoginRequest request)
