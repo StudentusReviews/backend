@@ -8,9 +8,12 @@ namespace AnonymousStudentReviews.Api.Features.Login;
 
 public class LoginRequestQueryParametersValidator : AbstractValidator<LoginRequestQueryParameters>
 {
-    public LoginRequestQueryParametersValidator(IUrlHelper helper, IHttpContextAccessor httpContextAccessor)
+    public LoginRequestQueryParametersValidator()
     {
         RuleFor(x => x.ReturnUrl)
-            .IsRelativeUri();
+            .NotNull()
+            .NotEmpty()
+            .IsRelativeUri()
+            .Must(returnUrl => returnUrl.StartsWith("/connect/authorize", StringComparison.Ordinal));
     }
 }

@@ -43,7 +43,7 @@ public class LoginController : Controller
 
         var queryValidationResult = await _loginRequestQueryParametersValidator.ValidateAsync(queryParameters);
 
-        if (!queryValidationResult.IsValid || !Url.IsLocalUrl(queryParameters.ReturnUrl))
+        if (!Url.IsLocalUrl(queryParameters.ReturnUrl) || !queryValidationResult.IsValid)
         {
             return BadRequest();
         }
@@ -56,7 +56,7 @@ public class LoginController : Controller
             return View("Index");
         }
 
-        return Redirect(queryParameters.ReturnUrl);
+        return Redirect("~/");
     }
 
     private LoginDto RequestToDto(LoginRequest request)
