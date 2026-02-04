@@ -21,11 +21,11 @@ builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     })
-.AddCookie(options =>
-{
-    options.LoginPath = "api/login";
-    options.LogoutPath = "api/logout";
-});
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/api/login";
+        options.LogoutPath = "/api/logout";
+    });
 
 builder.AddLoggerConfigs();
 
