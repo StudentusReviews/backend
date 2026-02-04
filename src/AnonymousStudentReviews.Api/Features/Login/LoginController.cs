@@ -3,6 +3,8 @@ using AnonymousStudentReviews.UseCases.Login;
 
 using FluentValidation;
 
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AnonymousStudentReviews.Api.Features.Login;
@@ -30,8 +32,7 @@ public class LoginController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login([FromForm] LoginRequest request,
-        [FromQuery] LoginRequestQueryParameters queryParameters)
+    public async Task<IActionResult> Login([FromForm] LoginRequest request)
     {
         var formValidationResult = await _loginRequestValidator.ValidateAsync(request);
 
@@ -41,12 +42,12 @@ public class LoginController : Controller
             return View("Index");
         }
 
-        var queryValidationResult = await _loginRequestQueryParametersValidator.ValidateAsync(queryParameters);
-
-        if (!Url.IsLocalUrl(queryParameters.ReturnUrl) || !queryValidationResult.IsValid)
-        {
-            return BadRequest();
-        }
+        // var queryValidationResult = await _loginRequestQueryParametersValidator.ValidateAsync(queryParameters);
+        //
+        // if (!Url.IsLocalUrl(queryParameters.ReturnUrl) || !queryValidationResult.IsValid)
+        // {
+        //     return BadRequest();
+        // }
 
         var loginResult = await _loginService.HandleAsync(RequestToDto(request));
 
@@ -56,7 +57,8 @@ public class LoginController : Controller
             return View("Index");
         }
 
-        return Redirect("~/");
+        var returnUri = HttpContext.GetOpenIddictServerRequest()?.RedirectUri ?? "~/";
+        return LocalRedirect(returnUri);
     }
 
     private LoginDto RequestToDto(LoginRequest request)

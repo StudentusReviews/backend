@@ -55,7 +55,7 @@ public class Worker : IHostedService
                     Permissions.ResponseTypes.Code,
                     Permissions.Scopes.Email,
                     Permissions.Scopes.Profile,
-                    Permissions.Scopes.Roles
+                    Permissions.Scopes.Roles,
                 },
                 Requirements = { Requirements.Features.ProofKeyForCodeExchange }
             };
