@@ -79,7 +79,7 @@
         <div class="error">@TempData["Error"]</div>
     }
 
-    <form asp-action="Index" method="post" asp-controller="Login">
+    <form asp-action="Login" method="post" asp-controller="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]">
         @Html.AntiForgeryToken()
         <div class="form-group">
             <label asp-for="Email">Email</label>
