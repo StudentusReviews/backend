@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AnonymousStudentReviews.Api.Features.Registration;
 
-[Route("register")]
+[Route("api/register")]
 public class RegistrationController : Controller
 {
     private readonly IValidator<RegistrationRequest> _createUserRequestValidator;
