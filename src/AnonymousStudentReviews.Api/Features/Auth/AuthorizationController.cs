@@ -1,6 +1,7 @@
 using System.Security.Claims;
 
 using AnonymousStudentReviews.Api.Features.Auth.Helpers;
+using AnonymousStudentReviews.Api.Features.Auth.ViewModels;
 using AnonymousStudentReviews.UseCases.Login.Abstractions;
 using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 
@@ -188,12 +189,11 @@ public class AuthorizationController : Controller
 
             // In every other case, render the consent form.
             default:
-                // return View(new AuthorizeViewModel
-                // {
-                //     ApplicationName = (await _applicationManager.GetLocalizedDisplayNameAsync(application))!,
-                //     Scope = request.Scope
-                // });
-                return View();
+                return View(new AuthorizeViewModel
+                {
+                    ApplicationName = (await _applicationManager.GetLocalizedDisplayNameAsync(application))!,
+                    Scope = request.Scope
+                });
         }
     }
 

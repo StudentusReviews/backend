@@ -39,8 +39,7 @@ public class SignInManager : ISignInManager
 
     public async Task<bool> CanSignInAsync(User user)
     {
-        // TODO: implement the CanSignAsync method properly
-        return true;
+        return user.EmailConfirmed;
     }
 
     public async Task<Result> CheckPasswordSignInAsync(User user, string password)

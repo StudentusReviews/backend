@@ -27,4 +27,8 @@
         <ProjectReference Include="..\AnonymousStudentReviews.UseCases\AnonymousStudentReviews.UseCases.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <Folder Include="Views\Logout\"/>
+    </ItemGroup>
+
 </Project>
