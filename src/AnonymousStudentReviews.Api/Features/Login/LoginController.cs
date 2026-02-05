@@ -10,16 +10,13 @@ namespace AnonymousStudentReviews.Api.Features.Login;
 [Route("api/login")]
 public class LoginController : Controller
 {
-    private readonly IValidator<LoginRequestQueryParameters> _loginRequestQueryParametersValidator;
     private readonly IValidator<LoginRequest> _loginRequestValidator;
     private readonly ILoginService _loginService;
 
-    public LoginController(ILoginService loginService, IValidator<LoginRequest> loginRequestValidator,
-        IValidator<LoginRequestQueryParameters> loginRequestQueryParametersValidator)
+    public LoginController(ILoginService loginService, IValidator<LoginRequest> loginRequestValidator)
     {
         _loginService = loginService;
         _loginRequestValidator = loginRequestValidator;
-        _loginRequestQueryParametersValidator = loginRequestQueryParametersValidator;
     }
 
     [HttpGet]
