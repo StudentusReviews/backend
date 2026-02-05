@@ -426,4 +426,40 @@ public class AuthorizationController : Controller
                 yield break;
         }
     }
+
+    [Authorize(AuthenticationSchemes = OpenIddictServerAspNetCoreDefaults.AuthenticationScheme)]
+    [HttpPost("~/connect/userinfo")]
+    [HttpGet("~/connect/userinfo")]
+    [Produces("application/json")]
+    public async Task<IActionResult> UserInfoAsync()
+    {
+        var userId = User.GetClaim(Claims.Subject);
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Challenge(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        }
+
+        var getUserResult = await _userManager.FindByIdAsync(userId);
+
+        if (getUserResult.IsFailure)
+        {
+            return Challenge(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        }
+
+        var user = getUserResult.Value;
+
+
+        var claims = new Dictionary<string, object>(StringComparer.Ordinal)
+        {
+            [Claims.Subject] = await _userManager.GetUserIdAsync(user)
+        };
+
+        if (User.HasScope(Scopes.Roles))
+        {
+            claims[Claims.Role] = await _userManager.GetRolesAsync(user);
+        }
+
+        return Ok(claims);
+    }
 }
