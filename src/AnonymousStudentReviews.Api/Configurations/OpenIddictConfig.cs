@@ -27,10 +27,11 @@ public static class OpenIddictConfig
                     OpenIddictConstants.Permissions.Scopes.Profile,
                     OpenIddictConstants.Permissions.Scopes.Roles,
                     OpenIddictConstants.Scopes.Profile,
-                    OpenIddictConstants.Scopes.Roles
+                    OpenIddictConstants.Scopes.Roles,
+                    OpenIddictConstants.Scopes.OfflineAccess
                 );
 
-                options.AllowAuthorizationCodeFlow();
+                options.AllowAuthorizationCodeFlow().AllowRefreshTokenFlow();
 
                 options.AddDevelopmentEncryptionCertificate()
                     .AddDevelopmentSigningCertificate();
