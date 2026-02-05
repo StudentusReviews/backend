@@ -1,0 +1,19 @@
+repos:
+  - repo: local
+    hooks:
+      - id: dotnet-format
+        name: dotnet format
+        entry: dotnet format
+        language: system
+        pass_filenames: false
+
+      - id: dotnet-test
+        name: dotnet test
+        entry: dotnet test
+        language: system
+        pass_filenames: false
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.2
+    hooks:
+      - id: gitleaks
