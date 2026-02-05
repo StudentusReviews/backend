@@ -53,10 +53,12 @@ public class Worker : IHostedService
                 Permissions.Endpoints.EndSession,
                 Permissions.Endpoints.Token,
                 Permissions.GrantTypes.AuthorizationCode,
+                Permissions.GrantTypes.RefreshToken,
                 Permissions.ResponseTypes.Code,
                 Permissions.Scopes.Email,
                 Permissions.Scopes.Profile,
-                Permissions.Scopes.Roles
+                Permissions.Scopes.Roles,
+                Scopes.OfflineAccess
             },
             Requirements = { Requirements.Features.ProofKeyForCodeExchange }
         };
@@ -87,6 +89,10 @@ public class Worker : IHostedService
 
         var postLogoutRedirectUrisJson =
             JsonSerializer.Serialize(openIddictDescriptor.PostLogoutRedirectUris.ToArray());
+
+        var permissionsJson = JsonSerializer.Serialize(openIddictDescriptor.Permissions.ToArray());
+        
+        clientFromDatabaseTyped.Permissions = permissionsJson;
 
         clientFromDatabaseTyped.RedirectUris = redirectUrisJson;
         clientFromDatabaseTyped.PostLogoutRedirectUris = postLogoutRedirectUrisJson;
