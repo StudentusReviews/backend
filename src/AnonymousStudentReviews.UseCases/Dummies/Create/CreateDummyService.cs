@@ -1,5 +1,6 @@
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.Dummy;
+using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 
 namespace AnonymousStudentReviews.UseCases.Dummies.Create;
 
@@ -7,11 +8,13 @@ public class CreateDummyService : ICreateDummyService
 {
     private readonly IDummyRepository _dummyRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IUserManager _userManager;
 
-    public CreateDummyService(IDummyRepository dummyRepository, IUnitOfWork unitOfWork)
+    public CreateDummyService(IDummyRepository dummyRepository, IUnitOfWork unitOfWork, IUserManager userManager)
     {
         _dummyRepository = dummyRepository;
         _unitOfWork = unitOfWork;
+        _userManager = userManager;
     }
 
     public async Task<Result<Dummy>> ExecuteAsync(CreateDummyDto dto)
