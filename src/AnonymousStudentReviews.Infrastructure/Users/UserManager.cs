@@ -66,7 +66,10 @@ public class UserManager : IUserManager
 
         var createdUser = new User
         {
-            Id = Guid.NewGuid(), EmailHash = emailHash, PasswordHash = hashedPassword, CreatedAt = DateTime.UtcNow
+            Id = Guid.NewGuid(),
+            EmailHash = emailHash,
+            PasswordHash = hashedPassword,
+            CreatedAt = DateTime.UtcNow
         };
 
         var userRoles = await DetermineUserRolesAsync(createdUser, email, emailDomain);
