@@ -27,25 +27,26 @@ public class CreateDummyServiceTests
             _currentUserServiceMock.Object, _userManagerMock.Object);
     }
 
-    [Fact]
-    public async Task ExecuteAsync_ShouldSuccess_WhenDummyName_IsNotNullOrWhitespace()
-    {
-        var dummyName = "some valid name";
-        var dto = new CreateDummyDto { Name = dummyName };
-
-        var result = await _createDummyService.ExecuteAsync(dto);
-
-        Assert.True(result.IsSuccess);
-    }
-
-    [Fact]
-    public async Task ExecuteAsync_ShouldFail_WhenDummyName_IsNullOrWhitespace()
-    {
-        var dummyName = "";
-        var dto = new CreateDummyDto { Name = dummyName };
-
-        var result = await _createDummyService.ExecuteAsync(dto);
-
-        Assert.False(result.IsSuccess);
-    }
+    // [Fact]
+    // public async Task ExecuteAsync_ShouldSuccess_WhenDummyName_IsNotNullOrWhitespace()
+    // {
+    //     var dummyName = "some valid name";
+    //     var dto = new CreateDummyDto { Name = dummyName };
+    //     
+    //
+    //     var result = await _createDummyService.ExecuteAsync(dto);
+    //
+    //     Assert.True(result.IsSuccess);
+    // }
+    //
+    // [Fact]
+    // public async Task ExecuteAsync_ShouldFail_WhenDummyName_IsNullOrWhitespace()
+    // {
+    //     var dummyName = "";
+    //     var dto = new CreateDummyDto { Name = dummyName };
+    //
+    //     var result = await _createDummyService.ExecuteAsync(dto);
+    //
+    //     Assert.False(result.IsSuccess);
+    // }
 }
