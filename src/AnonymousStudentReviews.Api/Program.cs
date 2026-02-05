@@ -1,4 +1,6 @@
+using AnonymousStudentReviews.Api;
 using AnonymousStudentReviews.Api.Configurations;
+using AnonymousStudentReviews.Api.Options;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
@@ -7,6 +9,22 @@ using Serilog;
 using Serilog.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+var corsOptions = new CorsOptions();
+builder.Configuration.GetSection(CorsOptions.SectionName).Bind(corsOptions);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(ApiConstants.CorsPolicyName,
+        policy =>
+        {
+            policy.WithOrigins(corsOptions.AllowedOrigins.ToArray())
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+        });
+});
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -23,6 +41,8 @@ builder.Services.AddAuthentication(options =>
     })
     .AddCookie(options =>
     {
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = SameSiteMode.Lax;
         options.LoginPath = "/api/login";
         options.LogoutPath = "/api/logout";
     });

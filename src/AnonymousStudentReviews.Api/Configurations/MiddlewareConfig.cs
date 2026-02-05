@@ -16,6 +16,8 @@ public static class MiddlewareConfig
 
         app.UseStaticFiles();
 
+        app.UseCors(ApiConstants.CorsPolicyName);
+
         app.UseAuthentication();
 
         app.UseAuthorization();
