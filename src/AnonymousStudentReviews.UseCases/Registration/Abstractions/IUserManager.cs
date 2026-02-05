@@ -13,5 +13,6 @@ public interface IUserManager
     Task<string> GetUserIdAsync(User user);
     Task<List<string>> GetRolesAsync(User user);
     Task<Result<User>> FindByIdAsync(string id);
+    Task<Result<User>> FindByIdAsync(Guid id);
     Task<Result<User>> FindByEmailAsync(string email);
 }

@@ -156,7 +156,12 @@ public class UserManager : IUserManager
             throw new InvalidOperationException("The user id is in the wrong format");
         }
 
-        return await _userRepository.FindByIdAsync(userId);
+        return await FindByIdAsync(userId);
+    }
+
+    public async Task<Result<User>> FindByIdAsync(Guid id)
+    {
+        return await _userRepository.FindByIdAsync(id);
     }
 
     public async Task<Result<User>> FindByEmailAsync(string email)

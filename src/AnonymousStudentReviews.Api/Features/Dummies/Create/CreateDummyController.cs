@@ -1,8 +1,8 @@
 using System.Data;
 
 using AnonymousStudentReviews.Api.Extensions;
+using AnonymousStudentReviews.Core.Aggregates.Dummy;
 using AnonymousStudentReviews.UseCases.Dummies.Create;
-using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 
 using FluentValidation;
 
@@ -20,16 +20,12 @@ public class CreateDummyController : ControllerBase
 {
     private readonly IValidator<CreateDummyRequest> _createDummyRequestValidator;
     private readonly ICreateDummyService _createDummyService;
-    private readonly ILogger<CreateDummyController> _logger;
-    private readonly IUserManager _userManager;
 
     public CreateDummyController(IValidator<CreateDummyRequest> createDummyRequestValidator,
-        ICreateDummyService createDummyService, ILogger<CreateDummyController> logger, IUserManager userManager)
+        ICreateDummyService createDummyService)
     {
         _createDummyRequestValidator = createDummyRequestValidator;
         _createDummyService = createDummyService;
-        _logger = logger;
-        _userManager = userManager;
     }
 
     [HttpPost]
@@ -43,24 +39,14 @@ public class CreateDummyController : ControllerBase
         }
 
         var createDummyResult = await _createDummyService.ExecuteAsync(RequestToDto(request));
-        
-        var user = await _userManager.GetUserAsync(User);
 
-        if ( user.IsFailure)
-        {
-            _logger.LogError("user is null");
-        }
-        else
-        {
-            _logger.LogInformation($"user is not null, user id = {user.Value.Id}");
-        }
 
         if (createDummyResult.IsFailure)
         {
             return createDummyResult.Error.ToProblemDetails(Request.Path);
         }
 
-        return CreatedAtAction(nameof(CreateDummy), createDummyResult.Value);
+        return CreatedAtAction(nameof(CreateDummy), ResultToResponse(createDummyResult.Value));
     }
 
     [HttpGet]
@@ -72,5 +58,10 @@ public class CreateDummyController : ControllerBase
     private CreateDummyDto RequestToDto(CreateDummyRequest request)
     {
         return new CreateDummyDto { Name = request.Name };
+    }
+
+    private CreateDummyResponse ResultToResponse(Dummy result)
+    {
+        return new CreateDummyResponse { Id = result.Id, Name = result.Name, UserId = result.UserId.ToString() };
     }
 }

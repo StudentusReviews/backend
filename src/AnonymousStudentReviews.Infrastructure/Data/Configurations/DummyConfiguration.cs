@@ -16,5 +16,11 @@ public class DummyConfiguration : IEntityTypeConfiguration<Dummy>
         builder.Property(e => e.Name)
             .HasMaxLength(20)
             .IsRequired();
+
+        builder
+            .HasOne(e => e.User)
+            .WithMany()
+            .HasForeignKey(e => e.UserId)
+            .IsRequired();
     }
 }
