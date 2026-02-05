@@ -1,24 +1,34 @@
 using AnonymousStudentReviews.Api.Configurations;
 
+using Microsoft.AspNetCore.DataProtection;
+
 using Serilog;
 using Serilog.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var logger = new LoggerConfiguration()
+Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
 
-logger.Information("Starting web host");
+Log.Information("Starting web host");
+
+var loggerFactory = new SerilogLoggerFactory(Log.Logger);
+var appLogger = loggerFactory.CreateLogger<AnonymousStudentReviews.Api.Program>();
+
 
 builder.AddLoggerConfigs();
 
-var appLogger = new SerilogLoggerFactory(logger)
-    .CreateLogger<Program>();
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo("/keys"));
 
-builder.Services.AddControllers();
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddRazorPages();
 
 builder.Services.AddSwaggerConfig();
+
+builder.Services.AddOptionsConfig(appLogger, builder);
 
 builder.Services.AddServiceConfigs(appLogger, builder);
 
@@ -32,8 +42,16 @@ if (app.Environment.IsDevelopment() && MigrationConfig.ShouldApplyMigrationsOnSt
 
 app.UseAppMiddleware();
 
+if (app.Environment.IsDevelopment())
+{
+    app.MapGet("/", () => Results.Redirect("/swagger"));
+}
+
 app.Run();
 
-public partial class Program
+namespace AnonymousStudentReviews.Api
 {
+    public class Program
+    {
+    }
 }

@@ -1,4 +1,4 @@
-using AnonymousStudentReviews.Core.DummyAggregate;
+using AnonymousStudentReviews.Core.Aggregates.Dummy;
 using AnonymousStudentReviews.Infrastructure.Data;
 
 namespace AnonymousStudentReviews.Infrastructure.Dummies;

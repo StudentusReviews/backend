@@ -14,7 +14,7 @@ public static class ErrorExtensions
         var problemDetails = new ProblemDetails
         {
             Type = type,
-            Title = error.Title,
+            Title = error.Code,
             Status = httpStatusCode,
             Detail = error.Details,
             Instance = instance

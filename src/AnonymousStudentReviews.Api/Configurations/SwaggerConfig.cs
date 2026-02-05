@@ -1,5 +1,3 @@
-using NSwag;
-
 namespace AnonymousStudentReviews.Api.Configurations;
 
 public static class SwaggerConfig
