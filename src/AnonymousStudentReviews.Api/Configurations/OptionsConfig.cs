@@ -14,6 +14,8 @@ public static class OptionsConfig
             builder.Configuration.GetSection(ResendApiOptions.SectionName));
         services.Configure<AccountConfirmationOptions>(
             builder.Configuration.GetSection(AccountConfirmationOptions.SectionName));
+        services.Configure<OpenIddictOptions>(
+            builder.Configuration.GetSection(OpenIddictOptions.SectionName));
 
         logger.LogInformation("Options registered successfully");
 

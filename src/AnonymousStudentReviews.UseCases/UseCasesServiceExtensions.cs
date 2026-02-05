@@ -1,6 +1,7 @@
 using AnonymousStudentReviews.UseCases.AccountVerification;
 using AnonymousStudentReviews.UseCases.Dummies.Create;
-using AnonymousStudentReviews.UseCases.Users.Create;
+using AnonymousStudentReviews.UseCases.Login;
+using AnonymousStudentReviews.UseCases.Registration;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -51,7 +52,8 @@ public static class UseCasesServiceExtensions
     private static void RegisterServices(IServiceCollection services)
     {
         services.AddScoped<ICreateDummyService, CreateDummyService>();
-        services.AddScoped<ICreateUserService, CreateUserService>();
+        services.AddScoped<IRegistrationService, RegistrationService>();
         services.AddScoped<IAccountVerificationService, AccountVerificationService>();
+        services.AddScoped<ILoginService, LoginService>();
     }
 }

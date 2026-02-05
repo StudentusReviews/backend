@@ -1,4 +1,4 @@
-namespace AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
+namespace AnonymousStudentReviews.UseCases.Registration.Abstractions;
 
 public interface IPasswordHasher
 {

@@ -14,6 +14,9 @@ public class Dummy : EntityBase<long>, IAggregateRoot
     }
 
     public string Name { get; private set; }
+    public Guid UserId { get; set; }
+
+    public User.User User { get; set; }
 
     public static Result<Dummy> Create(string name)
     {

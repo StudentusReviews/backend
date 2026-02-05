@@ -5,8 +5,8 @@ using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.Infrastructure.Options;
 using AnonymousStudentReviews.Infrastructure.Users;
-using AnonymousStudentReviews.UseCases.Users.Create;
-using AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
+using AnonymousStudentReviews.UseCases.Registration;
+using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 
 using Microsoft.Extensions.Options;
 
@@ -84,7 +84,7 @@ public class UserManagerTests
         var result = await _userManager.CreateAsync(email, password);
 
         Assert.True(result.IsFailure);
-        Assert.Equal(CreateUserErrors.UserAlreadyExists, result.Error);
+        Assert.Equal(RegistrationErrors.UserAlreadyExists, result.Error);
 
         _userRepositoryMock.Verify(x => x.CreateUser(It.IsAny<User>()), Times.Never);
         _unitOfWorkMock.Verify(x => x.SaveChangesAsync(CancellationToken.None), Times.Never);

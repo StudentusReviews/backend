@@ -1,4 +1,4 @@
-using AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
+using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 
 namespace AnonymousStudentReviews.Api.Features.AccountVerification;
 
