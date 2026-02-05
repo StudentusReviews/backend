@@ -25,7 +25,10 @@ public class EmailSender : IEmailSender
 
         var message = new EmailMessage
         {
-            From = fromEmailAddress, Subject = subject, HtmlBody = htmlBody, To = toEmailAddressList
+            From = fromEmailAddress,
+            Subject = subject,
+            HtmlBody = htmlBody,
+            To = toEmailAddressList
         };
 
         await _resend.EmailSendAsync(message);

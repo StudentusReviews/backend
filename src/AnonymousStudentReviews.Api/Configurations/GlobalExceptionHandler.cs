@@ -28,7 +28,7 @@ public class GlobalExceptionHandler : IExceptionHandler
             Status = StatusCodes.Status500InternalServerError,
             Instance = httpContext.Request.Path,
         };
-        
+
         if (httpContext.Request.Headers.Accept.Contains("application/json", StringComparer.OrdinalIgnoreCase))
         {
 
@@ -43,7 +43,7 @@ public class GlobalExceptionHandler : IExceptionHandler
             {
                 ViewName = "Error",
             };
-            
+
             httpContext.Response.StatusCode = problemDetails.Status.Value;
 
             await viewResult.ExecuteResultAsync(
@@ -54,9 +54,9 @@ public class GlobalExceptionHandler : IExceptionHandler
                     RouteData = httpContext.GetRouteData()
                 });
         }
-        
-        
-        
+
+
+
         return true;
     }
 }

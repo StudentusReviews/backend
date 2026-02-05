@@ -91,7 +91,7 @@ public class Worker : IHostedService
             JsonSerializer.Serialize(openIddictDescriptor.PostLogoutRedirectUris.ToArray());
 
         var permissionsJson = JsonSerializer.Serialize(openIddictDescriptor.Permissions.ToArray());
-        
+
         clientFromDatabaseTyped.Permissions = permissionsJson;
 
         clientFromDatabaseTyped.RedirectUris = redirectUrisJson;

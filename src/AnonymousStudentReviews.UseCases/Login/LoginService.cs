@@ -26,7 +26,7 @@ public class LoginService : ILoginService
         }
 
         var user = findUserResult.Value;
-        await _signInManager.SignInAsync(user, dto.RememberMe); 
+        await _signInManager.SignInAsync(user, dto.RememberMe);
         return Result.Success();
     }
 }

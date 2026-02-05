@@ -32,7 +32,7 @@ public class SignInManager : ISignInManager
         {
             throw new InvalidOperationException("HTTPContext is not available");
         }
-        
+
         await _httpContextAccessor.HttpContext.SignOutAsync(
             CookieAuthenticationDefaults.AuthenticationScheme);
     }
@@ -69,7 +69,7 @@ public class SignInManager : ISignInManager
         {
             throw new InvalidOperationException("HTTPContext is not available");
         }
-        
+
         await _httpContextAccessor.HttpContext.SignInAsync(
             CookieAuthenticationDefaults.AuthenticationScheme,
             principal,
