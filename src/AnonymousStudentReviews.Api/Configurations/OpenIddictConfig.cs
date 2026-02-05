@@ -22,14 +22,19 @@ public static class OpenIddictConfig
                     .SetTokenEndpointUris("connect/token")
                     .SetUserInfoEndpointUris("connect/userinfo");
 
-                options.RegisterScopes(OpenIddictConstants.Permissions.Scopes.Email,
-                    OpenIddictConstants.Permissions.Scopes.Profile, OpenIddictConstants.Permissions.Scopes.Roles);
-                
+                options.RegisterScopes(
+                    OpenIddictConstants.Permissions.Scopes.Email,
+                    OpenIddictConstants.Permissions.Scopes.Profile,
+                    OpenIddictConstants.Permissions.Scopes.Roles,
+                    OpenIddictConstants.Scopes.Profile,
+                    OpenIddictConstants.Scopes.Roles
+                );
+
                 options.AllowAuthorizationCodeFlow();
-                
+
                 options.AddDevelopmentEncryptionCertificate()
                     .AddDevelopmentSigningCertificate();
-                
+
                 options.UseAspNetCore()
                     .EnableAuthorizationEndpointPassthrough()
                     .EnableEndSessionEndpointPassthrough()
@@ -37,13 +42,11 @@ public static class OpenIddictConfig
                     .EnableUserInfoEndpointPassthrough()
                     .EnableStatusCodePagesIntegration()
                     .DisableTransportSecurityRequirement();
-                    
             })
-            
             .AddValidation(options =>
             {
                 options.UseLocalServer();
-                
+
                 options.UseAspNetCore();
             });
 
