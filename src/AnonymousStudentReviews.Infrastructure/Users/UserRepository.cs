@@ -1,3 +1,5 @@
+using AnonymousStudentReviews.Core.Abstractions;
+using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.Infrastructure.Data;
 
@@ -27,5 +29,42 @@ public class UserRepository : IUserRepository
     public void ConfirmUser(User user)
     {
         user.EmailConfirmed = true;
+    }
+
+    public async Task<Result<User>> FindByIdAsync(Guid id)
+    {
+        var result = await _context.Users.FirstOrDefaultAsync(user => user.Id == id);
+
+        if (result is null)
+        {
+            return Result.Failure<User>(UserErrors.NotFound);
+        }
+
+        return Result.Success(result);
+    }
+
+    public async Task<Result<User>> FindByEmailHashAsync(string emailHash)
+    {
+        var result = await _context.Users
+            .Include(user => user.Roles)
+            .FirstOrDefaultAsync(user => user.EmailHash == emailHash);
+
+        if (result is null)
+        {
+            return Result.Failure<User>(UserErrors.NotFound);
+        }
+
+        return result;
+    }
+
+    public async Task<IEnumerable<Role>> GetRolesAsync(User user)
+    {
+        var roles = await _context.Users
+            .Include(queryUser => queryUser.Roles)
+            .Where(queryUser => queryUser.Id == user.Id)
+            .Select(queryUser => queryUser.Roles)
+            .FirstOrDefaultAsync();
+
+        return roles ?? [];
     }
 }

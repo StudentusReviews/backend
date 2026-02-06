@@ -1,5 +1,5 @@
 using AnonymousStudentReviews.Api.Extensions;
-using AnonymousStudentReviews.UseCases.Users.Create;
+using AnonymousStudentReviews.UseCases.Registration;
 
 using FluentValidation;
 
@@ -7,17 +7,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AnonymousStudentReviews.Api.Features.Registration;
 
-[Route("register")]
+[Route("api/register")]
 public class RegistrationController : Controller
 {
     private readonly IValidator<RegistrationRequest> _createUserRequestValidator;
-    private readonly ICreateUserService _createUserService;
+    private readonly IRegistrationService _registrationService;
 
     public RegistrationController(IValidator<RegistrationRequest> createUserRequestValidator,
-        ICreateUserService createUserService)
+        IRegistrationService registrationService)
     {
         _createUserRequestValidator = createUserRequestValidator;
-        _createUserService = createUserService;
+        _registrationService = registrationService;
     }
 
     [HttpGet]
@@ -38,7 +38,7 @@ public class RegistrationController : Controller
             return View(request);
         }
 
-        var result = await _createUserService.HandleAsync(RequestToDto(request));
+        var result = await _registrationService.HandleAsync(RequestToDto(request));
 
         if (result.IsFailure)
         {
@@ -48,8 +48,8 @@ public class RegistrationController : Controller
         return View("Sucess");
     }
 
-    private CreateUserDto RequestToDto(RegistrationRequest request)
+    private RegistrationDto RequestToDto(RegistrationRequest request)
     {
-        return new CreateUserDto { Email = request.Email, Password = request.Password };
+        return new RegistrationDto { Email = request.Email, Password = request.Password };
     }
 }

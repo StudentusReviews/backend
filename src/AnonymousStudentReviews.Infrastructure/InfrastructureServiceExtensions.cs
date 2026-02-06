@@ -13,12 +13,16 @@ using AnonymousStudentReviews.Infrastructure.Options;
 using AnonymousStudentReviews.Infrastructure.Password;
 using AnonymousStudentReviews.Infrastructure.Roles;
 using AnonymousStudentReviews.Infrastructure.Users;
-using AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
+using AnonymousStudentReviews.UseCases.Abstractions;
+using AnonymousStudentReviews.UseCases.Login.Abstractions;
+using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+
+using Quartz;
 
 using Resend;
 
@@ -59,6 +63,7 @@ public static class InfrastructureServiceExtensions
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseNpgsql(connectionString);
+            options.UseOpenIddict();
             options.UseSeeding((context, _) =>
             {
                 void InsertRoleIfNotExists(string name)
@@ -127,5 +132,18 @@ public static class InfrastructureServiceExtensions
 
         services.AddScoped<IEmailSender, EmailSender>();
         services.AddScoped<IUserManager, UserManager>();
+
+        services.AddHostedService<Worker>();
+
+        services.AddQuartz(options =>
+        {
+            options.UseSimpleTypeLoader();
+            options.UseInMemoryStore();
+        });
+
+        services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
+
+        services.AddScoped<ISignInManager, SignInManager>();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
     }
 }

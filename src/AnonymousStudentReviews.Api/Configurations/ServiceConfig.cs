@@ -2,7 +2,7 @@ using AnonymousStudentReviews.Api.Features.AccountVerification;
 using AnonymousStudentReviews.Api.Features.Dummies.Create;
 using AnonymousStudentReviews.Infrastructure;
 using AnonymousStudentReviews.UseCases;
-using AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
+using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 
 using FluentValidation;
 

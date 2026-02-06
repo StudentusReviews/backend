@@ -1,5 +1,5 @@
 using AnonymousStudentReviews.Infrastructure.Options;
-using AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
+using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
