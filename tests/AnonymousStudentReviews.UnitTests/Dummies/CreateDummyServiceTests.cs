@@ -1,5 +1,5 @@
 using AnonymousStudentReviews.Core.Abstractions;
-using AnonymousStudentReviews.Core.DummyAggregate;
+using AnonymousStudentReviews.Core.Aggregates.Dummy;
 using AnonymousStudentReviews.UseCases.Dummies.Create;
 
 using Moq;

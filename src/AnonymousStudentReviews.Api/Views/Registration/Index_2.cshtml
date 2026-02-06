@@ -1,0 +1,148 @@
+@model AnonymousStudentReviews.Api.Features.Registration.RegistrationRequest
+
+@section HeadScripts
+{
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+}
+
+<div id="app">
+    <div
+        class="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+
+        <main class="flex-grow flex flex-col items-center justify-center px-4 py-16">
+            <div
+                class="w-full max-w-md rounded-2xl bg-gray-100 dark:bg-gray-800 p-8 shadow-xl transition-colors duration-200">
+
+                <h1 class="text-2xl font-semibold text-center mb-6 transition">
+                    Реєстрація
+                </h1>
+
+                <form asp-action="Index" asp-controller="Registration" method="post" @@submit.prevent="handleSubmit"
+                      class="space-y-4">
+                    @Html.AntiForgeryToken()
+                    <div id="roles">
+                        <label
+                            class="block mb-2 font-semibold transition-colors duration-200 text-gray-600 dark:text-gray-400"
+                            :class="{'!text-red-600': roleError}"
+                        >
+                            Я
+                        </label>
+
+                        <div class="flex w-full gap-3">
+                            <button
+                                v-for="role in roles"
+                                :key="role"
+                                type="button"
+                                @@click="selectRole(role)"
+                                :aria-selected="selectedRole === role"
+                                class="role-button flex-1 rounded-2xl py-2.5 text-center text-sm font-medium transition-colors focus:outline-none border
+                                    border-gray-400 bg-gray-100 text-gray-900
+                                    aria-selected:ring-1 aria-selected:ring-blue-500 aria-selected:border-blue-500 
+                                    aria-selected:bg-blue-50 aria-selected:text-blue-700"
+                                :class="{'!border-red-500 !text-gray-900': roleError}"
+                            >
+                                {{ role }}
+                            </button>
+                        </div>
+
+                        <p v-if="roleError" class="mt-2 text-sm font-medium text-red-600 block">
+                            Оберіть хто ви
+                        </p>
+                    </div>
+
+                    <div>
+                        <label
+                            asp-for="Email"
+                            for="email"
+                            class="block mb-2 font-semibold transition-colors duration-200 text-gray-600 dark:text-gray-400"
+                            :class="{'!text-red-600': emailError}"
+                        >
+                            Електронна пошта
+                        </label>
+                        <input
+                            asp-for="Email"
+                            id="email"
+                            type="email"
+                            v-model="email"
+                            placeholder="your.email@@example.ua"
+                            class="w-full px-5 py-2.5 pr-12 rounded-2xl transition-colors duration-200 focus:outline-none text-base shadow-sm
+                                bg-gray-50 dark:bg-gray-800 border border-gray-300 hover:border-gray-400 dark:border-gray-600 focus:ring-1 focus:ring-blue-500"
+                            :class="{'!border-red-500 !text-gray-900': emailError}"
+                        />
+
+                        <span
+                            asp-validation-for="Email"
+                            v-if="emailError" class="mt-2 text-sm font-small text-gray-600 dark:text-gray-400 block">
+                            Вашого університету немає в базі даних.
+                            <a href="#" class="text-blue-500 font-semibold hover:underline">Додати
+                                університет</a>
+                        </span>
+                    </div>
+
+                    <div>
+                        <label
+                            asp-for="Password"
+                            for="password"
+                            class="block mb-2 font-semibold transition-colors duration-200 text-gray-600 dark:text-gray-400"
+                            :class="{'!text-red-600': differentPasswordsError}"
+                        >
+                            Пароль
+                        </label>
+                        <input
+                            asp-for="Password"
+                            id="password"
+                            type="password"
+                            v-model="password"
+                            placeholder="Пароль"
+                            class="w-full px-5 py-2.5 pr-12 rounded-2xl transition-colors duration-200 focus:outline-none text-base shadow-sm 
+                                bg-gray-50 dark:bg-gray-800 border border-gray-300 hover:border-gray-400 dark:border-gray-600 focus:ring-1 focus:ring-blue-500"
+                            :class="{'!border-red-500 !text-gray-900': differentPasswordsError}"
+                        />
+                    </div>
+
+                    <div>
+                        <label
+                            for="password_confirm"
+                            class="block mb-2 font-semibold transition-colors duration-200 text-gray-600 dark:text-gray-400"
+                            :class="{'!text-red-600': differentPasswordsError}"
+                        >
+                            Підтвердження пароля
+                        </label>
+                        <input
+                            id="password_confirm"
+                            type="password"
+                            v-model="confirmationPassword"
+                            placeholder="Пароль"
+                            class="w-full px-5 py-2.5 pr-12 rounded-2xl transition-colors duration-200 focus:outline-none text-base shadow-sm 
+                                bg-gray-50 dark:bg-gray-800 border border-gray-300 hover:border-gray-400 dark:border-gray-600 focus:ring-1 focus:ring-blue-500"
+                            :class="{'!border-red-500 !text-gray-900': differentPasswordsError}"
+                        />
+
+                        <p v-if="differentPasswordsError" class="mt-2 text-sm font-medium text-red-600 block">
+                            Паролі не співпадають.
+                        </p>
+                    </div>
+
+                    <div class="text-center text-gray-900 dark:text-white">
+                        <button
+                            type="submit"
+                            class="w-full mt-4 mb-4 py-3 rounded-2xl bg-blue-500 hover:bg-blue-700 text-white transition font-medium"
+                        >
+                            Створити акаунт
+                        </button>
+                        <p>Вже маєте акаунт? <a href="#"
+                                                class="text-blue-500 font-bold hover:underline">Увійти</a></p>
+                    </div>
+
+                </form>
+            </div>
+        </main>
+    </div>
+</div>
+
+@section BodyScripts
+{
+    <script src="~/js/validationLogic.js"></script>
+}
+

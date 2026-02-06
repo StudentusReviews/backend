@@ -1,12 +1,26 @@
 using AnonymousStudentReviews.Core.Abstractions;
-using AnonymousStudentReviews.Core.DummyAggregate;
+using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
+using AnonymousStudentReviews.Core.Aggregates.Dummy;
+using AnonymousStudentReviews.Core.Aggregates.EmailVerificationToken;
+using AnonymousStudentReviews.Core.Aggregates.Role;
+using AnonymousStudentReviews.Core.Aggregates.User;
+using AnonymousStudentReviews.Infrastructure.AllowedEmailDomains;
 using AnonymousStudentReviews.Infrastructure.Data;
 using AnonymousStudentReviews.Infrastructure.Dummies;
+using AnonymousStudentReviews.Infrastructure.Email;
+using AnonymousStudentReviews.Infrastructure.EmailVerificationToken;
+using AnonymousStudentReviews.Infrastructure.Options;
+using AnonymousStudentReviews.Infrastructure.Password;
+using AnonymousStudentReviews.Infrastructure.Roles;
+using AnonymousStudentReviews.Infrastructure.Users;
+using AnonymousStudentReviews.UseCases.Users.Create.Abstractions;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+
+using Resend;
 
 namespace AnonymousStudentReviews.Infrastructure;
 
@@ -32,7 +46,7 @@ public static class InfrastructureServiceExtensions
         }
 
         RegisterEFRepositories(services);
-        RegisterServices(services);
+        RegisterServices(services, configuration);
 
         logger.LogInformation("{Project} services registered", "Infrastructure");
 
@@ -45,6 +59,25 @@ public static class InfrastructureServiceExtensions
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseNpgsql(connectionString);
+            options.UseSeeding((context, _) =>
+            {
+                void InsertRoleIfNotExists(string name)
+                {
+                    if (context.Set<Role>().FirstOrDefault(role => role.Name == "Student") is null)
+                    {
+                        context.Set<Role>().Add(new Role { Id = Guid.NewGuid(), Name = name });
+                    }
+                }
+
+                var roles = new[] { "Student", "Admin" };
+
+                foreach (var role in roles)
+                {
+                    InsertRoleIfNotExists(role);
+                }
+
+                context.SaveChanges();
+            });
         });
     }
 
@@ -66,10 +99,33 @@ public static class InfrastructureServiceExtensions
     private static void RegisterEFRepositories(IServiceCollection services)
     {
         services.AddScoped<IDummyRepository, DummyRepository>();
+        services.AddScoped<IAllowedEmailDomainRepository, AllowedEmailDomainRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IEmailVerificationTokenRepository, EmailVerificationTokenRepository>();
     }
 
-    private static void RegisterServices(IServiceCollection services)
+    private static void RegisterServices(IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IEmailHasher, EmailHasher>();
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<IEmailVerificationTokenHasher, EmailVerificationTokenHasher>();
+        services.AddScoped<IEmailVerificationTokenGenerator, EmailVerificationTokenGenerator>();
+        services.AddOptions();
+        services.AddHttpClient<ResendClient>();
+
+        var resendApiOptions = new ResendApiOptions();
+        configuration.GetSection(ResendApiOptions.SectionName).Bind(resendApiOptions);
+
+        services.Configure<ResendClientOptions>(o =>
+        {
+            o.ApiToken = resendApiOptions.Key;
+        });
+
+        services.AddTransient<IResend, ResendClient>();
+
+        services.AddScoped<IEmailSender, EmailSender>();
+        services.AddScoped<IUserManager, UserManager>();
     }
 }

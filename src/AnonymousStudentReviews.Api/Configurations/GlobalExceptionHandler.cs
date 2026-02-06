@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 
 namespace AnonymousStudentReviews.Api.Configurations;
 
@@ -28,10 +29,33 @@ public class GlobalExceptionHandler : IExceptionHandler
             Instance = httpContext.Request.Path,
         };
 
-        httpContext.Response.StatusCode = problemDetails.Status.Value;
+        if (httpContext.Request.Headers.Accept.Contains("application/json", StringComparer.OrdinalIgnoreCase))
+        {
 
-        await httpContext.Response
-            .WriteAsJsonAsync(problemDetails, cancellationToken);
+            httpContext.Response.StatusCode = problemDetails.Status.Value;
+
+            await httpContext.Response
+                .WriteAsJsonAsync(problemDetails, cancellationToken);
+        }
+        else
+        {
+            var viewResult = new ViewResult
+            {
+                ViewName = "Error",
+            };
+
+            httpContext.Response.StatusCode = problemDetails.Status.Value;
+
+            await viewResult.ExecuteResultAsync(
+                new ActionContext
+                {
+                    ActionDescriptor = new ActionDescriptor(),
+                    HttpContext = httpContext,
+                    RouteData = httpContext.GetRouteData()
+                });
+        }
+
+
 
         return true;
     }

@@ -1,6 +1,6 @@
 using AnonymousStudentReviews.Core.Abstractions;
 
-namespace AnonymousStudentReviews.Core.DummyAggregate;
+namespace AnonymousStudentReviews.Core.Aggregates.Dummy;
 
 public static class DummyErrors
 {
