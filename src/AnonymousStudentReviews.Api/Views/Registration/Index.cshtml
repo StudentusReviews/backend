@@ -1,102 +1,117 @@
 @model AnonymousStudentReviews.Api.Features.Registration.RegistrationRequest
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <title>Register</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-        }
+@section HeadScripts
+{
+    <link rel="stylesheet" href="~/css/styles-output.css">
+}
 
-        .register-container {
-            background-color: #fff;
-            padding: 30px 40px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 350px;
-        }
+<div id="app">
+    <div
+        class="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
 
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
-        }
+        <main class="flex-grow flex flex-col items-center justify-center px-4 py-16">
+            <div
+                class="w-full max-w-md rounded-2xl bg-gray-100 dark:bg-gray-800 p-8 shadow-xl transition-colors duration-200">
 
-        form div {
-            margin-bottom: 15px;
-        }
+                <h1 class="text-2xl text-black font-normal text-center mb-6 transition">
+                    Реєстрація
+                </h1>
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            font-size: 0.9em;
-        }
+                <form asp-action="Index" asp-controller="Registration" method="post"
+                      class="space-y-4" id="regForm">
+                    @Html.AntiForgeryToken()
+                    <div>
+                        <label
+                            asp-for="Email"
+                            for="emailInput"
+                            class="block mb-2 dark:text-gray-400"
+                        >
+                            Електронна пошта
+                        </label>
+                        <input
+                            asp-for="Email"
+                            id="emailInput"
+                            type="email"
+                            placeholder="email@example.com"
+                            class="w-full px-5 py-2.5 pr-12 rounded-2xl transition-colors duration-200 focus:outline-none text-base shadow-sm
+                                bg-gray-50 dark:bg-gray-800 border border-gray-400 hover:border-gray-400 dark:border-gray-600 focus:ring-1 focus:ring-blue-500"
+                        />
 
-        input[type="text"], input[type="email"], input[type="password"] {
-            width: 100%;
-            padding: 8px 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 0.9em;
-        }
+                        <p id="emailError" class="hidden mt-2 text-sm text-red-700">
+                            Введіть дійсну електронну пошту.
+                        </p>
+                        <span
+                            asp-validation-for="Email"
+                            class="mt-2 text-sm font-small text-gray-600 dark:text-gray-400 block">
+                        </span>
+                    </div>
 
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007acc;
-            color: #fff;
-            font-size: 1em;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+                    <div>
+                        <label
+                            asp-for="Password"
+                            for="passwordInput"
+                            class="block mb-2 dark:text-gray-400"
+                        >
+                            Пароль
+                        </label>
+                        <input
+                            asp-for="Password"
+                            id="passwordInput"
+                            type="password"
+                            placeholder="Пароль"
+                            class="w-full px-5 py-2.5 pr-12 rounded-2xl transition-colors duration-200 focus:outline-none text-base shadow-sm 
+                                bg-gray-50 dark:bg-gray-800 border border-gray-400 hover:border-gray-400 dark:border-gray-600 focus:ring-1 focus:ring-blue-500"
+                        />
+                        <p id="passwordError" class="hidden mt-2 text-sm text-red-600"></p>
+                        <span
+                            asp-validation-for="Password"
+                            class="mt-2 text-sm font-small text-gray-600 dark:text-gray-400 block">
+                        </span>
+                    </div>
 
-        button:hover {
-            background-color: #005f99;
-        }
+                    <div>
+                        <label
+                            asp-for="ConfirmPassword"
+                            for="confirmInput"
+                            class="block mb-2 dark:text-gray-400">
+                            Підтвердження пароля
+                        </label>
+                        <input
+                            asp-for="ConfirmPassword"
+                            id="confirmInput"
+                            type="password"
+                            placeholder="Пароль"
+                            class="w-full px-5 py-2.5 pr-12 rounded-2xl transition-colors duration-200 focus:outline-none text-base shadow-sm 
+                                bg-gray-50 dark:bg-gray-800 border border-gray-400 hover:border-gray-400 dark:border-gray-600 focus:ring-1 focus:ring-blue-500"
+                        />
 
-        .validation-message {
-            color: red;
-            font-size: 0.8em;
-        }
-    </style>
-</head>
-<body>
-<div class="register-container">
-    <h2>Register</h2>
+                        <span asp-validation-for="ConfirmPassword" class="mt-2 text-sm font-medium text-red-600 block">
+                        </span>
+                        <p id="confirmError" class="hidden mt-2 text-sm font-medium text-red-600 block">
+                            Паролі не співпадають.
+                        </p>
+                    </div>
 
-    <form asp-action="Index" asp-controller="Registration" method="post">
-        @Html.AntiForgeryToken()
-        <div>
-            <label asp-for="Email">Email</label>
-            <input asp-for="Email" type="email" required/>
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
+                    <div class="text-center text-gray-900 dark:text-white">
+                        <button
+                            type="submit"
+                            class="w-full mt-4 mb-4 py-3 rounded-2xl bg-blue-500 hover:bg-blue-700 text-white transition"
+                        >
+                            Створити акаунт
+                        </button>
+                        <p>Вже маєте акаунт? </p>
+                        <a asp-controller="Login" asp-action="Index"
+                           class="text-blue-500 hover:underline">Увійти</a>
+                    </div>
 
-        <div>
-            <label asp-for="Password">Password</label>
-            <input asp-for="Password" type="password" required/>
-            <span asp-validation-for="Password" class="text-danger"></span>
-        </div>
-
-        <div>
-            <label asp-for="ConfirmPassword">Confirm password</label>
-            <input asp-for="ConfirmPassword" type="password" required/>
-            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-        </div>
-
-        <button type="submit">Register</button>
-    </form>
+                </form>
+            </div>
+        </main>
+    </div>
 </div>
 
 @section BodyScripts
 {
-    <script src="~/js/validation.js"></script>
+    <script src="~/js/validationLogic.js" asp-append-version="true"></script>
 }
 
-</body>
-</html>

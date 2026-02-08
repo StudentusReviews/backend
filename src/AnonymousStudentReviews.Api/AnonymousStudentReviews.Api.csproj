@@ -31,4 +31,8 @@
         <Folder Include="Views\Logout\"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <None Include="wwwroot\css\styles.css"/>
+    </ItemGroup>
+
 </Project>
