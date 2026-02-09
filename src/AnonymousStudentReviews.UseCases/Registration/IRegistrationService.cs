@@ -5,5 +5,5 @@ namespace AnonymousStudentReviews.UseCases.Registration;
 
 public interface IRegistrationService
 {
-    Task<Result<User>> HandleAsync(RegistrationDto dto);
+    Task<Result> HandleAsync(RegistrationDto dto);
 }

@@ -9,7 +9,7 @@
     <div
         class="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
 
-        <main class="flex-grow flex flex-col items-center justify-center px-4 py-16">
+        <main class="grow flex flex-col items-center justify-center px-4 py-16">
             <div
                 class="w-full max-w-md rounded-2xl bg-gray-100 dark:bg-gray-800 p-8 shadow-xl transition-colors duration-200">
 
@@ -20,6 +20,25 @@
                 <form asp-action="Index" asp-controller="Registration" method="post"
                       class="space-y-4" id="regForm">
                     @Html.AntiForgeryToken()
+
+                    @if (ViewData["ErrorName"] is not null)
+                    {
+                        <div
+                            class="rounded-2xl p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 flex items-start space-x-3">
+                            <svg class="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 shrink-0" fill="none"
+                                 stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <div class="text-sm text-red-800 dark:text-red-200">
+                                <h3 class="font-medium">Помилка під час реєстрації</h3>
+                                <p class="mt-1 text-red-700 dark:text-red-300">
+                                    Під час реєстрації вашого акаунта сталась якась помилка. Зверніться у техпідтримку
+                                </p>
+                            </div>
+                        </div>
+                    }
+
                     <div>
                         <label
                             asp-for="Email"
@@ -43,7 +62,7 @@
                         <span
                             asp-validation-for="Email"
                             class="mt-2 text-sm font-small text-gray-600 dark:text-gray-400 block">
-                        </span>
+                    </span>
                     </div>
 
                     <div>
@@ -66,7 +85,7 @@
                         <span
                             asp-validation-for="Password"
                             class="mt-2 text-sm font-small text-gray-600 dark:text-gray-400 block">
-                        </span>
+                    </span>
                     </div>
 
                     <div>
@@ -86,7 +105,7 @@
                         />
 
                         <span asp-validation-for="ConfirmPassword" class="mt-2 text-sm font-medium text-red-600 block">
-                        </span>
+                    </span>
                         <p id="confirmError" class="hidden mt-2 text-sm font-medium text-red-600 block">
                             Паролі не співпадають.
                         </p>
@@ -112,6 +131,6 @@
 
 @section BodyScripts
 {
-    <script src="~/js/validationLogic.js" asp-append-version="true"></script>
+    <script src="~/js/validationLogic.js"></script>
 }
 

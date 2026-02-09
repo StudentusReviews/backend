@@ -20,22 +20,20 @@ public class RegistrationService : IRegistrationService
         _userManager = userManager;
     }
 
-    public async Task<Result<User>> HandleAsync(RegistrationDto dto)
+    public async Task<Result> HandleAsync(RegistrationDto dto)
     {
         _logger.LogInformation("Create user service started");
 
         var createUserResult = await _userManager.CreateAsync(dto.Email, dto.Password);
 
-        if (createUserResult.IsFailure)
+        _logger.LogInformation("Requested account verification");
+
+        if (createUserResult.IsSuccess)
         {
-            return Result.Failure<User>(createUserResult.Error);
+            var createdUser = createUserResult.Value;
+            await _userManager.RequestAccountVerificationAsync(createdUser, dto.Email);
         }
 
-        var createdUser = createUserResult.Value;
-
-        _logger.LogInformation("Requested account verification");
-        await _userManager.RequestAccountVerificationAsync(createdUser, dto.Email);
-
-        return Result.Success(createdUser);
+        return Result.Success();
     }
 }
