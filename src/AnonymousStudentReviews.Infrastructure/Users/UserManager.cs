@@ -6,6 +6,7 @@ using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
 using AnonymousStudentReviews.Core.Aggregates.EmailVerificationToken;
 using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.User;
+using AnonymousStudentReviews.Infrastructure.Email;
 using AnonymousStudentReviews.Infrastructure.Options;
 using AnonymousStudentReviews.UseCases.Registration;
 using AnonymousStudentReviews.UseCases.Registration.Abstractions;
@@ -30,6 +31,7 @@ public class UserManager : IUserManager
     private readonly IRoleRepository _roleRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserRepository _userRepository;
+    private readonly IVerificationEmailGenerator _verificationEmailGenerator;
 
     public UserManager(IUserRepository userRepository, IUnitOfWork unitOfWork, IPasswordHasher passwordHasher,
         IEmailHasher emailHasher,
@@ -37,7 +39,8 @@ public class UserManager : IUserManager
         IEmailVerificationTokenHasher emailVerificationTokenHasher, IOptions<AccountConfirmationOptions> emailOptions,
         IEmailVerificationTokenRepository emailVerificationTokenRepository,
         IAccountVerificationLinkFactory accountVerificationLinkFactory, IEmailSender emailSender,
-        IAllowedEmailDomainRepository allowedEmailDomainRepository, IRoleRepository roleRepository)
+        IAllowedEmailDomainRepository allowedEmailDomainRepository, IRoleRepository roleRepository,
+        IVerificationEmailGenerator verificationEmailGenerator)
     {
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
@@ -50,6 +53,7 @@ public class UserManager : IUserManager
         _emailSender = emailSender;
         _allowedEmailDomainRepository = allowedEmailDomainRepository;
         _roleRepository = roleRepository;
+        _verificationEmailGenerator = verificationEmailGenerator;
         _accountConfirmationOptions = emailOptions.Value;
     }
 
@@ -187,7 +191,7 @@ public class UserManager : IUserManager
             _accountConfirmationOptions.SendConfirmationLetterFromAddress,
             [emailAddress],
             _accountConfirmationOptions.ConfirmationLetterSubject,
-            $"<a href=\"{accountVerificationLink}\">{accountVerificationLink}</a>"
+            await _verificationEmailGenerator.GenerateVerificationEmailAsync(accountVerificationLink)
         );
     }
 

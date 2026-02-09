@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"] - Studentus</title>
-    @RenderSection("HeadScripts", false)
+    @await RenderSectionAsync("HeadScripts", false)
 </head>
 <body class="bg-white dark:bg-gray-900">
 
@@ -14,6 +14,6 @@
 
 <partial name="_Footer"/>
 
-@RenderSection("BodyScripts", false)
+@await RenderSectionAsync("BodyScripts", false)
 </body>
 </html>

@@ -1,98 +1,94 @@
-const {createApp, ref, computed, watch} = Vue;
+document.addEventListener('DOMContentLoaded', () => {
+    const CLASSES = {
+        default: ['border-gray-400', 'bg-white', 'focus:ring-blue-500'],
+        error: ['border-red-700', 'bg-gray-100', 'text-gray-900'],
+    };
 
-createApp({
-    setup() {
-        const selectedRole = ref(null);
-        const email = ref("");
-        const password = ref("");
-        const confirmationPassword = ref("");
+    const form = document.getElementById('regForm');
 
-        const currentError = ref(null);
-        const roleError = computed(() => currentError.value === 'role');
-        const emailError = computed(() => currentError.value === 'email');
-        const differentPasswordsError = computed(() => currentError.value === 'different-passwords');
+    const emailInput = document.getElementById('emailInput');
+    const passInput = document.getElementById('passwordInput');
+    const confirmInput = document.getElementById('confirmInput');
 
-        const roles = ['Студент', 'Абітурієнт', 'Інше'];
+    const emailError = document.getElementById('emailError');
+    const passError = document.getElementById('passwordError');
+    const confirmError = document.getElementById('confirmError');
+    
+    function setInputState(input, isValid, errorEl, errorMsg = null) {
+        input.classList.remove(...CLASSES.error);
 
-        const selectRole = (role) => {
-            if (selectedRole.value === role) {
-                selectedRole.value = null;
-                return;
+        if (isValid) {
+            if (errorEl) errorEl.classList.add('hidden');
+        } else {
+            input.classList.add(...CLASSES.error);
+            if (errorEl) {
+                errorEl.classList.remove('hidden');
+                if (errorMsg) errorEl.innerText = errorMsg;
             }
-            selectedRole.value = role;
         }
-
-        watch(selectedRole, (newRole) => {
-            if (newRole != null && roleError.value) {
-                currentError.value = null;
-            }
-        });
-
-        watch(email, (newEmail, oldEmail) => {
-            if (newEmail !== oldEmail && emailError.value) {
-                currentError.value = null;
-            }
-        });
-
-        watch(password, (newPassword, oldPassword) => {
-            if (newPassword !== oldPassword && differentPasswordsError.value) {
-                currentError.value = null;
-            }
-        });
-
-        watch(confirmationPassword, (newPassword, oldPassword) => {
-            if (newPassword !== oldPassword && differentPasswordsError.value) {
-                currentError.value = null;
-            }
-        });
-
-        const checkRole = () => {
-            return selectedRole.value != null;
-        }
-
-        const checkEmail = () => {
-            const allowedDomain = "knu.ua";
-
-            if (!email.value.includes("@")) return false;
-            return email.value.split("@")[1] === allowedDomain;
-        }
-
-        const checkPasswordsSimilarity = () => {
-            return password.value === confirmationPassword.value;
-        }
-
-        const handleSubmit = () => {
-            currentError.value = null;
-
-            if (!checkRole()) {
-                currentError.value = 'role';
-                return;
-            }
-
-            if (!checkEmail()) {
-                currentError.value = 'email';
-                return;
-            }
-
-            if (!checkPasswordsSimilarity()) {
-                currentError.value = 'different-passwords';
-                return;
-            }
-
-            alert(`Success! Selected role: ${selectedRole.value} ${email.value} Match: ${password.value === confirmationPassword.value}`);
-        }
-
-        return {
-            roles,
-            selectedRole,
-            email,
-            password,
-            confirmationPassword,
-            roleError,
-            emailError,
-            differentPasswordsError,
-            selectRole,
-            handleSubmit
-        };
     }
-}).mount('#app');
+
+    const validateEmail = () => {
+        const val = emailInput.value.trim();
+        const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+        setInputState(emailInput, isValid, emailError);
+        return isValid;
+    };
+    
+    const validatePass = () => {
+        const p = passInput.value || '';
+        let msg = null;
+
+        if (!p) {
+            msg = "Пароль обов'язковий.";
+        }
+        else if (p.length < 12) {
+            msg = "Мінімум 12 символів.";
+        }
+        else if (p.length > 128) {
+            msg = "Максимум 128 символів.";
+        }
+        else if (!/[A-Z]/.test(p)) {
+            msg = "Потрібна хоча б одна велика літера.";
+        }
+        else if (!/[a-z]/.test(p)) {
+            msg = "Потрібна хоча б одна мала літера.";
+        }
+        else if (!/\d/.test(p)) {
+            msg = "Потрібна хоча б одна цифра.";
+        }
+        else if (!/[^a-zA-Z0-9_\s]/.test(p)) {
+            msg = "Потрібен хоча б один спецсимвол.";
+        }
+        
+        setInputState(passInput, msg === null, passError, msg);
+        
+        if (confirmInput.value) validateConfirm();
+
+        return msg === null;
+    };
+
+    const validateConfirm = () => {
+        const isValid = confirmInput.value === passInput.value && confirmInput.value !== "";
+        setInputState(confirmInput, isValid, confirmError);
+        return isValid;
+    };
+
+    emailInput.addEventListener('blur', validateEmail);
+    passInput.addEventListener('blur', validatePass);
+    confirmInput.addEventListener('blur', validateConfirm);
+
+    emailInput.addEventListener('input', () => {
+        if (emailInput.classList.contains('bg-red-50')) validateEmail();
+    });
+
+    form.addEventListener('submit', (e) => {
+        const v2 = validateEmail();
+        const v3 = validatePass();
+        const v4 = validateConfirm();
+
+        if (!v2 || !v3 || !v4) {
+            e.preventDefault();
+        }
+    });
+});

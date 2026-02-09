@@ -42,7 +42,8 @@ public class RegistrationController : Controller
 
         if (result.IsFailure)
         {
-            return result.Error.ToProblemDetails(Request.Path);
+            ViewData["ErrorName"] = "Error";
+            return View();
         }
 
         return View("Sucess");

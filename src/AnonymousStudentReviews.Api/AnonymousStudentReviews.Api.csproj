@@ -28,7 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Views\Logout\"/>
+        <None Include="wwwroot\css\styles.css"/>
     </ItemGroup>
 
 </Project>

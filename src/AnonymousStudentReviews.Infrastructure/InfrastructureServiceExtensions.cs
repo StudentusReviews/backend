@@ -145,5 +145,7 @@ public static class InfrastructureServiceExtensions
 
         services.AddScoped<ISignInManager, SignInManager>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddScoped<IViewToStringRenderer, ViewToStringRenderer>();
+        services.AddScoped<IVerificationEmailGenerator, VerificationEmailGenerator>();
     }
 }
