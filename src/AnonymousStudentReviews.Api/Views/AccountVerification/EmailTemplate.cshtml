@@ -1,0 +1,110 @@
+@model AnonymousStudentReviews.Infrastructure.Email.VerificationEmailModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Підтвердження реєстрації – Studentus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body style="margin: 0; padding: 0; background-color: #ffffff; font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI';">
+
+<table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background-color:#ffffff; padding: 40px 16px;">
+  <tr>
+    <td align="center">
+
+      <!-- Logo -->
+      <table cellpadding="0" cellspacing="0" role="presentation" style="margin-bottom:32px;">
+        <tr>
+          <td align="center">
+            <table cellpadding="0" cellspacing="0" role="presentation">
+              <tr>
+                <td style="width: 56px; height: 56px; border-radius: 16px; border: 1px solid #e5e7eb; background: #ffffff; text-align: center;  box-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+                  <span style="font-size: 30px; font-weight: 800; background: #2563EB; background: linear-gradient(140deg, rgba(37, 99, 235, 1) 0%, rgba(99, 102, 241, 1) 100%); background-clip: text; color: transparent; font-family: system-ui;">S</span>
+                </td>
+                <td style="padding-left:12px;font-size:30px;font-weight:700;color:#000000;vertical-align:middle;">
+                  Studentus
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+
+      <!-- Card -->
+      <table width="502" cellpadding="0" cellspacing="0" role="presentation" style="background:#f9fafb; border-radius: 32px; border: 1px solid #e5e7eb; box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04);">
+        <tr>
+          <td style="padding: 38px;">
+
+            <h1 style="margin: 0 0 32px 0; font-size: 24px; font-weight: 700; text-align: center; color: #000000;">
+              Дякуємо за реєстрацію!
+            </h1>
+
+            <p style="margin: 0 0 8px 0; font-size: 16px; line-height: 1.6; color: #1f2937; font-weight: 500;">
+              Шановний(а) користувач,
+            </p>
+
+            <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #1f2937; font-weight: 500;">
+              Вітаємо вас на платформі <span style="color: #2563eb; font-weight: 600;">Studentus</span>!<br>
+              Дякуємо за реєстрацію.
+            </p>
+
+            <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #1f2937; font-weight: 500;">
+              Щоб активувати акаунт і завершити реєстрацію, будь ласка, натисніть кнопку нижче та підтвердьте свою електронну адресу:
+            </p>
+
+            <!-- Button -->
+            <table cellpadding="0" cellspacing="0" role="presentation" align="center" style="margin:32px auto;">
+              <tr>
+                <td bgcolor="#2563eb" style="border-radius: 16px; box-shadow: 0px 4px 6px -1px rgba(37, 99, 235, 0.2);">
+                  <a href="@Model.VerificationLink" style="display: inline-block; padding: 14px 40px; font-size: 16px; font-weight: 700; color: #ffffff; text-decoration: none;">
+                    Підтвердити
+                  </a>
+                </td>
+              </tr>
+            </table>
+
+            <table cellpadding="0" cellspacing="0" role="presentation">
+              <tr>
+                <td align="left">
+                  <table cellpadding="0" cellspacing="0" role="presentation">
+                    <tr>
+                      <td style="width: 4px; height: 56px; border-radius: 2px; background: linear-gradient(0deg,rgba(37, 99, 235, 1) 0%, rgba(99, 102, 241, 1) 100%);">
+                      </td>
+                      <td style="padding-left: 12px; font-size: 14px; font-weight: 700; color:#000000; vertical-align: middle;">
+                        З повагою,<br>
+                        Команда Studentus
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin-top: 25px; padding-top: 25px; border-top: 1px solid #dfe2e4; font-size: 14px; font-weight: 500; color: #6b7280;">
+              Виникли питання? Напишіть нам на пошту
+              <a href="mailto:contact@studentus.org" style="color:#4b5563;text-decoration:underline;">
+                contact@studentus.org
+              </a>
+            </p>
+
+            <p style="padding-top: 25px; text-align:center; font-size:10px; color:#6b7280;">
+              © 2026 Studentus. All rights reserved.
+            </p>
+
+          </td>
+        </tr>
+      </table>
+
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

@@ -3,6 +3,7 @@ using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
 using AnonymousStudentReviews.Core.Aggregates.EmailVerificationToken;
 using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.User;
+using AnonymousStudentReviews.Infrastructure.Email;
 using AnonymousStudentReviews.Infrastructure.Options;
 using AnonymousStudentReviews.Infrastructure.Users;
 using AnonymousStudentReviews.UseCases.Registration;
@@ -17,8 +18,7 @@ namespace AnonymousStudentReviews.UnitTests.Users.Create;
 public class UserManagerTests
 {
     private readonly AccountConfirmationOptions _accountConfirmationOptions;
-
-    // Mocks
+    
     private readonly Mock<IAccountVerificationLinkFactory> _accountVerificationLinkFactoryMock;
     private readonly Mock<IAllowedEmailDomainRepository> _allowedEmailDomainRepositoryMock;
     private readonly Mock<IEmailHasher> _emailHasherMock;
@@ -31,6 +31,7 @@ public class UserManagerTests
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly UserManager _userManager;
     private readonly Mock<IUserRepository> _userRepositoryMock;
+    private readonly Mock<IVerificationEmailGenerator> _verificationEmailGenerator;
 
     public UserManagerTests()
     {
@@ -52,6 +53,7 @@ public class UserManagerTests
         _roleRepositoryMock = new Mock<IRoleRepository>();
         _unitOfWorkMock = new Mock<IUnitOfWork>();
         _userRepositoryMock = new Mock<IUserRepository>();
+        _verificationEmailGenerator = new Mock<IVerificationEmailGenerator>();
 
         _userManager = new UserManager(
             _userRepositoryMock.Object,
@@ -65,7 +67,8 @@ public class UserManagerTests
             _accountVerificationLinkFactoryMock.Object,
             _emailSenderMock.Object,
             _allowedEmailDomainRepositoryMock.Object,
-            _roleRepositoryMock.Object
+            _roleRepositoryMock.Object,
+            _verificationEmailGenerator.Object
         );
     }
 
