@@ -50,7 +50,7 @@ builder.Services.AddAuthentication(options =>
 builder.AddLoggerConfigs();
 
 builder.Services.AddDataProtection()
-    .PersistKeysToFileSystem(new DirectoryInfo("/keys"));
+    .PersistKeysToFileSystem(new DirectoryInfo("/app/keys"));
 
 builder.Services.AddControllersWithViews();
 

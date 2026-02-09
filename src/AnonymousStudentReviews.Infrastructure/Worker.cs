@@ -1,7 +1,9 @@
 using System.Text.Json;
 
+using AnonymousStudentReviews.Infrastructure.Data;
 using AnonymousStudentReviews.Infrastructure.Options;
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
@@ -17,10 +19,12 @@ public class Worker : IHostedService
 {
     private readonly OpenIddictOptions _openIddictOptions;
     private readonly IServiceProvider _serviceProvider;
+    private readonly IConfiguration _configuration;
 
-    public Worker(IServiceProvider serviceProvider, IOptions<OpenIddictOptions> openIddictOptions)
+    public Worker(IServiceProvider serviceProvider, IOptions<OpenIddictOptions> openIddictOptions, IConfiguration configuration)
     {
         _serviceProvider = serviceProvider;
+        _configuration = configuration;
         _openIddictOptions = openIddictOptions.Value;
     }
 
@@ -28,8 +32,8 @@ public class Worker : IHostedService
     {
         await using var scope = _serviceProvider.CreateAsyncScope();
 
-        // var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        // await context.Database.EnsureCreatedAsync(cancellationToken);
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        context.Database.EnsureCreated();
 
         var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
 
@@ -44,6 +48,8 @@ public class Worker : IHostedService
 
         var openIddictDescriptor = new OpenIddictApplicationDescriptor
         {
+            ClientType = ClientTypes.Confidential,
+            ClientSecret = _configuration["OpenIddictSecrets:ClientSecret"],
             ClientId = _openIddictOptions.ClientId,
             ConsentType = ConsentTypes.Implicit,
             DisplayName = _openIddictOptions.DisplayName,
@@ -76,28 +82,28 @@ public class Worker : IHostedService
         if (clientFromDatabase is null)
         {
             await manager.CreateAsync(openIddictDescriptor, cancellationToken);
-            return;
+            // return;
         }
 
-        var clientFromDatabaseTyped = (OpenIddictEntityFrameworkCoreApplication)clientFromDatabase;
-
-        clientFromDatabaseTyped.ClientId = openIddictDescriptor.ClientId;
-        clientFromDatabaseTyped.DisplayName = openIddictDescriptor.DisplayName;
-
-        var redirectUrisJson =
-            JsonSerializer.Serialize(openIddictDescriptor.RedirectUris.ToArray());
-
-        var postLogoutRedirectUrisJson =
-            JsonSerializer.Serialize(openIddictDescriptor.PostLogoutRedirectUris.ToArray());
-
-        var permissionsJson = JsonSerializer.Serialize(openIddictDescriptor.Permissions.ToArray());
-
-        clientFromDatabaseTyped.Permissions = permissionsJson;
-
-        clientFromDatabaseTyped.RedirectUris = redirectUrisJson;
-        clientFromDatabaseTyped.PostLogoutRedirectUris = postLogoutRedirectUrisJson;
-
-        await manager.UpdateAsync(clientFromDatabaseTyped, cancellationToken);
+        // var clientFromDatabaseTyped = (OpenIddictEntityFrameworkCoreApplication)clientFromDatabase;
+        //
+        // clientFromDatabaseTyped.ClientId = openIddictDescriptor.ClientId;
+        // clientFromDatabaseTyped.DisplayName = openIddictDescriptor.DisplayName;
+        //
+        // var redirectUrisJson =
+        //     JsonSerializer.Serialize(openIddictDescriptor.RedirectUris.ToArray());
+        //
+        // var postLogoutRedirectUrisJson =
+        //     JsonSerializer.Serialize(openIddictDescriptor.PostLogoutRedirectUris.ToArray());
+        //
+        // var permissionsJson = JsonSerializer.Serialize(openIddictDescriptor.Permissions.ToArray());
+        //
+        // clientFromDatabaseTyped.Permissions = permissionsJson;
+        //
+        // clientFromDatabaseTyped.RedirectUris = redirectUrisJson;
+        // clientFromDatabaseTyped.PostLogoutRedirectUris = postLogoutRedirectUrisJson;
+        //
+        // await manager.UpdateAsync(clientFromDatabaseTyped, cancellationToken);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
