@@ -18,7 +18,7 @@ namespace AnonymousStudentReviews.UnitTests.Users.Create;
 public class UserManagerTests
 {
     private readonly AccountConfirmationOptions _accountConfirmationOptions;
-    
+
     private readonly Mock<IAccountVerificationLinkFactory> _accountVerificationLinkFactoryMock;
     private readonly Mock<IAllowedEmailDomainRepository> _allowedEmailDomainRepositoryMock;
     private readonly Mock<IEmailHasher> _emailHasherMock;
