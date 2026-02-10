@@ -10,4 +10,7 @@ public interface IUserRepository
     Task<Result<User>> FindByIdAsync(Guid id);
     Task<Result<User>> FindByEmailHashAsync(string email);
     Task<IEnumerable<Role.Role>> GetRolesAsync(User user);
+    bool IsUserEntityTracked(User user);
+    void IncrementAccessFailedCount(User user);
+    void LockOutUser(User user);
 }

@@ -18,12 +18,21 @@ public class LoginService : ILoginService
     public async Task<Result> HandleAsync(LoginDto dto)
     {
         var findUserResult = await _userManager.FindByEmailAsync(dto.Email);
-        
+
         if (findUserResult.IsFailure)
         {
             return Result.Failure(LoginErrors.WrongEmailOrPassword);
         }
-        
+
+        var user = findUserResult.Value;
+
+        var canSignIn = await _signInManager.CanSignInAsync(user);
+
+        if (!canSignIn)
+        {
+            return Result.Failure(LoginErrors.WrongEmailOrPassword);
+        }
+
         var signInResult = await _signInManager.CheckPasswordSignInAsync(findUserResult.Value, dto.Password);
 
         if (signInResult.IsFailure)
@@ -31,7 +40,6 @@ public class LoginService : ILoginService
             return Result.Failure(LoginErrors.WrongEmailOrPassword);
         }
 
-        var user = findUserResult.Value;
         await _signInManager.SignInAsync(user, dto.RememberMe);
         return Result.Success();
     }
