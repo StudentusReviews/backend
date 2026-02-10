@@ -13,4 +13,6 @@ public interface IUserRepository
     bool IsUserEntityTracked(User user);
     void IncrementAccessFailedCount(User user);
     void LockOutUser(User user);
+    void Ban(User user);
+    Task<bool> UserHasRole(User user, Role.Role role);
 }

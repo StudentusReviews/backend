@@ -86,4 +86,16 @@ public class UserRepository : IUserRepository
     {
         user.LockoutEnd = DateTimeOffset.UtcNow.AddMinutes(_loginOptions.LockoutTimeMinutes);
     }
+
+    public void Ban(User user)
+    {
+        user.IsBanned = true;
+    }
+
+    public async Task<bool> UserHasRole(User user, Role role)
+    {
+        return await _context.Users
+            .Include(e => e.Roles)
+            .AnyAsync(e => e.Id == user.Id && e.Roles.Contains(role));
+    }
 }
