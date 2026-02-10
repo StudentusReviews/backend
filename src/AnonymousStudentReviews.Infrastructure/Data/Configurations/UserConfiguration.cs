@@ -44,6 +44,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(e => e.AccessFailedCount)
             .HasDefaultValue(0)
             .IsRequired();
-        
+
+        builder.Property(e => e.IsBanned)
+            .HasDefaultValue(false)
+            .IsRequired();
     }
 }
