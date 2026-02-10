@@ -2,18 +2,22 @@ using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.Infrastructure.Data;
+using AnonymousStudentReviews.Infrastructure.Options;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace AnonymousStudentReviews.Infrastructure.Users;
 
 public class UserRepository : IUserRepository
 {
     private readonly ApplicationDbContext _context;
+    private readonly LoginOptions _loginOptions;
 
-    public UserRepository(ApplicationDbContext context)
+    public UserRepository(ApplicationDbContext context, IOptions<LoginOptions> loginOptions)
     {
         _context = context;
+        _loginOptions = loginOptions.Value;
     }
 
     public async Task<bool> UserWithEmailHashExistsAsync(string emailHash)
@@ -66,5 +70,20 @@ public class UserRepository : IUserRepository
             .FirstOrDefaultAsync();
 
         return roles ?? [];
+    }
+
+    public bool IsUserEntityTracked(User user)
+    {
+        return _context.Entry(user).State != EntityState.Detached;
+    }
+
+    public void IncrementAccessFailedCount(User user)
+    {
+        user.AccessFailedCount++;
+    }
+
+    public void LockOutUser(User user)
+    {
+        user.LockoutEnd = DateTimeOffset.UtcNow.AddMinutes(_loginOptions.LockoutTimeMinutes);
     }
 }

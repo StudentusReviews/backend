@@ -14,10 +14,10 @@ public class LoginRequestValidator : AbstractValidator<LoginRequest>
             .EmailAddress();
 
         RuleFor(x => x.Password)
-            .SetValidator(new PasswordValidator());
+            .NotNull()
+            .NotEmpty();
 
         RuleFor(x => x.RememberMe)
-            .NotEmpty()
             .NotNull();
     }
 }

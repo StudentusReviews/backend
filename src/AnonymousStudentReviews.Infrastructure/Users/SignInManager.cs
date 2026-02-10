@@ -3,6 +3,7 @@ using System.Security.Claims;
 
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.User;
+using AnonymousStudentReviews.Infrastructure.Options;
 using AnonymousStudentReviews.UseCases.Login;
 using AnonymousStudentReviews.UseCases.Login.Abstractions;
 using AnonymousStudentReviews.UseCases.Registration.Abstractions;
@@ -10,6 +11,7 @@ using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 
 using OpenIddict.Abstractions;
 
@@ -17,13 +19,20 @@ namespace AnonymousStudentReviews.Infrastructure.Users;
 
 public class SignInManager : ISignInManager
 {
-    private readonly IPasswordHasher _passwordHasher;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly LoginOptions _loginOptions;
+    private readonly IPasswordHasher _passwordHasher;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IUserRepository _userRepository;
 
-    public SignInManager(IPasswordHasher passwordHasher, IHttpContextAccessor httpContextAccessor)
+    public SignInManager(IPasswordHasher passwordHasher, IHttpContextAccessor httpContextAccessor,
+        IUserRepository userRepository, IOptions<LoginOptions> loginOptions, IUnitOfWork unitOfWork)
     {
         _passwordHasher = passwordHasher;
         _httpContextAccessor = httpContextAccessor;
+        _userRepository = userRepository;
+        _unitOfWork = unitOfWork;
+        _loginOptions = loginOptions.Value;
     }
 
     public async Task SignOutAsync()
@@ -39,16 +48,43 @@ public class SignInManager : ISignInManager
 
     public async Task<bool> CanSignInAsync(User user)
     {
-        return user.EmailConfirmed;
+        if (!_userRepository.IsUserEntityTracked(user))
+        {
+            throw new InvalidOperationException("Provided user entity must be tracked");
+        }
+
+        var isUserLockedOut = user.LockoutEnd is not null && user.LockoutEnd >= DateTimeOffset.UtcNow;
+
+
+        return user is { IsBanned: false, EmailConfirmed: true } && !isUserLockedOut;
     }
 
     public async Task<Result> CheckPasswordSignInAsync(User user, string password)
     {
+        if (!_userRepository.IsUserEntityTracked(user))
+        {
+            throw new InvalidOperationException("Provided user entity must be tracked");
+        }
+
         var passwordVerificationResult = _passwordHasher.VerifyHashedPassword(user.PasswordHash, password);
 
         if (!passwordVerificationResult)
         {
+            _userRepository.IncrementAccessFailedCount(user);
+
+            if (user.AccessFailedCount >= _loginOptions.MaxFailedAccessAttempts)
+            {
+                _userRepository.LockOutUser(user);
+            }
+
+            await _unitOfWork.SaveChangesAsync();
             return Result.Failure(LoginErrors.WrongPassword);
+        }
+
+        if (user.AccessFailedCount != 0)
+        {
+            user.AccessFailedCount = 0;
+            await _unitOfWork.SaveChangesAsync();
         }
 
         return Result.Success();

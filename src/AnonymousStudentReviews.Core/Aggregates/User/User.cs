@@ -7,6 +7,9 @@ public class User
     public string EmailHash { get; set; }
     public string PasswordHash { get; set; }
     public bool EmailConfirmed { get; set; }
+    public int AccessFailedCount { get; set; }
+    public DateTimeOffset? LockoutEnd { get; set; }
+    public bool IsBanned { get; set; }
     public DateTime CreatedAt { get; set; }
 
     public University? University { get; set; }

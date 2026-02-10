@@ -23,6 +23,7 @@ public class RegistrationController : Controller
     [HttpGet]
     public IActionResult Index()
     {
+        ViewData["Title"] = "Реєстрація";
         return View();
     }
 
@@ -30,6 +31,8 @@ public class RegistrationController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Index([FromForm] RegistrationRequest request)
     {
+        ViewData["Title"] = "Реєстрація";
+
         var validationResult = await _createUserRequestValidator.ValidateAsync(request);
 
         if (!validationResult.IsValid)
