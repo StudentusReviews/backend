@@ -18,7 +18,6 @@ public class LoginRequestValidator : AbstractValidator<LoginRequest>
             .NotEmpty();
 
         RuleFor(x => x.RememberMe)
-            .NotEmpty()
             .NotNull();
     }
 }
