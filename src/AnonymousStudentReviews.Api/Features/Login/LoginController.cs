@@ -22,6 +22,7 @@ public class LoginController : Controller
     [HttpGet]
     public IActionResult Index(string? returnUrl = null)
     {
+        ViewData["Title"] = "Вхід";
         ViewData["ReturnUrl"] = returnUrl;
         return View();
     }
@@ -44,7 +45,8 @@ public class LoginController : Controller
 
         if (loginResult.IsFailure)
         {
-            TempData["Error"] = "Invalid email or password";
+            ViewData["ErrorName"] = "Помилка входу";
+            ViewData["ErrorDescription"] = "Невірний логін або пароль";
             return View("Index");
         }
 
