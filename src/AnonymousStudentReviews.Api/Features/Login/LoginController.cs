@@ -31,6 +31,8 @@ public class LoginController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login([FromForm] LoginRequest request, string? returnUrl = null)
     {
+        ViewData["Title"] = "Вхід";
+        
         var formValidationResult = await _loginRequestValidator.ValidateAsync(request);
 
         if (!formValidationResult.IsValid)
