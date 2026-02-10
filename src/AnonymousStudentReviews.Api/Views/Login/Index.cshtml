@@ -64,7 +64,8 @@
                         class="w-full px-5 py-2.5 pr-12 rounded-2xl transition-colors duration-200 focus:outline-none text-base shadow-sm 
                             bg-gray-50 dark:bg-gray-800 border border-gray-300 hover:border-gray-400 dark:border-gray-600 focus:ring-1 focus:ring-blue-500"/>
                     <span id="passwordError" class="hidden text-sm text-red-600 dark:text-red-400 mt-1 block"></span>
-                    <span asp-validation-for="Password"  class="text-sm text-red-600 dark:text-red-400 mt-1 block"></span>
+                    <span asp-validation-for="Password"
+                          class="text-sm text-red-600 dark:text-red-400 mt-1 block"></span>
                 </div>
 
                 <div class="flex items-center">
@@ -92,6 +93,6 @@
 
 @section BodyScripts
 {
-<script src="~/js/loginFormValidation.js"></script>
+    <script src="~/js/loginFormValidation.js" asp-append-version="true"></script>
 }
 
