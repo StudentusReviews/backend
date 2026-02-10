@@ -2,7 +2,7 @@
 
 @section HeadScripts
 {
-    <link rel="stylesheet" href="~/css/styles-output.css">
+    <link rel="stylesheet" href="~/css/styles-output.css" asp-append-version="true">
 }
 
 <div
@@ -30,7 +30,7 @@
                         </svg>
                         <div class="text-sm text-red-800 dark:text-red-200">
                             <h3 class="font-medium">@ViewData["ErrorName"]</h3>
-                            <p class="mt-1 text-red-700 dark:text-red-300">ViewData["ErrorDescriptions"]</p>
+                            <p class="mt-1 text-red-700 dark:text-red-300">@ViewData["ErrorDescription"]</p>
                         </div>
                     </div>
                 }
@@ -70,7 +70,7 @@
 
                 <div class="flex items-center">
                     <input asp-for="RememberMe" id="remember-me" type="checkbox"
-                           class="w-4 h-4 text-blue-600 bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600">
+                           class="form-checkbox w-4 h-4 text-blue-600 bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600">
                     <label asp-for="RememberMe" for="remember-me"
                            class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">Запам’ятати
                         мене</label>
