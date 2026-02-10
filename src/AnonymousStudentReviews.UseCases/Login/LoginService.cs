@@ -18,9 +18,15 @@ public class LoginService : ILoginService
     public async Task<Result> HandleAsync(LoginDto dto)
     {
         var findUserResult = await _userManager.FindByEmailAsync(dto.Email);
+        
+        if (findUserResult.IsFailure)
+        {
+            return Result.Failure(LoginErrors.WrongEmailOrPassword);
+        }
+        
         var signInResult = await _signInManager.CheckPasswordSignInAsync(findUserResult.Value, dto.Password);
 
-        if (findUserResult.IsFailure || signInResult.IsFailure)
+        if (signInResult.IsFailure)
         {
             return Result.Failure(LoginErrors.WrongEmailOrPassword);
         }
