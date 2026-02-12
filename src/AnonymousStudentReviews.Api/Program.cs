@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 using AnonymousStudentReviews.Api;
 using AnonymousStudentReviews.Api.Configurations;
 using AnonymousStudentReviews.Api.Options;
@@ -52,7 +54,9 @@ builder.AddLoggerConfigs();
 builder.Services.AddDataProtection()
     .PersistKeysToFileSystem(new DirectoryInfo("/app/keys"));
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
+;
 
 builder.Services.AddRazorPages();
 
