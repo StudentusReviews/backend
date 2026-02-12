@@ -3,7 +3,6 @@ using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.Infrastructure.Data;
 using AnonymousStudentReviews.Infrastructure.Options;
-using AnonymousStudentReviews.UseCases.Users.Retrieve;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -38,7 +37,10 @@ public class UserRepository : IUserRepository
 
     public async Task<Result<User>> FindByIdAsync(Guid id)
     {
-        var result = await _context.Users.FirstOrDefaultAsync(user => user.Id == id);
+        var result = await _context.Users
+            .Include(user => user.University)
+            .Include(user => user.Roles)
+            .FirstOrDefaultAsync(user => user.Id == id);
 
         if (result is null)
         {
