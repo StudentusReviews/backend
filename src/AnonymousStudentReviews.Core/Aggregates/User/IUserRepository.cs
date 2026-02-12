@@ -1,4 +1,5 @@
 using AnonymousStudentReviews.Core.Abstractions;
+using AnonymousStudentReviews.UseCases.Users.Retrieve;
 
 namespace AnonymousStudentReviews.Core.Aggregates.User;
 
@@ -15,4 +16,10 @@ public interface IUserRepository
     void LockOutUser(User user);
     void Ban(User user);
     Task<bool> UserHasRole(User user, Role.Role role);
+
+    Task<PaginatedList<UserPreview>> GetAllAsync(string? queryString = null, Guid? userId = null,
+        Guid? universityId = null,
+        string? universityName = null,
+        string? emailHash = null, SortBy sortBy = SortBy.UniversityName, SortOrder sortOrder = SortOrder.Ascending,
+        int pageNumber = 1, int pageSize = 10);
 }

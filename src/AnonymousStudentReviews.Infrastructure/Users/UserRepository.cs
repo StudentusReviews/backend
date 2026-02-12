@@ -3,6 +3,7 @@ using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.Infrastructure.Data;
 using AnonymousStudentReviews.Infrastructure.Options;
+using AnonymousStudentReviews.UseCases.Users.Retrieve;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -97,5 +98,73 @@ public class UserRepository : IUserRepository
         return await _context.Users
             .Include(e => e.Roles)
             .AnyAsync(e => e.Id == user.Id && e.Roles.Contains(role));
+    }
+
+    public async Task<PaginatedList<UserPreview>> GetAllAsync(string? queryString = null, Guid? userId = null,
+        Guid? universityId = null,
+        string? universityName = null,
+        string? emailHash = null, SortBy sortBy = SortBy.UniversityName, SortOrder sortOrder = SortOrder.Ascending,
+        int pageNumber = 1, int pageSize = 10)
+    {
+        var query = _context.Users.Include(user => user.University).AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(queryString))
+        {
+            var queryToGuidResult = Guid.TryParse(queryString, out var queryGuid);
+
+            if (queryToGuidResult)
+            {
+                query = query
+                    .Where(user => user.Id == queryGuid || user.UniversityId == queryGuid);
+            }
+            else
+            {
+                query = query
+                    .Where(user => user.University != null && user.University.Name.Contains(queryString));
+            }
+        }
+
+        if (userId is not null)
+        {
+            query = query.Where(user => user.Id == userId);
+        }
+
+        if (universityId is not null)
+        {
+            query = query.Where(user => user.UniversityId == universityId);
+        }
+
+        if (universityName is not null)
+        {
+            query = query
+                .Where(user => user.University != null && user.University.Name.Contains(universityName));
+        }
+
+        if (emailHash is not null)
+        {
+            query = query.Where(user => user.EmailHash == emailHash);
+        }
+
+        query = (sortBy, sortOrder) switch
+        {
+            (SortBy.UniversityName, SortOrder.Ascending) =>
+                query.OrderBy(u => u.University != null ? u.University.Name : null),
+            (SortBy.UniversityName, SortOrder.Descending) =>
+                query.OrderByDescending(u => u.University != null ? u.University.Name : null),
+            _ => query.OrderBy(u => u.Id)
+        };
+
+        var count = await query.CountAsync();
+
+        var offset = (pageNumber - 1) * pageSize;
+
+        var result = await query.Skip(offset).Take(pageSize).Select(user => new UserPreview
+        {
+            UserId = user.Id,
+            UniversityId = user.UniversityId,
+            UniversityName = user.University != null ? user.University.Name : null
+        }).ToListAsync();
+
+        return new PaginatedList<UserPreview>(result, count, pageNumber, pageSize);
     }
 }
