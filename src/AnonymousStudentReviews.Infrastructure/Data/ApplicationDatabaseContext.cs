@@ -6,6 +6,7 @@ using AnonymousStudentReviews.Core.Aggregates.Review;
 using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.University;
 using AnonymousStudentReviews.Core.Aggregates.User;
+using AnonymousStudentReviews.Core.Aggregates.AppToAddAUni;
 using AnonymousStudentReviews.Infrastructure.Data.Configurations;
 
 using Microsoft.EntityFrameworkCore;
@@ -29,8 +30,8 @@ public class ApplicationDatabaseContext : DbContext
     public DbSet<Role> Roles { get; set; }
     public DbSet<Core.Aggregates.EmailVerificationToken.EmailVerificationToken> EmailVerificationTokens { get; set; }
     public DbSet<Review> Reviews { get; set; }
-    public DbSet<ApplicationToAddAUniversity> ApplicationToAddAUniversities { get; set; }
-    public DbSet<ApplicationToAddAUniversityStatus> ApplicationToAddAUniversityStatuses { get; set; }
+    public DbSet<AppToAddAUni> Applications { get; set; }
+    public DbSet<AppToAddAUniStatus> ApplicationStatuses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
