@@ -77,6 +77,53 @@ jobs:
 
       - name: Enable Dependabot alerts (GitHub-side)
         run: echo "Dependabot scanning enabled in repo settings"
+  # Builds the backend Docker image and pushes it to AWS     
+  docker:
+    needs: build-test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+  
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+  
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+  
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+  
+      - name: Determine image tags
+        id: tags
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          IMAGE_NAME="${ECR_REGISTRY}/backend"
+          
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            TAGS="${IMAGE_NAME}:latest ${IMAGE_NAME}:${{ github.sha }}"
+          elif [ "${{ github.ref }}" = "refs/heads/dev" ]; then
+            TAGS="${IMAGE_NAME}:dev ${IMAGE_NAME}:dev-${{ github.sha }}"
+          else
+            TAGS="${IMAGE_NAME}:${{ github.sha }}"
+          fi
+          
+          echo "tags=${TAGS}" >> $GITHUB_OUTPUT
+  
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ steps.tags.outputs.tags }} .
+  
+      - name: Push Docker image to ECR
+        run: |
+          for tag in ${{ steps.tags.outputs.tags }}; do
+            docker push "$tag"
+          done
 
   # Enforce merge rules (optional)
   # You can configure branch protection in GitHub UI:
