@@ -78,48 +78,16 @@ jobs:
       - name: Enable Dependabot alerts (GitHub-side)
         run: echo "Dependabot scanning enabled in repo settings"
         
-  # Builds the backend Docker image and pushes it to Azure Container Registry (ACR)      
-  docker:
+  # Push-docker    
+  push-docker:
     needs: build-test
-    runs-on: ubuntu-latest
     if: github.event_name == 'push'
-    
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    uses: ./.github/workflows/push-docker-images.yml
+    with:
+      AWS_REGION: "eu-central-1"
+      AWS_ACCOUNT_ID: "585517712585"
+      CONTAINER_NAME: "backend"
       
-      - name: Login to Azure Container Registry
-        uses: azure/docker-login@v1
-        with:
-          login-server: ${{ secrets.ACR_LOGIN_SERVER }}
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
-      
-      - name: Determine image tags
-        id: tags
-        run: |
-          ACR_LOGIN_SERVER=${{ secrets.ACR_LOGIN_SERVER }}
-          IMAGE_NAME="${ACR_LOGIN_SERVER}/backend"
-          
-          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            TAGS="${IMAGE_NAME}:latest ${IMAGE_NAME}:${{ github.sha }}"
-          elif [ "${{ github.ref }}" = "refs/heads/dev" ]; then
-            TAGS="${IMAGE_NAME}:dev ${IMAGE_NAME}:dev-${{ github.sha }}"
-          else
-            TAGS="${IMAGE_NAME}:${{ github.sha }}"
-          fi
-          
-          echo "tags=${TAGS}" >> $GITHUB_OUTPUT
-      
-      - name: Build Docker image
-        run: |
-          docker build -t ${{ steps.tags.outputs.tags }} .
-      
-      - name: Push Docker image to ACR
-        run: |
-          for tag in ${{ steps.tags.outputs.tags }}; do
-            docker push "$tag"
-          done
   # Enforce merge rules (optional)
   # You can configure branch protection in GitHub UI:
   # - Require passing CI before merge
