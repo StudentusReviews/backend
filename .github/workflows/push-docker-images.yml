@@ -1,19 +1,7 @@
 name: push docker images
 on:
-  workflow_call:
-    inputs:
-      AWS_REGION:
-        required: true
-        type: string
-        default: "eu-central-1"
-      AWS_ACCOUNT_ID:
-        required: true
-        type: string
-      CONTAINER_NAME:
-        required: true
-        type: string
-  workflow_dispatch:
-
+  push:
+    
 permissions:
   id-token: write
 
@@ -27,7 +15,7 @@ jobs:
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v5.1.1
         with:
-          role-to-assume: arn:aws:iam::${{ inputs.AWS_ACCOUNT_ID }}:role/github_actions_oidc
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/github_actions_oidc
           role-session-name: GHA_DOCKER_PUSH
           aws-region: eu-central-1
       - name: Set up Docker
@@ -39,10 +27,9 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: "./src/${{ inputs.CONTAINER_NAME }}"
+          context: "./src/AnonymousStudentReviews.Api/"
           push: true
-          tags: ${{ inputs.AWS_ACCOUNT_ID }}.dkr.ecr.${{ inputs.AWS_REGION }}.amazonaws.com/${{ inputs.CONTAINER_NAME }}:test,
-                ${{ inputs.AWS_ACCOUNT_ID }}.dkr.ecr.${{ inputs.AWS_REGION }}.amazonaws.com/${{ inputs.CONTAINER_NAME }}:test-${{ env.SHORT_SHA }}
-
+          tags: ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.eu-central-1.amazonaws.com/backend:test,
+                ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.eu-central-1.amazonaws.com/backend:test-${{ env.SHORT_SHA }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
