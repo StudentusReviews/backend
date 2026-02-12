@@ -31,4 +31,8 @@
         <None Include="wwwroot\css\styles.css"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Features\Users\Retrieve\RetrieveOne\" />
+    </ItemGroup>
+
 </Project>

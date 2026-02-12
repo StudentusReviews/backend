@@ -1,10 +1,9 @@
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.User;
-using AnonymousStudentReviews.UseCases.Users.Retrieve;
 
-namespace AnonymousStudentReviews.Api.Features.Users.Retrieve;
+namespace AnonymousStudentReviews.UseCases.Users.Retrieve.RetrieveMany;
 
-public class RetrieveUsersQueryParameters
+public class RetrieveUsersDto
 {
     public string? QueryString { get; set; }
     public Guid? UserId { get; set; }

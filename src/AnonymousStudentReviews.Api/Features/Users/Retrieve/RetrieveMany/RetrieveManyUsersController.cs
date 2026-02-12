@@ -1,13 +1,13 @@
 using AnonymousStudentReviews.Api.Extensions;
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.User;
-using AnonymousStudentReviews.UseCases.Users.Retrieve;
+using AnonymousStudentReviews.UseCases.Users.Retrieve.RetrieveMany;
 
 using FluentValidation;
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace AnonymousStudentReviews.Api.Features.Users.Retrieve;
+namespace AnonymousStudentReviews.Api.Features.Users.Retrieve.RetrieveMany;
 
 // [Authorize(
 //     AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme,
@@ -15,21 +15,21 @@ namespace AnonymousStudentReviews.Api.Features.Users.Retrieve;
 // )]
 [Route("api/users")]
 [ApiController]
-public class RetrieveUsersController : ControllerBase
+public class RetrieveManyUsersController : ControllerBase
 {
-    private readonly IRetrieveUsersService _retrieveUsersService;
-    private readonly IValidator<RetrieveUsersQueryParameters> _validator;
+    private readonly IRetrieveManyUsersService _retrieveManyUsersService;
+    private readonly IValidator<RetrieveManyUsersQueryParameters> _validator;
 
-    public RetrieveUsersController(IRetrieveUsersService retrieveUsersService,
-        IValidator<RetrieveUsersQueryParameters> validator)
+    public RetrieveManyUsersController(IRetrieveManyUsersService retrieveManyUsersService,
+        IValidator<RetrieveManyUsersQueryParameters> validator)
     {
-        _retrieveUsersService = retrieveUsersService;
+        _retrieveManyUsersService = retrieveManyUsersService;
         _validator = validator;
     }
 
     [HttpGet]
     public async Task<ActionResult<PaginatedList<UserPreview>>> GetUsersAsync(
-        [FromQuery] RetrieveUsersQueryParameters queryParameters)
+        [FromQuery] RetrieveManyUsersQueryParameters queryParameters)
     {
         var validationResult = await _validator.ValidateAsync(queryParameters);
 
@@ -38,7 +38,7 @@ public class RetrieveUsersController : ControllerBase
             return validationResult.ToProblemDetails(Request.Path);
         }
 
-        var result = await _retrieveUsersService.HandleAsync(QueryParametersToDto(queryParameters));
+        var result = await _retrieveManyUsersService.HandleAsync(QueryParametersToDto(queryParameters));
 
         if (result.IsFailure)
         {
@@ -48,7 +48,7 @@ public class RetrieveUsersController : ControllerBase
         return Ok(result.Value);
     }
 
-    private RetrieveUsersDto QueryParametersToDto(RetrieveUsersQueryParameters queryParameters)
+    private RetrieveUsersDto QueryParametersToDto(RetrieveManyUsersQueryParameters queryParameters)
     {
         return new RetrieveUsersDto
         {

@@ -2,14 +2,14 @@ using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 
-namespace AnonymousStudentReviews.UseCases.Users.Retrieve;
+namespace AnonymousStudentReviews.UseCases.Users.Retrieve.RetrieveMany;
 
-public class RetrieveUsersService : IRetrieveUsersService
+public class RetrieveManyUsersService : IRetrieveManyUsersService
 {
     private readonly IEmailHasher _emailHasher;
     private readonly IUserRepository _userRepository;
 
-    public RetrieveUsersService(IUserRepository userRepository, IEmailHasher emailHasher)
+    public RetrieveManyUsersService(IUserRepository userRepository, IEmailHasher emailHasher)
     {
         _userRepository = userRepository;
         _emailHasher = emailHasher;

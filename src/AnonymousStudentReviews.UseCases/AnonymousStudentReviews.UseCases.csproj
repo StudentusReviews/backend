@@ -16,4 +16,8 @@
         <ProjectReference Include="..\AnonymousStudentReviews.Core\AnonymousStudentReviews.Core.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Users\Retrieve\RetrieveOne\" />
+    </ItemGroup>
+
 </Project>
