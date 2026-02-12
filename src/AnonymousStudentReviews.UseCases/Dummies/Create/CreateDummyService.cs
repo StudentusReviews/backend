@@ -44,7 +44,7 @@ public class CreateDummyService : ICreateDummyService
 
         if (getUserResult.IsFailure)
         {
-            Result.Failure<Dummy>(new Error("", ""));
+            return Result.Failure<Dummy>(new Error("", ""));
         }
 
         var user = getUserResult.Value;
