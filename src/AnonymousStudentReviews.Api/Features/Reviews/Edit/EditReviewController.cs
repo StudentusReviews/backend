@@ -18,11 +18,11 @@ namespace AnonymousStudentReviews.Api.Features.Reviews.Edit;
 public class EditReviewController : ControllerBase
 {
     private readonly IValidator<EditReviewRequest> _validator;
-    
+
     public EditReviewController(IValidator<EditReviewRequest> validator)
     {
         _validator = validator;
-        
+
     }
 
     [HttpPut("{reviewId:guid}")]
@@ -42,7 +42,7 @@ public class EditReviewController : ControllerBase
         }
 
         return StatusCode(StatusCodes.Status501NotImplemented);
-        
+
     }
-    
+
 }

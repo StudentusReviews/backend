@@ -40,7 +40,7 @@ public class CreateReviewController : ControllerBase
         }
 
         return StatusCode(StatusCodes.Status501NotImplemented);
-        
+
     }
-    
+
 }
