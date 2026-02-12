@@ -1,7 +1,9 @@
 name: push docker images
 on:
   push:
-    
+    branches:
+      - dev
+      - main
 permissions:
   id-token: write
 
