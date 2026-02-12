@@ -5,5 +5,5 @@ namespace AnonymousStudentReviews.UseCases.Users.Retrieve;
 
 public interface IRetrieveUsersService
 {
-    Task<Result<PaginatedList<User>>> HandleAsync(RetrieveUsersDto dto);
+    Task<Result<PaginatedList<UserPreview>>> HandleAsync(RetrieveUsersDto dto);
 }

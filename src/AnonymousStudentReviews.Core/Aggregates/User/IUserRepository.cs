@@ -1,5 +1,4 @@
 using AnonymousStudentReviews.Core.Abstractions;
-using AnonymousStudentReviews.UseCases.Users.Retrieve;
 
 namespace AnonymousStudentReviews.Core.Aggregates.User;
 
