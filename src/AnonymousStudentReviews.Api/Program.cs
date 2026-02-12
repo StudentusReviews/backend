@@ -92,7 +92,7 @@ if (app.Environment.IsProduction())
     {
         throw new Exception("Healthcheck:RequireHost not set in config file");
     }
-    
+
     healthCheckBuilder.RequireHost();
 }
 
