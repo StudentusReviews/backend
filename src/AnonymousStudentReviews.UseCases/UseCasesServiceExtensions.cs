@@ -3,8 +3,8 @@ using AnonymousStudentReviews.UseCases.Dummies.Create;
 using AnonymousStudentReviews.UseCases.Login;
 using AnonymousStudentReviews.UseCases.Registration;
 using AnonymousStudentReviews.UseCases.Users.Ban;
-using AnonymousStudentReviews.UseCases.Users.Retrieve;
 using AnonymousStudentReviews.UseCases.Users.Retrieve.RetrieveMany;
+using AnonymousStudentReviews.UseCases.Users.Retrieve.RetrieveOne;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,5 +60,6 @@ public static class UseCasesServiceExtensions
         services.AddScoped<ILoginService, LoginService>();
         services.AddScoped<IBanUserService, BanUserService>();
         services.AddScoped<IRetrieveManyUsersService, RetrieveManyUsersService>();
+        services.AddScoped<IRetrieveOneUserService, RetrieveOneUserService>();
     }
 }
