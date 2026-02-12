@@ -5,14 +5,17 @@ using AnonymousStudentReviews.UseCases.Users.Retrieve.RetrieveMany;
 
 using FluentValidation;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+using OpenIddict.Validation.AspNetCore;
 
 namespace AnonymousStudentReviews.Api.Features.Users.Retrieve.RetrieveMany;
 
-// [Authorize(
-//     AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme,
-//     Roles = "Admin"
-// )]
+[Authorize(
+    AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme,
+    Roles = "Admin"
+)]
 [Route("api/users")]
 [ApiController]
 public class RetrieveManyUsersController : ControllerBase
