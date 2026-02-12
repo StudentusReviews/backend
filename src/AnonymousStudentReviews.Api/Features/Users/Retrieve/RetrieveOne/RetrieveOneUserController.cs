@@ -49,7 +49,8 @@ public class RetrieveOneUserController : ControllerBase
             AccessFailedCount = result.AccessFailedCount,
             LockoutEnd = result.LockoutEnd,
             Roles = result.Roles.Select(role => new RolePreview { Id = role.Id, Name = role.Name }),
-            UniversityName = result.University?.Name
+            UniversityName = result.University?.Name,
+            IsBanned = result.IsBanned
         };
 
         return response;
