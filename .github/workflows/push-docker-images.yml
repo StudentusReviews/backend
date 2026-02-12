@@ -27,7 +27,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: "./src/AnonymousStudentReviews.Api/"
           push: true
           tags: ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.eu-central-1.amazonaws.com/backend:test,
                 ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.eu-central-1.amazonaws.com/backend:test-${{ env.SHORT_SHA }}
