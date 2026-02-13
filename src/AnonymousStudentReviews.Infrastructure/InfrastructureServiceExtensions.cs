@@ -68,7 +68,7 @@ public static class InfrastructureServiceExtensions
             {
                 void InsertRoleIfNotExists(string name)
                 {
-                    if (context.Set<Role>().FirstOrDefault(role => role.Name == "Student") is null)
+                    if (context.Set<Role>().FirstOrDefault(role => role.Name == name) is null)
                     {
                         context.Set<Role>().Add(new Role { Id = Guid.NewGuid(), Name = name });
                     }
