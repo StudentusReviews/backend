@@ -95,11 +95,20 @@ public class UserRepository : IUserRepository
         user.IsBanned = true;
     }
 
-    public async Task<bool> UserHasRole(User user, Role role)
+    public async Task<bool> UserHasRoleAsync(User user, Role role)
     {
         return await _context.Users
             .Include(e => e.Roles)
             .AnyAsync(e => e.Id == user.Id && e.Roles.Contains(role));
+    }
+
+    public async Task<ICollection<Role>> GetUserRoles(User user)
+    {
+        return await _context.Users
+            .Include(e => e.Roles)
+            .Where(e => e.Id == user.Id)
+            .Select(e => e.Roles)
+            .FirstOrDefaultAsync() ?? [];
     }
 
     public async Task<PagedResponse<UserPreview>> GetAllAsync(string? queryString = null, Guid? userId = null,

@@ -14,7 +14,8 @@ public interface IUserRepository
     void IncrementAccessFailedCount(User user);
     void LockOutUser(User user);
     void Ban(User user);
-    Task<bool> UserHasRole(User user, Role.Role role);
+    Task<bool> UserHasRoleAsync(User user, Role.Role role);
+    Task<ICollection<Role.Role>> GetUserRoles(User user);
 
     Task<PagedResponse<UserPreview>> GetAllAsync(string? queryString = null, Guid? userId = null,
         Guid? universityId = null,

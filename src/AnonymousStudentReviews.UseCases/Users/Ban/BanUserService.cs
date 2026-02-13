@@ -54,13 +54,13 @@ public class BanUserService : IBanUserService
 
         var adminRole = adminRoleResult.Value;
 
-        var userToBeBannedIsAdmin = await _userRepository.UserHasRole(userToBeBanned, adminRole);
+        var userToBeBannedIsAdmin = await _userRepository.UserHasRoleAsync(userToBeBanned, adminRole);
 
         if (userToBeBannedIsAdmin)
         {
             return Result.Failure(BanUserErrors.UserIsAdmin);
         }
-        
+
         _userRepository.Ban(userToBeBanned);
         await _unitOfWork.SaveChangesAsync();
 

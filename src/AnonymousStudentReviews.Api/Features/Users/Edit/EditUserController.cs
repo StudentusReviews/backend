@@ -1,0 +1,43 @@
+using AnonymousStudentReviews.Api.Extensions;
+using AnonymousStudentReviews.UseCases.Users.Edit;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+using OpenIddict.Validation.AspNetCore;
+
+namespace AnonymousStudentReviews.Api.Features.Users.Edit;
+
+[Route("api/users/{userId:guid}")]
+[Authorize(
+    AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme,
+    Roles = "Admin,SuperAdmin"
+)]
+[ApiController]
+public class EditUserController : ControllerBase
+{
+    private readonly IEditUserService _editUserService;
+
+    public EditUserController(IEditUserService editUserService)
+    {
+        _editUserService = editUserService;
+    }
+
+    [HttpPut]
+    public async Task<ActionResult> EditUserAsync([FromRoute] Guid userId, [FromBody] EditUserRequest request)
+    {
+        var editUserResult = await _editUserService.HandleAsync(RequestToDto(userId, request));
+
+        if (editUserResult.IsFailure)
+        {
+            return editUserResult.Error.ToProblemDetails(Request.Path);
+        }
+
+        return NoContent();
+    }
+
+    private EditUserDto RequestToDto(Guid userId, EditUserRequest request)
+    {
+        return new EditUserDto { IsBanned = request.IsBanned, UserId = userId };
+    }
+}

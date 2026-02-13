@@ -4,4 +4,5 @@ public static class RoleNameConstants
 {
     public static string Admin = "Admin";
     public static string Student = "Student";
+    public static string SuperAdmin = "SuperAdmin";
 }

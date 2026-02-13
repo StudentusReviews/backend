@@ -3,7 +3,7 @@ namespace AnonymousStudentReviews.Core.Abstractions;
 public class PagedResponse<T>
 {
     public List<T> Items { get; set; } = new();
-    
+
     public int PageIndex { get; set; }
     public int PageSize { get; set; }
     public int TotalCount { get; set; }
@@ -11,7 +11,7 @@ public class PagedResponse<T>
 
     public bool HasPreviousPage => PageIndex > 1;
     public bool HasNextPage => PageIndex < TotalPages;
-    
+
     public PagedResponse() { }
 
     public PagedResponse(List<T> items, int count, int pageIndex, int pageSize)
