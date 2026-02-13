@@ -74,7 +74,7 @@ public static class InfrastructureServiceExtensions
                     }
                 }
 
-                var roles = new[] { "Student", "Admin" };
+                var roles = new[] { "Student", "Admin", "SuperAdmin" };
 
                 foreach (var role in roles)
                 {

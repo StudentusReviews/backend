@@ -14,7 +14,7 @@ namespace AnonymousStudentReviews.Api.Features.Users.Retrieve.RetrieveMany;
 
 [Authorize(
     AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme,
-    Roles = "Admin"
+    Roles = "Admin,SuperAdmin"
 )]
 [Route("api/users")]
 [ApiController]
