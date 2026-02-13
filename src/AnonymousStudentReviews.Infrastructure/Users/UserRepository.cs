@@ -102,7 +102,7 @@ public class UserRepository : IUserRepository
             .AnyAsync(e => e.Id == user.Id && e.Roles.Contains(role));
     }
 
-    public async Task<PaginatedList<UserPreview>> GetAllAsync(string? queryString = null, Guid? userId = null,
+    public async Task<PagedResponse<UserPreview>> GetAllAsync(string? queryString = null, Guid? userId = null,
         Guid? universityId = null,
         string? universityName = null,
         string? emailHash = null, SortBy sortBy = SortBy.UniversityName, SortOrder sortOrder = SortOrder.Ascending,
@@ -167,6 +167,6 @@ public class UserRepository : IUserRepository
             UniversityName = user.University != null ? user.University.Name : null
         }).ToListAsync();
 
-        return new PaginatedList<UserPreview>(result, count, pageNumber, pageSize);
+        return new PagedResponse<UserPreview>(result, count, pageNumber, pageSize);
     }
 }

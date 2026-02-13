@@ -16,7 +16,7 @@ public interface IUserRepository
     void Ban(User user);
     Task<bool> UserHasRole(User user, Role.Role role);
 
-    Task<PaginatedList<UserPreview>> GetAllAsync(string? queryString = null, Guid? userId = null,
+    Task<PagedResponse<UserPreview>> GetAllAsync(string? queryString = null, Guid? userId = null,
         Guid? universityId = null,
         string? universityName = null,
         string? emailHash = null, SortBy sortBy = SortBy.UniversityName, SortOrder sortOrder = SortOrder.Ascending,

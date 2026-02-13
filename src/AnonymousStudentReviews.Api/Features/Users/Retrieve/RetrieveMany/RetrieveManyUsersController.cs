@@ -31,7 +31,7 @@ public class RetrieveManyUsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<PaginatedList<UserPreview>>> GetUsersAsync(
+    public async Task<ActionResult<PagedResponse<UserPreview>>> GetUsersAsync(
         [FromQuery] RetrieveManyUsersQueryParameters queryParameters)
     {
         var validationResult = await _validator.ValidateAsync(queryParameters);

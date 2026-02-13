@@ -15,7 +15,7 @@ public class RetrieveManyUsersService : IRetrieveManyUsersService
         _emailHasher = emailHasher;
     }
 
-    public async Task<Result<PaginatedList<UserPreview>>> HandleAsync(RetrieveUsersDto dto)
+    public async Task<Result<PagedResponse<UserPreview>>> HandleAsync(RetrieveUsersDto dto)
     {
         var emailHash = dto.Email is not null ? _emailHasher.Hash(dto.Email) : null;
 
