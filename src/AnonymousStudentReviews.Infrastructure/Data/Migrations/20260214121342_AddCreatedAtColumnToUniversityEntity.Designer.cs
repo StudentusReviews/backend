@@ -3,6 +3,7 @@ using System;
 using AnonymousStudentReviews.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260214121342_AddCreatedAtColumnToUniversityEntity")]
+    partial class AddCreatedAtColumnToUniversityEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,40 +97,6 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("email_verification_codes", (string)null);
-                });
-
-            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.Review.Review", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Body")
-                        .IsRequired()
-                        .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Score")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("UniversityId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UniversityId", "UserId")
-                        .IsUnique();
-
-                    b.ToTable("reviews", (string)null);
                 });
 
             modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.Role.Role", b =>
