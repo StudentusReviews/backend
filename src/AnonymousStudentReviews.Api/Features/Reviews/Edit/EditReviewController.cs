@@ -57,16 +57,16 @@ public class EditReviewController : ControllerBase
     }
 
     private static ReviewResponse ToResponse(Review review)
+    {
+        return new ReviewResponse
         {
-            return new ReviewResponse
-            {
-                Id = review.Id,
-                UniversityId = review.UniversityId,
-                UserId = review.UserId,
-                Score = review.Score,
-                Body = review.Body,
-                CreatedAt = review.CreatedAt,
-                UpdatedAt = review.UpdatedAt
-            };
-        }
+            Id = review.Id,
+            UniversityId = review.UniversityId,
+            UserId = review.UserId,
+            Score = review.Score,
+            Body = review.Body,
+            CreatedAt = review.CreatedAt,
+            UpdatedAt = review.UpdatedAt
+        };
     }
+}

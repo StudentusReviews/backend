@@ -41,7 +41,7 @@ public class CreateReviewController : ControllerBase
         {
             return validationResult.ToProblemDetails(Request.Path);
         }
-        
+
         var dto = new CreateReviewDto
         {
             UniversityId = request.UniversityId,
@@ -55,10 +55,10 @@ public class CreateReviewController : ControllerBase
         {
             return result.Error.ToProblemDetails(Request.Path);
         }
-        
+
         return CreatedAtAction(nameof(Create), ToResponse(result.Value));
     }
-    
+
     private static ReviewResponse ToResponse(Review review)
     {
         return new ReviewResponse

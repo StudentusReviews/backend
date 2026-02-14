@@ -21,7 +21,7 @@ public class DeleteReviewController : ControllerBase
     {
         _service = service;
     }
-    
+
     [HttpDelete("{reviewId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
