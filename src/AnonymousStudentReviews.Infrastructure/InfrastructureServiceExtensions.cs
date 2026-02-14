@@ -20,6 +20,8 @@ using AnonymousStudentReviews.Infrastructure.Users;
 using AnonymousStudentReviews.UseCases.Abstractions;
 using AnonymousStudentReviews.UseCases.Login.Abstractions;
 using AnonymousStudentReviews.UseCases.Registration.Abstractions;
+using AnonymousStudentReviews.Core.Aggregates.Review;
+using AnonymousStudentReviews.Infrastructure.Reviews;
 
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
@@ -127,6 +129,7 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IEmailVerificationTokenRepository, EmailVerificationTokenRepository>();
         services.AddScoped<IReviewRepository, ReviewRepository>();
         services.AddScoped<IUniversityRepository, UniversityRepository>();
+        services.AddScoped<IReviewRepository, ReviewRepository>();
     }
 
     private static void RegisterServices(IServiceCollection services, IConfiguration configuration)
