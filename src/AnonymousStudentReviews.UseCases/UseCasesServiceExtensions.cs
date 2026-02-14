@@ -6,7 +6,10 @@ using AnonymousStudentReviews.UseCases.Reviews.Create;
 using AnonymousStudentReviews.UseCases.Reviews.Delete;
 using AnonymousStudentReviews.UseCases.Reviews.Edit;
 using AnonymousStudentReviews.UseCases.Universities.RetrieveMany;
-
+using AnonymousStudentReviews.UseCases.Reviews.Create;
+using AnonymousStudentReviews.UseCases.Reviews.Delete;
+using AnonymousStudentReviews.UseCases.Reviews.Edit;
+using AnonymousStudentReviews.UseCases.Universities.RetrieveMany;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -70,5 +73,6 @@ public static class UseCasesServiceExtensions
         services.AddScoped<ICreateReviewService, CreateReviewService>();
         services.AddScoped<IEditReviewService, EditReviewService>();
         services.AddScoped<IDeleteReviewService, DeleteReviewService>();
+        services.AddScoped<IRetrieveManyUniversitiesService, RetrieveManyUniversitiesService>();
     }
 }

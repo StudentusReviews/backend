@@ -130,6 +130,7 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IReviewRepository, ReviewRepository>();
         services.AddScoped<IUniversityRepository, UniversityRepository>();
         services.AddScoped<IReviewRepository, ReviewRepository>();
+        services.AddScoped<IUniversityRepository, UniversityRepository>();
     }
 
     private static void RegisterServices(IServiceCollection services, IConfiguration configuration)
