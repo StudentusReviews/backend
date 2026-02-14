@@ -14,7 +14,7 @@ namespace AnonymousStudentReviews.Api.Features.ApplicationToAddAUniversity.Creat
 
 [Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 [ApiController]
-[Route("api/applications")]
+[Route("api/applications/create")]
 public class CreateApplicationToAddAUniversityController : ControllerBase
 {
     private readonly IValidator<CreateApplicationToAddAUniversityRequest> _createApplicationToAddAUniversityRequestValidator;
@@ -53,7 +53,7 @@ public class CreateApplicationToAddAUniversityController : ControllerBase
         return new CreateApplicationToAddAUniversityDto { UniversityName = request.UniversityName, DomainName = request.DomainName };
     }
 
-    private CreateApplicationToAddAUniversityResponse ResultToResponse(Core.Aggregates.ApplicationToAddAUniversity.ApplicationToAddAUniversity result)
+    private CreateApplicationToAddAUniversityResponse ResultToResponse(Core.Aggregates.ApplicationToAddAUniversity.Base.ApplicationToAddAUniversity result)
     {
         return new CreateApplicationToAddAUniversityResponse { Id = result.Id, UniversityName = result.UniversityName, DomainName = result.DomainName, CreatedAt = result.CreatedAt,  UserId = result.UserId };
     }

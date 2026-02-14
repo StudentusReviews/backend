@@ -10,6 +10,6 @@ namespace AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.View;
 
 public interface IViewApplicationToAddAUniversityService
 {
-    public Task<Result<List<Core.Aggregates.ApplicationToAddAUniversity.ApplicationToAddAUniversity>>> ExecuteAsync();
-    public Task<Result<Core.Aggregates.ApplicationToAddAUniversity.ApplicationToAddAUniversity>> ExecuteAsync(Guid id);
+    public Task<Result<List<Core.Aggregates.ApplicationToAddAUniversity.Base.ApplicationToAddAUniversity>>> ExecuteAsync();
+    public Task<Result<Core.Aggregates.ApplicationToAddAUniversity.Base.ApplicationToAddAUniversity>> ExecuteAsync(Guid id);
 }
