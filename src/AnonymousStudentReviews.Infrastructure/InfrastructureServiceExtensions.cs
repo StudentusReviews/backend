@@ -20,8 +20,6 @@ using AnonymousStudentReviews.Infrastructure.Users;
 using AnonymousStudentReviews.UseCases.Abstractions;
 using AnonymousStudentReviews.UseCases.Login.Abstractions;
 using AnonymousStudentReviews.UseCases.Registration.Abstractions;
-using AnonymousStudentReviews.Core.Aggregates.Review;
-using AnonymousStudentReviews.Infrastructure.Reviews;
 
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
