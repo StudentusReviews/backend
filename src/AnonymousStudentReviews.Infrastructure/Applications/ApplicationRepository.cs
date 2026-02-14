@@ -1,4 +1,5 @@
-﻿using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity;
+﻿using AnonymousStudentReviews.Core.Abstractions;
+using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Base;
 using AnonymousStudentReviews.Infrastructure.Data;
 
 namespace AnonymousStudentReviews.Infrastructure.Applications;
@@ -11,31 +12,32 @@ public class ApplicationRepository: IApplicationRepository
         _dbContext = dbContext;
     }
 
-    public Task<ApplicationToAddAUniversity> Create(ApplicationToAddAUniversity appToAddAUni)
+    public async Task<Result<ApplicationToAddAUniversity>> Create(ApplicationToAddAUniversity appToAddAUni)
     {
-        _dbContext.Applications.AddAsync(appToAddAUni);
-        return Task.FromResult(appToAddAUni);
+        await _dbContext.Applications.AddAsync(appToAddAUni);
+        return Result.Success(appToAddAUni);
     }
 
-    public async Task DeleteByIdAsync(Guid id)
+    public async Task<Result> DeleteByIdAsync(Guid id)
     {
         var application = await _dbContext.Applications.FindAsync(id);
         if (application is null)
-            throw new InvalidOperationException($"Application with id {id} not found.");
+            return Result.Failure(new("ApplicationToAddAUniversity.ApplicationNotFound", $"Application with id {id} not found."));
         application.MarkAsDeleted();
         _dbContext.Applications.Update(application);
+        return Result.Success();
     }
 
-    public Task<List<ApplicationToAddAUniversity>> GetAll()
+    public async Task<Result<List<ApplicationToAddAUniversity>>> GetAll()
     {
-        return Task.FromResult(_dbContext.Applications.Where(a => !a.IsDeleted).ToList());
+        return Result.Success<List<ApplicationToAddAUniversity>>(_dbContext.Applications.Where(a => !a.IsDeleted).ToList());
     }
 
-    public async Task<ApplicationToAddAUniversity> GetByIdAsync(Guid id)
+    public async Task<Result<ApplicationToAddAUniversity>> GetByIdAsync(Guid id)
     {
         var application = await _dbContext.Applications.FindAsync(id);
         if (application is null || application.IsDeleted)
-            throw new InvalidOperationException($"Application with id {id} not found.");
-        return application;
+            return Result.Failure<ApplicationToAddAUniversity>(new("ApplicationToAddAUniversity.ApplicationNotFound", $"Application with id {id} not found."));
+        return Result.Success(application);
     }
 }

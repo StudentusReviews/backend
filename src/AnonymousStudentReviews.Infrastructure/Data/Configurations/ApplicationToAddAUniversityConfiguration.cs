@@ -1,4 +1,4 @@
-﻿using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity;
+﻿using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Base;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -33,7 +33,7 @@ public class ApplicationToAddAUniversityConfiguration : IEntityTypeConfiguration
 
         builder
             .HasOne(e => e.AppToAddAUniStatus)
-            .WithMany(e => e.AppToAddAUnis)
+            .WithMany(e => e.ApplicationToAddAUniversities)
             .HasForeignKey(e => e.ApplicationStatusId)
             .IsRequired();
 
