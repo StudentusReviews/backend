@@ -1,5 +1,7 @@
 ﻿using AnonymousStudentReviews.Api.Extensions;
 using AnonymousStudentReviews.Api.Features.Reviews.Common;
+using AnonymousStudentReviews.Core.Aggregates.Review;
+using AnonymousStudentReviews.UseCases.Reviews.Edit;
 
 using FluentValidation;
 
@@ -18,11 +20,12 @@ namespace AnonymousStudentReviews.Api.Features.Reviews.Edit;
 public class EditReviewController : ControllerBase
 {
     private readonly IValidator<EditReviewRequest> _validator;
+    private readonly IEditReviewService _service;
 
-    public EditReviewController(IValidator<EditReviewRequest> validator)
+    public EditReviewController(IValidator<EditReviewRequest> validator, IEditReviewService service)
     {
         _validator = validator;
-
+        _service = service;
     }
 
     [HttpPut("{reviewId:guid}")]
@@ -31,8 +34,8 @@ public class EditReviewController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status501NotImplemented)]
-    public async Task<ActionResult<ReviewResponse>> Edit([FromRoute] Guid reviewId, [FromBody] EditReviewRequest request)
+    public async Task<ActionResult<ReviewResponse>> Edit([FromRoute] Guid reviewId,
+        [FromBody] EditReviewRequest request)
     {
         var validationResult = await _validator.ValidateAsync(request);
 
@@ -41,8 +44,29 @@ public class EditReviewController : ControllerBase
             return validationResult.ToProblemDetails(Request.Path);
         }
 
-        return StatusCode(StatusCodes.Status501NotImplemented);
+        var dto = new EditReviewDto { ReviewId = reviewId, Score = request.Score, Body = request.Body };
 
+        var result = await _service.ExecuteAsync(dto);
+
+        if (result.IsFailure)
+        {
+            return result.Error.ToProblemDetails(Request.Path);
+        }
+
+        return Ok(ToResponse(result.Value));
     }
 
-}
+    private static ReviewResponse ToResponse(Review review)
+        {
+            return new ReviewResponse
+            {
+                Id = review.Id,
+                UniversityId = review.UniversityId,
+                UserId = review.UserId,
+                Score = review.Score,
+                Body = review.Body,
+                CreatedAt = review.CreatedAt,
+                UpdatedAt = review.UpdatedAt
+            };
+        }
+    }

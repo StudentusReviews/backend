@@ -1,5 +1,7 @@
 ﻿using AnonymousStudentReviews.Api.Extensions;
 using AnonymousStudentReviews.Api.Features.Reviews.Common;
+using AnonymousStudentReviews.Core.Aggregates.Review;
+using AnonymousStudentReviews.UseCases.Reviews.Create;
 
 using FluentValidation;
 
@@ -18,10 +20,12 @@ namespace AnonymousStudentReviews.Api.Features.Reviews.Create;
 public class CreateReviewController : ControllerBase
 {
     private readonly IValidator<CreateReviewRequest> _validator;
+    private readonly ICreateReviewService _service;
 
-    public CreateReviewController(IValidator<CreateReviewRequest> validator)
+    public CreateReviewController(IValidator<CreateReviewRequest> validator, ICreateReviewService service)
     {
         _validator = validator;
+        _service = service;
     }
 
     [HttpPost]
@@ -29,7 +33,6 @@ public class CreateReviewController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
-    [ProducesResponseType(StatusCodes.Status501NotImplemented)]
     public async Task<ActionResult<ReviewResponse>> Create([FromBody] CreateReviewRequest request)
     {
         var validationResult = await _validator.ValidateAsync(request);
@@ -38,9 +41,35 @@ public class CreateReviewController : ControllerBase
         {
             return validationResult.ToProblemDetails(Request.Path);
         }
+        
+        var dto = new CreateReviewDto
+        {
+            UniversityId = request.UniversityId,
+            Score = request.Score,
+            Body = request.Body
+        };
 
-        return StatusCode(StatusCodes.Status501NotImplemented);
+        var result = await _service.ExecuteAsync(dto);
 
+        if (result.IsFailure)
+        {
+            return result.Error.ToProblemDetails(Request.Path);
+        }
+        
+        return CreatedAtAction(nameof(Create), ToResponse(result.Value));
     }
-
+    
+    private static ReviewResponse ToResponse(Review review)
+    {
+        return new ReviewResponse
+        {
+            Id = review.Id,
+            UniversityId = review.UniversityId,
+            UserId = review.UserId,
+            Score = review.Score,
+            Body = review.Body,
+            CreatedAt = review.CreatedAt,
+            UpdatedAt = review.UpdatedAt
+        };
+    }
 }
