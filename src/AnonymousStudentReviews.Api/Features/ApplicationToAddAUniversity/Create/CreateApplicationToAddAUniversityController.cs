@@ -14,7 +14,7 @@ namespace AnonymousStudentReviews.Api.Features.ApplicationToAddAUniversity.Creat
 
 [Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 [ApiController]
-[Route("api/applications")]
+[Route("api/applications/create")]
 public class CreateApplicationToAddAUniversityController : ControllerBase
 {
     private readonly IValidator<CreateApplicationToAddAUniversityRequest> _createApplicationToAddAUniversityRequestValidator;

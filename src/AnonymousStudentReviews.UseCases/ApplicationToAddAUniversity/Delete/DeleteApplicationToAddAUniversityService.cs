@@ -1,5 +1,5 @@
 ﻿using AnonymousStudentReviews.Core.Abstractions;
-using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity;
+using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Base;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.UseCases.Abstractions;
 using AnonymousStudentReviews.UseCases.Registration.Abstractions;

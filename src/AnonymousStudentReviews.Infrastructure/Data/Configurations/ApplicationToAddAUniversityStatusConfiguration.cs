@@ -1,4 +1,4 @@
-﻿using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity;
+﻿using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Status;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

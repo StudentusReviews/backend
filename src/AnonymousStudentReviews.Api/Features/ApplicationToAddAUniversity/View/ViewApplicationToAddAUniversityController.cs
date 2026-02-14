@@ -13,7 +13,7 @@ namespace AnonymousStudentReviews.Api.Features.ApplicationToAddAUniversity.View;
 
 //[Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 [ApiController]
-[Route("api/applications")]
+[Route("api/applications/view")]
 public class ViewApplicationToAddAUniversityController : ControllerBase
 {
     private readonly IViewApplicationToAddAUniversityService _viewApplicationToAddAUniversityService;
@@ -24,7 +24,7 @@ public class ViewApplicationToAddAUniversityController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Core.Aggregates.ApplicationToAddAUniversity.ApplicationToAddAUniversity>>> AllAppToAddAUni()
+    public async Task<ActionResult<List<Core.Aggregates.ApplicationToAddAUniversity.Base.ApplicationToAddAUniversity>>> AllAppToAddAUni()
     {
         var viewApplicationToAddAUniversityResult = await _viewApplicationToAddAUniversityService.ExecuteAsync();
         if (viewApplicationToAddAUniversityResult.IsFailure)
@@ -35,7 +35,7 @@ public class ViewApplicationToAddAUniversityController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Core.Aggregates.ApplicationToAddAUniversity.ApplicationToAddAUniversity>> AppToAddAUniById(Guid id)
+    public async Task<ActionResult<Core.Aggregates.ApplicationToAddAUniversity.Base.ApplicationToAddAUniversity>> AppToAddAUniById(Guid id)
     {
         var viewApplicationToAddAUniversityResult = await _viewApplicationToAddAUniversityService.ExecuteAsync(id);
         if (viewApplicationToAddAUniversityResult.IsFailure)

@@ -16,7 +16,7 @@ namespace AnonymousStudentReviews.Api.Features.ApplicationToAddAUniversity.Delet
 
 [Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 [ApiController]
-[Route("api/applications")]
+[Route("api/applications/delete")]
 public class DeleteApplicationToAddAUniversityController : ControllerBase
 {
     private readonly IDeleteApplicationToAddAUniversityService _deleteApplicationToAddAUniversityService;
