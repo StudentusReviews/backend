@@ -1,4 +1,5 @@
-﻿using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Base;
+
+﻿using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -9,7 +10,7 @@ public class ApplicationToAddAUniversityConfiguration : IEntityTypeConfiguration
 {
     public void Configure(EntityTypeBuilder<ApplicationToAddAUniversity> builder)
     {
-        builder.ToTable("applications_to_add_a_university");
+        builder.ToTable("applications");
 
         builder.HasKey(e => e.Id);
 
@@ -21,23 +22,20 @@ public class ApplicationToAddAUniversityConfiguration : IEntityTypeConfiguration
             .HasMaxLength(50)
             .IsRequired();
 
-        builder.Property(e => e.Comment)
-            .HasMaxLength(500);
-
         builder.Property(e => e.IsDeleted)
             .HasDefaultValue(false)
             .IsRequired();
 
         builder
             .HasOne(e => e.User)
-            .WithMany(e => e.ApplicationToAddAUniversities)
+            .WithMany(e => e.AppToAddAUnis)
             .HasForeignKey(e => e.UserId)
             .IsRequired();
 
         builder
-            .HasOne(e => e.ApplicationToAddAUniversityStatus)
-            .WithMany(e => e.ApplicationToAddAUniversities)
-            .HasForeignKey(e => e.ApplicationToAddAUniversityStatusId)
+            .HasOne(e => e.AppToAddAUniStatus)
+            .WithMany(e => e.AppToAddAUnis)
+            .HasForeignKey(e => e.ApplicationStatusId)
             .IsRequired();
 
     }

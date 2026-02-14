@@ -28,7 +28,7 @@ public class CreateApplicationToAddAUniversityController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<CreateApplicationToAddAUniversityResponse>> CreateApplicationToAddAUniversity([FromBody] CreateApplicationToAddAUniversityRequest request)
+    public async Task<ActionResult<CreateApplicationToAddAUniversityResponse>> CreateAppToAddAUni([FromBody] CreateApplicationToAddAUniversityRequest request)
     {
         var validationResult = await _createApplicationToAddAUniversityRequestValidator.ValidateAsync(request);
 
@@ -45,16 +45,16 @@ public class CreateApplicationToAddAUniversityController : ControllerBase
             return createApplicationToAddAUniversityResult.Error.ToProblemDetails(Request.Path);
         }
 
-        return CreatedAtAction(nameof(CreateApplicationToAddAUniversity), ResultToResponse(createApplicationToAddAUniversityResult.Value));
+        return CreatedAtAction(nameof(CreateAppToAddAUni), ResultToResponse(createApplicationToAddAUniversityResult.Value));
     }
 
     private CreateApplicationToAddAUniversityDto RequestToDto(CreateApplicationToAddAUniversityRequest request)
     {
-        return new CreateApplicationToAddAUniversityDto { UniversityName = request.UniversityName, DomainName = request.DomainName, Comment = request.Comment };
+        return new CreateApplicationToAddAUniversityDto { UniversityName = request.UniversityName, DomainName = request.DomainName };
     }
 
     private CreateApplicationToAddAUniversityResponse ResultToResponse(Core.Aggregates.ApplicationToAddAUniversity.Base.ApplicationToAddAUniversity result)
     {
-        return new CreateApplicationToAddAUniversityResponse { Id = result.Id, UniversityName = result.UniversityName, DomainName = result.DomainName, CreatedAt = result.CreatedAt, UserId = result.UserId };
+        return new CreateApplicationToAddAUniversityResponse { Id = result.Id, UniversityName = result.UniversityName, DomainName = result.DomainName, CreatedAt = result.CreatedAt,  UserId = result.UserId };
     }
 }

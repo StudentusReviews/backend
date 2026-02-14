@@ -1,7 +1,7 @@
 ﻿using AnonymousStudentReviews.Core.Abstractions;
-namespace AnonymousStudentReviews.Core.Aggregates.AppToAddAUni;
+namespace AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity;
 
-public class AppToAddAUni
+public class ApplicationToAddAUniversity
 {
     public Guid Id { get; set; }
     public string UniversityName { get; set; }
@@ -13,22 +13,22 @@ public class AppToAddAUni
     public Guid ApplicationStatusId { get; set; }
 
     public User.User User { get; set; }
-    public AppToAddAUniStatus AppToAddAUniStatus { get; set; }
+    public ApplicationToAddAUniversityStatus AppToAddAUniStatus { get; set; }
 
     public void MarkAsDeleted()
     {
         IsDeleted = true;
     }
 
-    private AppToAddAUni() { }
+    private ApplicationToAddAUniversity() { }
 
-    public static Result<AppToAddAUni> Create(string universityName, string domainName, Guid userId)
+    public static Result<ApplicationToAddAUniversity> Create(string universityName, string domainName, Guid userId)
     {
         if (string.IsNullOrWhiteSpace(universityName))
-            return Result.Failure<AppToAddAUni>(AppToAddAUniErrors.EmptyUniName);
+            return Result.Failure<ApplicationToAddAUniversity>(ApplicationToAddAUniversityErrors.EmptyUniName);
         if (string.IsNullOrWhiteSpace(domainName))
-            return Result.Failure<AppToAddAUni>(AppToAddAUniErrors.EmptyDomainName);
-        var application = new AppToAddAUni
+            return Result.Failure<ApplicationToAddAUniversity>(ApplicationToAddAUniversityErrors.EmptyDomainName);
+        var application = new ApplicationToAddAUniversity
         {
             Id = Guid.NewGuid(),
             UniversityName = universityName,
@@ -37,7 +37,7 @@ public class AppToAddAUni
             UpdatedAt = DateTime.UtcNow,
             IsDeleted = false,
             UserId = userId,
-            ApplicationStatusId = new AppToAddAUniStatus().Id // Це можна замінити на дефолтний статус, якщо він є
+            ApplicationStatusId = new ApplicationToAddAUniversityStatus().Id // Це можна замінити на дефолтний статус, якщо він є
         };
         return Result.Success(application);
     }

@@ -1,7 +1,6 @@
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
-using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Base;
-using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Status;
+using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity;
 using AnonymousStudentReviews.Core.Aggregates.Dummy;
 using AnonymousStudentReviews.Core.Aggregates.EmailVerificationToken;
 using AnonymousStudentReviews.Core.Aggregates.Review;
@@ -207,8 +206,7 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IUniversityRepository, UniversityRepository>();
         services.AddScoped<IReviewRepository, ReviewRepository>();
         services.AddScoped<IUniversityRepository, UniversityRepository>();
-        services.AddScoped<IApplicationToAddAUniversityRepository, ApplicationToAddAUniversityRepository>();
-        services.AddScoped<IApplicationToAddAUniversityStatusRepository, ApplicationToAddAUniversityStatusRepository>();
+        services.AddScoped<IApplicationRepository, ApplicationRepository>();
     }
 
     private static void RegisterServices(IServiceCollection services, IConfiguration configuration)
