@@ -2,6 +2,8 @@
 
 public interface IApplicationRepository
 {
-    public void Create(AppToAddAUni appToAddAUni);
+    public Task<AppToAddAUni> Create(AppToAddAUni appToAddAUni);
     public Task DeleteByIdAsync(Guid id);
+    public Task<List<AppToAddAUni>> GetAll();
+    public Task<AppToAddAUni> GetByIdAsync(Guid id);
 }

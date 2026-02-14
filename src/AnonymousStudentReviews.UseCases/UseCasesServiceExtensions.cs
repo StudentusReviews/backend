@@ -1,10 +1,15 @@
 using AnonymousStudentReviews.UseCases.AccountVerification;
+<<<<<<< HEAD
 using AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.Create;
 using AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.Delete;
 using AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.View;
 using AnonymousStudentReviews.UseCases.Dummies.Create;
+=======
+>>>>>>> f5cb2cd (Add Delete and View controllers. Created configurations for AppToAddAUni and AppToAddAUniStatus)
 using AnonymousStudentReviews.UseCases.AppToAddAUni.Create;
 using AnonymousStudentReviews.UseCases.AppToAddAUni.Delete;
+using AnonymousStudentReviews.UseCases.AppToAddAUni.View;
+using AnonymousStudentReviews.UseCases.Dummies.Create;
 using AnonymousStudentReviews.UseCases.Login;
 using AnonymousStudentReviews.UseCases.Registration;
 using AnonymousStudentReviews.UseCases.Reviews.Create;
@@ -84,7 +89,6 @@ public static class UseCasesServiceExtensions
         services.AddScoped<IRetrieveOneUniversityService, RetrieveOneUniversityService>();
         services.AddScoped<ICreateAppToAddAUniService, CreateAppToAddAUniService>();
         services.AddScoped<IDeleteAppToAddAUniService, DeleteAppToAddAUniService>();
-        services.AddScoped<IViewAllApplicationsToAddAUniversityService, ViewAllApplicationToAddAUniversityService>();
-        services.AddScoped<IViewByIdApplicationToAddAUniversityService, ViewByIdApplicationToAddAUniversityService>();
+        services.AddScoped<IViewAppToAddAUniService, ViewAppToAddAUniService>();
     }
 }

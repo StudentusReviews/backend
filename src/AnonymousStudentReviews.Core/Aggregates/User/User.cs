@@ -14,5 +14,5 @@ public class User
 
     public University.University? University { get; set; }
     public ICollection<Role.Role> Roles { get; set; }
-    public ICollection<ApplicationToAddAUniversity.Base.ApplicationToAddAUniversity> ApplicationToAddAUniversities { get; set; }
+    public ICollection<AppToAddAUni.AppToAddAUni> AppToAddAUnis { get; set; }
 }
