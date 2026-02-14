@@ -1,13 +1,13 @@
-﻿using AnonymousStudentReviews.Core.Aggregates.AppToAddAUni;
+﻿using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AnonymousStudentReviews.Infrastructure.Data.Configurations;
 
-public class AppToAddAUniStatusConfiguration : IEntityTypeConfiguration<AppToAddAUniStatus>
+public class ApplicationToAddAUniversityStatusConfiguration : IEntityTypeConfiguration<ApplicationToAddAUniversityStatus>
 {
-    public void Configure(EntityTypeBuilder<AppToAddAUniStatus> builder)
+    public void Configure(EntityTypeBuilder<ApplicationToAddAUniversityStatus> builder)
     {
         builder.ToTable("application_statuses");
 

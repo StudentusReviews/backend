@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace AnonymousStudentReviews.Api.Features.AppToAddAUni.Create;
+namespace AnonymousStudentReviews.Api.Features.ApplicationToAddAUniversity.Create;
 
-public class CreateAppToAddAUniRequestValidator : AbstractValidator<CreateAppToAddAUniRequest>
+public class CreateApplicationToAddAUniversityRequestValidator : AbstractValidator<CreateApplicationToAddAUniversityRequest>
 {
-    public CreateAppToAddAUniRequestValidator()
+    public CreateApplicationToAddAUniversityRequestValidator()
     {
         RuleFor(x => x.UniversityName)
             .NotEmpty()
