@@ -10,7 +10,10 @@ public class AppToAddAUni
     public DateTime UpdatedAt { get; set; }
     public bool IsDeleted { get; set; }
     public Guid UserId { get; set; }
-    public Guid ApplicationStatusID { get; set; }
+    public Guid ApplicationStatusId { get; set; }
+
+    public User.User User { get; set; }
+    public AppToAddAUniStatus AppToAddAUniStatus { get; set; }
 
     public void MarkAsDeleted()
     {
@@ -33,8 +36,8 @@ public class AppToAddAUni
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             IsDeleted = false,
-            UserID = userId,
-            ApplicationStatusID = new AppToAddAUniStatus().Id // Це можна замінити на дефолтний статус, якщо він є
+            UserId = userId,
+            ApplicationStatusId = new AppToAddAUniStatus().Id // Це можна замінити на дефолтний статус, якщо він є
         };
         return Result.Success(application);
     }
