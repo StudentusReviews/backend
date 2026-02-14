@@ -1,18 +1,18 @@
 ﻿using AnonymousStudentReviews.Core.Abstractions;
-using AnonymousStudentReviews.Core.Aggregates.AppToAddAUni;
+using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.UseCases.Abstractions;
 using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 
-namespace AnonymousStudentReviews.UseCases.AppToAddAUni.Delete;
+namespace AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.Delete;
 
-public class DeleteAppToAddAUniService : IDeleteAppToAddAUniService
+public class DeleteApplicationToAddAUniversityService : IDeleteApplicationToAddAUniversityService
 {
     private readonly ICurrentUserService _currentUser;
     private readonly IApplicationRepository _applicationRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteAppToAddAUniService(IApplicationRepository applicationRepository, IUnitOfWork unitOfWork,
+    public DeleteApplicationToAddAUniversityService(IApplicationRepository applicationRepository, IUnitOfWork unitOfWork,
         ICurrentUserService currentUser)
     {
         _applicationRepository = applicationRepository;

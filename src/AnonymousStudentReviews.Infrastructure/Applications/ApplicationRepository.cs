@@ -1,4 +1,4 @@
-﻿using AnonymousStudentReviews.Core.Aggregates.AppToAddAUni;
+﻿using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity;
 using AnonymousStudentReviews.Infrastructure.Data;
 
 namespace AnonymousStudentReviews.Infrastructure.Applications;
@@ -11,7 +11,7 @@ public class ApplicationRepository: IApplicationRepository
         _dbContext = dbContext;
     }
 
-    public Task<AppToAddAUni> Create(AppToAddAUni appToAddAUni)
+    public Task<ApplicationToAddAUniversity> Create(ApplicationToAddAUniversity appToAddAUni)
     {
         _dbContext.Applications.AddAsync(appToAddAUni);
         return Task.FromResult(appToAddAUni);
@@ -26,12 +26,12 @@ public class ApplicationRepository: IApplicationRepository
         _dbContext.Applications.Update(application);
     }
 
-    public Task<List<AppToAddAUni>> GetAll()
+    public Task<List<ApplicationToAddAUniversity>> GetAll()
     {
         return Task.FromResult(_dbContext.Applications.Where(a => !a.IsDeleted).ToList());
     }
 
-    public async Task<AppToAddAUni> GetByIdAsync(Guid id)
+    public async Task<ApplicationToAddAUniversity> GetByIdAsync(Guid id)
     {
         var application = await _dbContext.Applications.FindAsync(id);
         if (application is null || application.IsDeleted)

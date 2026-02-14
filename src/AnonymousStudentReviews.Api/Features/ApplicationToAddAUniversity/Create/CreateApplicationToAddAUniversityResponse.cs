@@ -1,6 +1,6 @@
-﻿namespace AnonymousStudentReviews.Api.Features.AppToAddAUni.Create;
+﻿namespace AnonymousStudentReviews.Api.Features.ApplicationToAddAUniversity.Create;
 
-public class CreateAppToAddAUniResponse
+public class CreateApplicationToAddAUniversityResponse
 {
     public Guid Id { get; init; }
     public string UniversityName { get; init; }

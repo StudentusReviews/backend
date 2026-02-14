@@ -1,7 +1,7 @@
 using AnonymousStudentReviews.UseCases.AccountVerification;
-using AnonymousStudentReviews.UseCases.AppToAddAUni.Create;
-using AnonymousStudentReviews.UseCases.AppToAddAUni.Delete;
-using AnonymousStudentReviews.UseCases.AppToAddAUni.View;
+using AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.Create;
+using AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.Delete;
+using AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.View;
 using AnonymousStudentReviews.UseCases.Dummies.Create;
 using AnonymousStudentReviews.UseCases.Login;
 using AnonymousStudentReviews.UseCases.Registration;
@@ -80,8 +80,8 @@ public static class UseCasesServiceExtensions
         services.AddScoped<IDeleteReviewService, DeleteReviewService>();
         services.AddScoped<IRetrieveManyUniversitiesService, RetrieveManyUniversitiesService>();
         services.AddScoped<IRetrieveOneUniversityService, RetrieveOneUniversityService>();
-        services.AddScoped<ICreateAppToAddAUniService, CreateAppToAddAUniService>();
-        services.AddScoped<IDeleteAppToAddAUniService, DeleteAppToAddAUniService>();
-        services.AddScoped<IViewAppToAddAUniService, ViewAppToAddAUniService>();
+        services.AddScoped<ICreateApplicationToAddAUniversityService, CreateApplicationToAddAUniversityService>();
+        services.AddScoped<IDeleteApplicationToAddAUniversityService, DeleteApplicationToAddAUniversityService>();
+        services.AddScoped<IViewApplicationToAddAUniversityService, ViewApplicationToAddAUniversityService>();
     }
 }
