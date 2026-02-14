@@ -6,7 +6,6 @@ using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.University;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.Infrastructure.Data.Configurations;
-using AnonymousStudentReviews.Core.Aggregates.Review;
 
 using Microsoft.EntityFrameworkCore;
 

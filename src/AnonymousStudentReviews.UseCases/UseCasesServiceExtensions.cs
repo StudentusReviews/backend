@@ -7,8 +7,8 @@ using AnonymousStudentReviews.UseCases.Reviews.Delete;
 using AnonymousStudentReviews.UseCases.Reviews.Edit;
 using AnonymousStudentReviews.UseCases.Universities.RetrieveMany;
 using AnonymousStudentReviews.UseCases.Reviews.Create;
-using AnonymousStudentReviews.UseCases.Reviews.Edit;
 using AnonymousStudentReviews.UseCases.Reviews.Delete;
+using AnonymousStudentReviews.UseCases.Reviews.Edit;
 
 
 using Microsoft.Extensions.Configuration;
