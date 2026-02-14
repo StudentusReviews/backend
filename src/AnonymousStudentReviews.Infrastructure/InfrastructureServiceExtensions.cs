@@ -16,6 +16,8 @@ using AnonymousStudentReviews.Infrastructure.Users;
 using AnonymousStudentReviews.UseCases.Abstractions;
 using AnonymousStudentReviews.UseCases.Login.Abstractions;
 using AnonymousStudentReviews.UseCases.Registration.Abstractions;
+using AnonymousStudentReviews.Core.Aggregates.Review;
+using AnonymousStudentReviews.Infrastructure.Reviews;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -108,6 +110,7 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IEmailVerificationTokenRepository, EmailVerificationTokenRepository>();
+        services.AddScoped<IReviewRepository, ReviewRepository>();
     }
 
     private static void RegisterServices(IServiceCollection services, IConfiguration configuration)
