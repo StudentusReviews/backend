@@ -1,6 +1,3 @@
-using System.Text.Json;
-
-using AnonymousStudentReviews.Infrastructure.Data;
 using AnonymousStudentReviews.Infrastructure.Options;
 
 using Microsoft.Extensions.Configuration;
@@ -9,19 +6,17 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 using OpenIddict.Abstractions;
-using OpenIddict.EntityFrameworkCore.Models;
-
-using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace AnonymousStudentReviews.Infrastructure;
 
 public class Worker : IHostedService
 {
+    private readonly IConfiguration _configuration;
     private readonly OpenIddictOptions _openIddictOptions;
     private readonly IServiceProvider _serviceProvider;
-    private readonly IConfiguration _configuration;
 
-    public Worker(IServiceProvider serviceProvider, IOptions<OpenIddictOptions> openIddictOptions, IConfiguration configuration)
+    public Worker(IServiceProvider serviceProvider, IOptions<OpenIddictOptions> openIddictOptions,
+        IConfiguration configuration)
     {
         _serviceProvider = serviceProvider;
         _configuration = configuration;
@@ -32,82 +27,85 @@ public class Worker : IHostedService
     {
         await using var scope = _serviceProvider.CreateAsyncScope();
 
-        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        context.Database.EnsureCreated();
+        var openIddictApplicationManager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
 
-        var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
-
-        var redirectUris = _openIddictOptions.RedirectUris
-            .Select(redirectUri => new Uri(redirectUri));
-
-        var postLogoutRedirectUris = _openIddictOptions.PostLogoutRedirectUris
-            .Select(redirectUri => new Uri(redirectUri));
-
-        var clientFromDatabase =
-            await manager.FindByClientIdAsync(_openIddictOptions.ClientId, cancellationToken);
-
-        var openIddictDescriptor = new OpenIddictApplicationDescriptor
+        foreach (var openIddictApplicationOptions in _openIddictOptions.Applications)
         {
-            ClientType = ClientTypes.Confidential,
-            ClientSecret = _configuration["OpenIddictSecrets:ClientSecret"],
-            ClientId = _openIddictOptions.ClientId,
-            ConsentType = ConsentTypes.Implicit,
-            DisplayName = _openIddictOptions.DisplayName,
-            Permissions =
+            var openIddictApplicationDescriptor = new OpenIddictApplicationDescriptor
             {
-                Permissions.Endpoints.Authorization,
-                Permissions.Endpoints.EndSession,
-                Permissions.Endpoints.Token,
-                Permissions.GrantTypes.AuthorizationCode,
-                Permissions.GrantTypes.RefreshToken,
-                Permissions.ResponseTypes.Code,
-                Permissions.Scopes.Email,
-                Permissions.Scopes.Profile,
-                Permissions.Scopes.Roles,
-                Scopes.OfflineAccess
-            },
-            Requirements = { Requirements.Features.ProofKeyForCodeExchange }
-        };
+                ApplicationType = openIddictApplicationOptions.ApplicationType.ToOpenIddictApplicationType(),
+                ClientType = openIddictApplicationOptions.ClientType.ToOpenIddictClientType(),
+                ClientSecret = GetClientSecretByClientId(openIddictApplicationOptions.ClientId),
+                ClientId = openIddictApplicationOptions.ClientId,
+                ConsentType = openIddictApplicationOptions.ConsentType.ToOpenIddictConsentType(),
+                DisplayName = openIddictApplicationOptions.DisplayName
+            };
 
-        foreach (var redirectUri in redirectUris)
-        {
-            openIddictDescriptor.RedirectUris.Add(redirectUri);
+            foreach (var endpointOption in openIddictApplicationOptions.Permissions.Endpoints)
+            {
+                openIddictApplicationDescriptor.Permissions.Add(endpointOption.ToOpenIddictEndpoint());
+            }
+
+            foreach (var grantTypeOption in openIddictApplicationOptions.Permissions.GrantTypes)
+            {
+                openIddictApplicationDescriptor.Permissions.Add(grantTypeOption.ToOpenIddictGrantType());
+            }
+
+            foreach (var responseTypeOption in openIddictApplicationOptions.Permissions.ResponseTypes)
+            {
+                openIddictApplicationDescriptor.Permissions.Add(responseTypeOption.ToOpenIddictResponseType());
+            }
+
+            foreach (var scopeOption in openIddictApplicationOptions.Permissions.Scopes)
+            {
+                openIddictApplicationDescriptor.Permissions.Add(scopeOption.ToOpenIddictScope());
+            }
+
+            foreach (var featureOption in openIddictApplicationOptions.Requirements.Features)
+            {
+                openIddictApplicationDescriptor.Requirements.Add(featureOption.ToOpenIddictFeature());
+            }
+
+            foreach (var redirectUri in openIddictApplicationOptions.RedirectUris)
+            {
+                openIddictApplicationDescriptor.RedirectUris.Add(new Uri(redirectUri));
+            }
+
+            foreach (var postLogoutRedirectUri in openIddictApplicationOptions.PostLogoutRedirectUris)
+            {
+                openIddictApplicationDescriptor.PostLogoutRedirectUris.Add(new Uri(postLogoutRedirectUri));
+            }
+
+            var clientFromDatabase =
+                await openIddictApplicationManager.FindByClientIdAsync(openIddictApplicationOptions.ClientId,
+                    cancellationToken);
+
+            if (clientFromDatabase is null)
+            {
+                await openIddictApplicationManager.CreateAsync(openIddictApplicationDescriptor, cancellationToken);
+            }
+            else
+            {
+                await openIddictApplicationManager.UpdateAsync(clientFromDatabase, openIddictApplicationDescriptor,
+                    cancellationToken);
+            }
         }
-
-        foreach (var postLogoutRedirectUri in postLogoutRedirectUris)
-        {
-            openIddictDescriptor.PostLogoutRedirectUris.Add(postLogoutRedirectUri);
-        }
-
-        if (clientFromDatabase is null)
-        {
-            await manager.CreateAsync(openIddictDescriptor, cancellationToken);
-            // return;
-        }
-
-        // var clientFromDatabaseTyped = (OpenIddictEntityFrameworkCoreApplication)clientFromDatabase;
-        //
-        // clientFromDatabaseTyped.ClientId = openIddictDescriptor.ClientId;
-        // clientFromDatabaseTyped.DisplayName = openIddictDescriptor.DisplayName;
-        //
-        // var redirectUrisJson =
-        //     JsonSerializer.Serialize(openIddictDescriptor.RedirectUris.ToArray());
-        //
-        // var postLogoutRedirectUrisJson =
-        //     JsonSerializer.Serialize(openIddictDescriptor.PostLogoutRedirectUris.ToArray());
-        //
-        // var permissionsJson = JsonSerializer.Serialize(openIddictDescriptor.Permissions.ToArray());
-        //
-        // clientFromDatabaseTyped.Permissions = permissionsJson;
-        //
-        // clientFromDatabaseTyped.RedirectUris = redirectUrisJson;
-        // clientFromDatabaseTyped.PostLogoutRedirectUris = postLogoutRedirectUrisJson;
-        //
-        // await manager.UpdateAsync(clientFromDatabaseTyped, cancellationToken);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
+    }
+
+    private string GetClientSecretByClientId(string clientId)
+    {
+        var secret = _configuration[$"OpenIddictApplicationSecrets:{clientId}"];
+
+        if (secret is null)
+        {
+            throw new Exception($"Secret for application with id {clientId} not set");
+        }
+
+        return secret;
     }
 }
