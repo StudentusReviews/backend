@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260214200152_AddReviews")]
+    [Migration("20260215140121_AddReviews")]
     partial class AddReviews
     {
         /// <inheritdoc />
@@ -127,9 +127,10 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UniversityId", "UserId");
+                    b.HasIndex("UniversityId", "UserId")
+                        .IsUnique();
 
-                    b.ToTable("Reviews");
+                    b.ToTable("reviews", (string)null);
                 });
 
             modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.Role.Role", b =>

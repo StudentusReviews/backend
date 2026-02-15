@@ -9,6 +9,8 @@ public class ReviewConfiguration : IEntityTypeConfiguration<Review>
 {
     public void Configure(EntityTypeBuilder<Review> builder)
     {
+        builder.ToTable("reviews");
+
         builder.HasKey(r => r.Id);
 
         builder.Property(r => r.Body)
@@ -24,6 +26,6 @@ public class ReviewConfiguration : IEntityTypeConfiguration<Review>
         builder.Property(r => r.CreatedAt).IsRequired();
         builder.Property(r => r.UpdatedAt).IsRequired();
 
-        builder.HasIndex(r => new { r.UniversityId, r.UserId });
+        builder.HasIndex(r => new { r.UniversityId, r.UserId }).IsUnique();
     }
 }

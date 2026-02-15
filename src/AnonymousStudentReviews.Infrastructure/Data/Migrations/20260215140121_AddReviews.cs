@@ -13,7 +13,7 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Reviews",
+                name: "reviews",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -26,20 +26,21 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reviews", x => x.Id);
+                    table.PrimaryKey("PK_reviews", x => x.Id);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reviews_UniversityId_UserId",
-                table: "Reviews",
-                columns: new[] { "UniversityId", "UserId" });
+                name: "IX_reviews_UniversityId_UserId",
+                table: "reviews",
+                columns: new[] { "UniversityId", "UserId" },
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Reviews");
+                name: "reviews");
         }
     }
 }

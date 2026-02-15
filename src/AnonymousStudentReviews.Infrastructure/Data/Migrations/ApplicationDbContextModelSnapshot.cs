@@ -124,9 +124,10 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UniversityId", "UserId");
+                    b.HasIndex("UniversityId", "UserId")
+                        .IsUnique();
 
-                    b.ToTable("Reviews");
+                    b.ToTable("reviews", (string)null);
                 });
 
             modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.Role.Role", b =>

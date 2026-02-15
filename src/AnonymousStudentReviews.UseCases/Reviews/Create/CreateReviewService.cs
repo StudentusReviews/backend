@@ -52,6 +52,13 @@ public class CreateReviewService : ICreateReviewService
             return Result.Failure<Review>(ReviewErrors.UniversityMismatch);
         }
 
+        var alreadyExists = await _reviewRepository.ExistsAsync(dto.UniversityId, userId.Value);
+
+        if (alreadyExists)
+        {
+            return Result.Failure<Review>(ReviewErrors.AlreadyExists);
+        }
+
         var createReviewResult = Review.Create(dto.UniversityId, userId.Value, dto.Score, dto.Body);
 
         if (createReviewResult.IsFailure)

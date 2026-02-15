@@ -25,6 +25,12 @@ public class ReviewRepository : IReviewRepository
             .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
     }
 
+    public async Task<bool> ExistsAsync(Guid universityId, Guid userId, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Review>()
+            .AnyAsync(r => r.UniversityId == universityId && r.UserId == userId, cancellationToken);
+    }
+
     public void Delete(Review review)
     {
         _dbContext.Set<Review>().Remove(review);
