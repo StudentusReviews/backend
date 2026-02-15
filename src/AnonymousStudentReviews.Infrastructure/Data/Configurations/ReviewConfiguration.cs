@@ -1,0 +1,31 @@
+﻿using AnonymousStudentReviews.Core.Aggregates.Review;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace AnonymousStudentReviews.Infrastructure.Data.Configurations;
+
+public class ReviewConfiguration : IEntityTypeConfiguration<Review>
+{
+    public void Configure(EntityTypeBuilder<Review> builder)
+    {
+        builder.ToTable("reviews");
+
+        builder.HasKey(r => r.Id);
+
+        builder.Property(r => r.Body)
+            .IsRequired()
+            .HasMaxLength(4000);
+
+        builder.Property(r => r.Score)
+            .IsRequired();
+
+        builder.Property(r => r.UniversityId).IsRequired();
+        builder.Property(r => r.UserId).IsRequired();
+
+        builder.Property(r => r.CreatedAt).IsRequired();
+        builder.Property(r => r.UpdatedAt).IsRequired();
+
+        builder.HasIndex(r => new { r.UniversityId, r.UserId }).IsUnique();
+    }
+}
