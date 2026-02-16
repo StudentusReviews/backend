@@ -9,4 +9,5 @@ public class University
     public DateTime CreatedAt { get; set; }
     public ICollection<User.User> Users { get; set; }
     public ICollection<AllowedEmailDomain.AllowedEmailDomain> AllowedEmailDomains { get; set; }
+    public UniversityStatistics UniversityStatistics { get; init; }
 }
