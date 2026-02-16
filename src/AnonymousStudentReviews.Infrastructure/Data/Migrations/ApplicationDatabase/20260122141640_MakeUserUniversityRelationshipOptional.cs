@@ -1,12 +1,8 @@
-﻿using System;
+﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore.Migrations;
 
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-
-#nullable disable
-
-namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
+namespace AnonymousStudentReviews.Infrastructure.Data.Migrations.ApplicationDatabase
 {
     /// <inheritdoc />
     public partial class MakeUserUniversityRelationshipOptional : Migration

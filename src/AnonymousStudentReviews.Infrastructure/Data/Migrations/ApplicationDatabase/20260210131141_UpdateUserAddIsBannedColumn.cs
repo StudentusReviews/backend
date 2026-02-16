@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿#nullable disable
 
-#nullable disable
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
+namespace AnonymousStudentReviews.Infrastructure.Data.Migrations.ApplicationDatabase
 {
     /// <inheritdoc />
     public partial class UpdateUserAddIsBannedColumn : Migration
