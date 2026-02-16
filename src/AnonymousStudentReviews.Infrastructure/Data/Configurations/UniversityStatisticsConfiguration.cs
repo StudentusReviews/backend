@@ -10,6 +10,9 @@ public class UniversityStatisticsConfiguration : IEntityTypeConfiguration<Univer
     public void Configure(EntityTypeBuilder<UniversityStatistics> builder)
     {
         builder
+            .ToTable("university_statistics");
+        
+        builder
             .HasKey(e => e.UniversityId);
 
         builder
