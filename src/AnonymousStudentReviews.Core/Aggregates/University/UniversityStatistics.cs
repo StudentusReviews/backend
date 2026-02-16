@@ -8,7 +8,7 @@ public class UniversityStatistics
     public int TotalScoreSum { get; private set; }
     public int TotalReviewCount { get; private set; }
     public int Rank { get; private set; }
-    
+
     public University? University { get; init; }
 
     public static Result<UniversityStatistics> Create(Guid universityId)
@@ -25,6 +25,11 @@ public class UniversityStatistics
 
     public Result UpdateRank(int rank)
     {
+        if (rank == Rank)
+        {
+            return Result.Failure(UniversityStatisticsErrors.NothingToUpdate);
+        }
+        
         if (rank <= 0)
         {
             return Result.Failure(UniversityStatisticsErrors.InvalidRank);
@@ -48,6 +53,24 @@ public class UniversityStatistics
         return Result.Success();
     }
 
+    public Result UpdateScore(int oldScore, int newScore)
+    {
+        if (oldScore == newScore)
+        {
+            return Result.Failure(UniversityStatisticsErrors.NothingToUpdate);
+        }
+        
+        if (!IsScoreValid(newScore) || !IsScoreValid(newScore))
+        {
+            return Result.Failure(UniversityStatisticsErrors.ScoreOutOfRange);
+        }
+
+        TotalScoreSum -= oldScore;
+        TotalScoreSum += newScore;
+
+        return Result.Success();
+    }
+
     public double GetAverageScore()
     {
         if (TotalReviewCount == 0)
@@ -56,5 +79,10 @@ public class UniversityStatistics
         }
 
         return (double)TotalScoreSum / TotalReviewCount;
+    }
+
+    private bool IsScoreValid(int score)
+    {
+        return score is >= 1 and <= 10;
     }
 }
