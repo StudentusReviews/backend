@@ -4,6 +4,11 @@ public static class MiddlewareConfig
 {
     public static IApplicationBuilder UseAppMiddleware(this WebApplication app)
     {
+        if (!app.Environment.IsDevelopment())
+        {
+            app.UseHsts();
+        }
+        
         app.UseHttpsRedirection();
 
         if (app.Environment.IsDevelopment())
