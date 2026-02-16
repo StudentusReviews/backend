@@ -1,0 +1,1 @@
+CREATE DATABASE dataprotectionkeysdb OWNER username;

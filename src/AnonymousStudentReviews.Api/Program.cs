@@ -4,7 +4,6 @@ using AnonymousStudentReviews.Api.Options;
 using AnonymousStudentReviews.Infrastructure.Data;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.DataProtection;
 
 using Serilog;
 using Serilog.Extensions.Logging;
@@ -51,9 +50,6 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.AddLoggerConfigs();
-
-builder.Services.AddDataProtection()
-    .PersistKeysToFileSystem(new DirectoryInfo("/app/keys"));
 
 builder.Services.AddControllersWithViews();
 
