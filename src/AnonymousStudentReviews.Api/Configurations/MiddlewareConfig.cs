@@ -8,7 +8,7 @@ public static class MiddlewareConfig
         {
             app.UseHsts();
         }
-        
+
         app.UseHttpsRedirection();
 
         if (app.Environment.IsDevelopment())
