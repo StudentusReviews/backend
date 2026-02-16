@@ -84,7 +84,6 @@ jobs:
   # Push-docker    
   push-docker:
     needs: build-test
-    if: github.event_name == 'push'
     uses: ./.github/workflows/push-docker-images.yml
       
   # Enforce merge rules (optional)
