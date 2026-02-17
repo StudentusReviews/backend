@@ -36,14 +36,15 @@ public static class OpenIddictConfig
                 options.AddDevelopmentEncryptionCertificate()
                     .AddDevelopmentSigningCertificate();
 
+                options.AcceptAnonymousClients();
+
                 options.UseAspNetCore()
                     .EnableAuthorizationEndpointPassthrough()
                     .EnableEndSessionEndpointPassthrough()
                     .EnableTokenEndpointPassthrough()
                     .EnableUserInfoEndpointPassthrough()
                     .EnableStatusCodePagesIntegration()
-                    .DisableTransportSecurityRequirement()
-                    .AcceptAnonymousClients();
+                    .DisableTransportSecurityRequirement();
             })
             .AddValidation(options =>
             {
