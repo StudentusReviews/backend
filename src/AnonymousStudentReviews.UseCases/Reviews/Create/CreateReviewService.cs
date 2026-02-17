@@ -2,13 +2,11 @@
 using AnonymousStudentReviews.Core.Aggregates.Review;
 using AnonymousStudentReviews.UseCases.Abstractions;
 using AnonymousStudentReviews.UseCases.Registration.Abstractions;
-using AnonymousStudentReviews.UseCases.Reviews.Outbox.CreateMessage;
 
 namespace AnonymousStudentReviews.UseCases.Reviews.Create;
 
 public class CreateReviewService : ICreateReviewService
 {
-    private readonly ICreateMessageInReviewOutboxService _createMessageInReviewOutboxService;
     private readonly ICurrentUserService _currentUserService;
     private readonly IReviewRepository _reviewRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -18,13 +16,12 @@ public class CreateReviewService : ICreateReviewService
         IReviewRepository reviewRepository,
         IUnitOfWork unitOfWork,
         ICurrentUserService currentUserService,
-        IUserManager userManager, ICreateMessageInReviewOutboxService createMessageInReviewOutboxService)
+        IUserManager userManager)
     {
         _reviewRepository = reviewRepository;
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
         _userManager = userManager;
-        _createMessageInReviewOutboxService = createMessageInReviewOutboxService;
     }
 
     public async Task<Result<Review>> ExecuteAsync(CreateReviewDto dto)
@@ -71,11 +68,6 @@ public class CreateReviewService : ICreateReviewService
 
         _reviewRepository.Create(createReviewResult.Value);
         await _unitOfWork.SaveChangesAsync();
-
-        await _createMessageInReviewOutboxService.HandleAsync(new CreateMessageInReviewOutboxDto
-        {
-            Score = createReviewResult.Value.Score, OldScore = 0, ReviewOutboxAction = ReviewOutboxAction.Add
-        });
 
         return Result.Success(createReviewResult.Value);
     }

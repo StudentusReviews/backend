@@ -130,70 +130,6 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
                     b.ToTable("reviews", (string)null);
                 });
 
-            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.Review.ReviewOutbox", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ActionId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("StateId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("UniversityId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActionId");
-
-                    b.HasIndex("StateId");
-
-                    b.HasIndex("UniversityId");
-
-                    b.ToTable("review_outbox", (string)null);
-                });
-
-            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.Review.ReviewOutboxActionEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("review_outbox_actions", (string)null);
-                });
-
-            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.Review.ReviewOutboxStateEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("review_outbox_states", (string)null);
-                });
-
             modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.Role.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -238,31 +174,6 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("universities", (string)null);
-                });
-
-            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.University.UniversityStatistics", b =>
-                {
-                    b.Property<Guid>("UniversityId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Rank")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0);
-
-                    b.Property<int>("TotalReviewCount")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0);
-
-                    b.Property<int>("TotalScoreSum")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0);
-
-                    b.HasKey("UniversityId");
-
-                    b.ToTable("university_statistics", (string)null);
                 });
 
             modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.User.User", b =>
@@ -568,68 +479,6 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.Review.ReviewOutbox", b =>
-                {
-                    b.HasOne("AnonymousStudentReviews.Core.Aggregates.Review.ReviewOutboxActionEntity", "Action")
-                        .WithMany("ReviewOutboxes")
-                        .HasForeignKey("ActionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AnonymousStudentReviews.Core.Aggregates.Review.ReviewOutboxStateEntity", "State")
-                        .WithMany("ReviewOutboxItems")
-                        .HasForeignKey("StateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AnonymousStudentReviews.Core.Aggregates.University.University", "Unversity")
-                        .WithMany()
-                        .HasForeignKey("UniversityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.OwnsOne("AnonymousStudentReviews.Core.Aggregates.Review.ReviewOutboxPayload", "Payload", b1 =>
-                        {
-                            b1.Property<Guid>("ReviewOutboxId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<int>("OldScore")
-                                .HasColumnType("integer");
-
-                            b1.Property<int>("Score")
-                                .HasColumnType("integer");
-
-                            b1.HasKey("ReviewOutboxId");
-
-                            b1.ToTable("review_outbox");
-
-                            b1.ToJson("Payload");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ReviewOutboxId");
-                        });
-
-                    b.Navigation("Action");
-
-                    b.Navigation("Payload")
-                        .IsRequired();
-
-                    b.Navigation("State");
-
-                    b.Navigation("Unversity");
-                });
-
-            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.University.UniversityStatistics", b =>
-                {
-                    b.HasOne("AnonymousStudentReviews.Core.Aggregates.University.University", "University")
-                        .WithOne("UniversityStatistics")
-                        .HasForeignKey("AnonymousStudentReviews.Core.Aggregates.University.UniversityStatistics", "UniversityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("University");
-                });
-
             modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.User.User", b =>
                 {
                     b.HasOne("AnonymousStudentReviews.Core.Aggregates.University.University", "University")
@@ -679,22 +528,9 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.Review.ReviewOutboxActionEntity", b =>
-                {
-                    b.Navigation("ReviewOutboxes");
-                });
-
-            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.Review.ReviewOutboxStateEntity", b =>
-                {
-                    b.Navigation("ReviewOutboxItems");
-                });
-
             modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.University.University", b =>
                 {
                     b.Navigation("AllowedEmailDomains");
-
-                    b.Navigation("UniversityStatistics")
-                        .IsRequired();
 
                     b.Navigation("Users");
                 });

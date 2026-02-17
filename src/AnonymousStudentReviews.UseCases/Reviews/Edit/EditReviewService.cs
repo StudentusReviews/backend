@@ -1,13 +1,11 @@
 ﻿using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.Review;
 using AnonymousStudentReviews.UseCases.Abstractions;
-using AnonymousStudentReviews.UseCases.Reviews.Outbox.CreateMessage;
 
 namespace AnonymousStudentReviews.UseCases.Reviews.Edit;
 
 public class EditReviewService : IEditReviewService
 {
-    private readonly ICreateMessageInReviewOutboxService _createMessageInReviewOutboxService;
     private readonly ICurrentUserService _currentUserService;
     private readonly IReviewRepository _reviewRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -15,12 +13,11 @@ public class EditReviewService : IEditReviewService
     public EditReviewService(
         IReviewRepository reviewRepository,
         IUnitOfWork unitOfWork,
-        ICurrentUserService currentUserService, ICreateMessageInReviewOutboxService createMessageInReviewOutboxService)
+        ICurrentUserService currentUserService)
     {
         _reviewRepository = reviewRepository;
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
-        _createMessageInReviewOutboxService = createMessageInReviewOutboxService;
     }
 
     public async Task<Result<Review>> ExecuteAsync(EditReviewDto dto)
@@ -44,8 +41,6 @@ public class EditReviewService : IEditReviewService
             return Result.Failure<Review>(ReviewErrors.AccessDenied);
         }
 
-        var oldScore = review.Score;
-        var newScore = dto.Score;
 
         var updateResult = review.Update(dto.Score, dto.Body);
 
@@ -53,11 +48,6 @@ public class EditReviewService : IEditReviewService
         {
             return Result.Failure<Review>(updateResult.Error);
         }
-
-        await _createMessageInReviewOutboxService.HandleAsync(new CreateMessageInReviewOutboxDto
-        {
-            Score = newScore, OldScore = oldScore, ReviewOutboxAction = ReviewOutboxAction.Update
-        });
 
         await _unitOfWork.SaveChangesAsync();
 
