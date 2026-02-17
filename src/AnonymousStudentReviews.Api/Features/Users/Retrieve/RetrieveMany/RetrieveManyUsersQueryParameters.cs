@@ -12,6 +12,6 @@ public class RetrieveManyUsersQueryParameters
     public string? Email { get; set; }
     public SortBy SortBy { get; set; } = SortBy.UniversityName;
     public SortOrder SortOrder { get; set; } = SortOrder.Ascending;
-    public int PageNumber { get; set; } = 0;
+    public int PageNumber { get; set; } = 1;
     public int PageSize { get; set; } = 10;
 }
