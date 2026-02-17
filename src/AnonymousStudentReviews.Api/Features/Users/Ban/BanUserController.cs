@@ -11,7 +11,7 @@ namespace AnonymousStudentReviews.Api.Features.Users.Ban;
 [Route("api/users/{userId:guid}/ban")]
 [Authorize(
     AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme,
-    Roles = "Admin"
+    Roles = "Admin,SuperAdmin"
 )]
 [ApiController]
 public class BanUserController : ControllerBase
