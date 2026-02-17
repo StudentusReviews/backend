@@ -29,7 +29,7 @@ public static class ServiceConfig
         {
             services.Configure<ForwardedHeadersOptions>(options =>
             {
-                options.ForwardedHeaders = ForwardedHeaders.All;
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
                 options.ForwardLimit = 3;
 
                 var networks = headerForwardingOptions.KnownNetworks.Select(network =>

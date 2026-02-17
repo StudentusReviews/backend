@@ -6,7 +6,8 @@ namespace AnonymousStudentReviews.Api.Configurations;
 
 public static class OpenIddictConfig
 {
-    public static IServiceCollection AddOpenIddictConfig(this IServiceCollection services)
+    public static IServiceCollection AddOpenIddictConfig(this IServiceCollection services,
+        WebApplicationBuilder builder)
     {
         services.AddOpenIddict()
             .AddCore(options =>
@@ -33,8 +34,12 @@ public static class OpenIddictConfig
 
                 options.AllowAuthorizationCodeFlow().AllowRefreshTokenFlow();
 
-                options.AddDevelopmentEncryptionCertificate()
-                    .AddDevelopmentSigningCertificate();
+                if (builder.Environment.IsDevelopment())
+                {
+                    options.AddDevelopmentEncryptionCertificate()
+                        .AddDevelopmentSigningCertificate();
+                }
+
 
                 options.UseAspNetCore()
                     .EnableAuthorizationEndpointPassthrough()

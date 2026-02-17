@@ -61,7 +61,7 @@ builder.Services.AddOptionsConfig(appLogger, builder);
 
 builder.Services.AddServiceConfigs(appLogger, builder);
 
-builder.Services.AddOpenIddictConfig();
+builder.Services.AddOpenIddictConfig(builder);
 
 var app = builder.Build();
 
