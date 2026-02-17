@@ -4,7 +4,7 @@ using AnonymousStudentReviews.Infrastructure.Data;
 
 namespace AnonymousStudentReviews.Infrastructure.Applications;
 
-public class ApplicationRepository: IApplicationRepository
+public class ApplicationRepository : IApplicationRepository
 {
     private readonly ApplicationDbContext _dbContext;
     public ApplicationRepository(ApplicationDbContext dbContext)
