@@ -27,5 +27,7 @@ public class ReviewConfiguration : IEntityTypeConfiguration<Review>
         builder.Property(r => r.UpdatedAt).IsRequired();
 
         builder.HasIndex(r => new { r.UniversityId, r.UserId }).IsUnique();
+
+        builder.Property(r => r.IsDeleted).HasDefaultValue(false).IsRequired();
     }
 }
