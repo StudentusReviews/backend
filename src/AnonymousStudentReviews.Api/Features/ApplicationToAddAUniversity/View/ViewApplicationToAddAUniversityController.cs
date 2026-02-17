@@ -11,7 +11,7 @@ using OpenIddict.Validation.AspNetCore;
 
 namespace AnonymousStudentReviews.Api.Features.ApplicationToAddAUniversity.View;
 
-//[Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
+[Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("api/applications")]
 public class ViewApplicationToAddAUniversityController : ControllerBase
