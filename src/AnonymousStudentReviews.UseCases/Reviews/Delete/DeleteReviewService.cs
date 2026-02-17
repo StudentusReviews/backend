@@ -1,11 +1,13 @@
 ﻿using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.Review;
 using AnonymousStudentReviews.UseCases.Abstractions;
+using AnonymousStudentReviews.UseCases.Reviews.Outbox.CreateMessage;
 
 namespace AnonymousStudentReviews.UseCases.Reviews.Delete;
 
 public class DeleteReviewService : IDeleteReviewService
 {
+    private readonly ICreateMessageInReviewOutboxService _createMessageInReviewOutboxService;
     private readonly ICurrentUserService _currentUserService;
     private readonly IReviewRepository _reviewRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -13,11 +15,12 @@ public class DeleteReviewService : IDeleteReviewService
     public DeleteReviewService(
         IReviewRepository reviewRepository,
         IUnitOfWork unitOfWork,
-        ICurrentUserService currentUserService)
+        ICurrentUserService currentUserService, ICreateMessageInReviewOutboxService createMessageInReviewOutboxService)
     {
         _reviewRepository = reviewRepository;
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
+        _createMessageInReviewOutboxService = createMessageInReviewOutboxService;
     }
 
     public async Task<Result> ExecuteAsync(DeleteReviewDto dto)
@@ -41,8 +44,13 @@ public class DeleteReviewService : IDeleteReviewService
             return Result.Failure(ReviewErrors.AccessDenied);
         }
 
-        _reviewRepository.Delete(review);
+        _reviewRepository.SoftDelete(review);
         await _unitOfWork.SaveChangesAsync();
+
+        await _createMessageInReviewOutboxService.HandleAsync(new CreateMessageInReviewOutboxDto
+        {
+            Review = review, ReviewOutboxState = ReviewOutboxState.PendingDelete
+        });
 
         return Result.Success();
     }
