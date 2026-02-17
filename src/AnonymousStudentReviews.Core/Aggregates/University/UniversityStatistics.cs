@@ -60,13 +60,32 @@ public class UniversityStatistics
             return Result.Failure(UniversityStatisticsErrors.NothingToUpdate);
         }
 
-        if (!IsScoreValid(newScore) || !IsScoreValid(newScore))
+        if (!IsScoreValid(newScore) || !IsScoreValid(oldScore))
         {
             return Result.Failure(UniversityStatisticsErrors.ScoreOutOfRange);
         }
 
         TotalScoreSum -= oldScore;
         TotalScoreSum += newScore;
+
+        return Result.Success();
+    }
+
+
+    public Result RemoveScore(int score)
+    {
+        if (TotalReviewCount <= 0)
+        {
+            return Result.Failure(UniversityStatisticsErrors.UniversityHasNoReviews);
+        }
+
+        if (!IsScoreValid(score))
+        {
+            return Result.Failure(UniversityStatisticsErrors.ScoreOutOfRange);
+        }
+
+        TotalScoreSum -= score;
+        TotalReviewCount--;
 
         return Result.Success();
     }

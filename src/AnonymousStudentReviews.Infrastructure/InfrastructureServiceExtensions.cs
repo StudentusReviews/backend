@@ -13,6 +13,7 @@ using AnonymousStudentReviews.Infrastructure.Email;
 using AnonymousStudentReviews.Infrastructure.EmailVerificationToken;
 using AnonymousStudentReviews.Infrastructure.Options;
 using AnonymousStudentReviews.Infrastructure.Password;
+using AnonymousStudentReviews.Infrastructure.Quartz.Jobs;
 using AnonymousStudentReviews.Infrastructure.Reviews;
 using AnonymousStudentReviews.Infrastructure.Roles;
 using AnonymousStudentReviews.Infrastructure.Universities;
@@ -88,6 +89,15 @@ public static class InfrastructureServiceExtensions
                     }
                 }
 
+                void InsertReviewOutboxActionIfNotExists(string name)
+                {
+                    if (context.Set<ReviewOutboxActionEntity>().FirstOrDefault(state => state.Name == name) is null)
+                    {
+                        context.Set<ReviewOutboxActionEntity>()
+                            .Add(new ReviewOutboxActionEntity { Id = Guid.NewGuid(), Name = name });
+                    }
+                }
+
                 var roles = new[] { RoleNameConstants.Student, RoleNameConstants.Admin };
 
                 foreach (var role in roles)
@@ -97,13 +107,23 @@ public static class InfrastructureServiceExtensions
 
                 var reviewOutboxStates = new[]
                 {
-                    ReviewOutboxStateNameConstants.PendingAdd, ReviewOutboxStateNameConstants.PendingUpdate,
-                    ReviewOutboxStateNameConstants.Processed
+                    ReviewOutboxStateNameConstants.Pending, ReviewOutboxStateNameConstants.Processed
                 };
 
                 foreach (var state in reviewOutboxStates)
                 {
                     InsertReviewOutboxStateIfNotExists(state);
+                }
+
+                var reviewOutboxActions = new[]
+                {
+                    ReviewOutboxActionNameConstants.Add, ReviewOutboxActionNameConstants.Delete,
+                    ReviewOutboxActionNameConstants.Update
+                };
+
+                foreach (var state in reviewOutboxStates)
+                {
+                    InsertReviewOutboxActionIfNotExists(state);
                 }
 
                 context.SaveChanges();
@@ -186,6 +206,18 @@ public static class InfrastructureServiceExtensions
         {
             options.UseSimpleTypeLoader();
             options.UseInMemoryStore();
+
+            options.AddJob<ProcessReviewOutboxMessagesJob>(o => o.WithIdentity(ProcessReviewOutboxMessagesJob.Key));
+
+            options.AddTrigger(o => o
+                .ForJob(ProcessReviewOutboxMessagesJob.Key)
+                .WithIdentity(
+                    ProcessReviewOutboxMessagesJob.Key.Name + "-trigger",
+                    ProcessReviewOutboxMessagesJob.Key.Group)
+                .StartNow()
+                .WithSimpleSchedule(x => x
+                    .WithIntervalInSeconds(10)
+                    .RepeatForever()));
         });
 
         services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);

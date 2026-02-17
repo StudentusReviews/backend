@@ -16,22 +16,19 @@ public class CreateMessageInReviewOutboxService : ICreateMessageInReviewOutboxSe
 
     public async Task<Result> HandleAsync(CreateMessageInReviewOutboxDto dto)
     {
-        if (dto.ReviewOutboxState == ReviewOutboxState.Processed)
-        {
-            return Result.Failure(CreateMessageInReviewOutboxErrors.MessageCantBeInsertedWithProcessedState);
-        }
+        var pendingReviewOutboxState = await _reviewOutboxRepository
+            .GetReviewOutboxStateEntityAsync(ReviewOutboxState.Pending);
 
-        var reviewOutboxState = await _reviewOutboxRepository
-            .GetReviewOutboxStateEntityAsync(dto.ReviewOutboxState);
+        var payload = new ReviewOutboxPayload { Score = dto.Score, OldScore = dto.OldScore };
 
-        if (await _reviewOutboxRepository.ReviewOutboxExistsAsync(reviewOutboxState, dto.Review))
-        {
-            return Result.Failure(CreateMessageInReviewOutboxErrors.AlreadyExists);
-        }
+        var actionEntity = await _reviewOutboxRepository.GetReviewOutboxActionEntityAsync(dto.ReviewOutboxAction);
 
         var reviewOutbox = new ReviewOutbox
         {
-            Id = Guid.NewGuid(), ReviewId = dto.Review.Id, StateId = reviewOutboxState.Id
+            Id = Guid.NewGuid(),
+            StateId = pendingReviewOutboxState.Id,
+            ActionId = actionEntity.Id,
+            Payload = payload
         };
 
         _reviewOutboxRepository.Create(reviewOutbox);
