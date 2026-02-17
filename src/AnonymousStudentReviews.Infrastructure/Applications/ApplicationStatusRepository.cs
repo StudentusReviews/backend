@@ -14,7 +14,8 @@ public class ApplicationStatusRepository : IApplicationStatusRepository
     }
 
     public async Task<Result<ApplicationToAddAUniversityStatus>> GetStatusByNameAsync(string statusName)
-    {         var status = _context.ApplicationStatuses.FirstOrDefault(s => s.Name == statusName);
+    {
+        var status = _context.ApplicationStatuses.FirstOrDefault(s => s.Name == statusName);
         if (status is null)
             return Result.Failure<ApplicationToAddAUniversityStatus>(ApplicationToAddAUniversityStatusErrors.StatusNotFound);
         return Result.Success(status);

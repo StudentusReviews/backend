@@ -1,16 +1,12 @@
 ﻿using AnonymousStudentReviews.Api.Extensions;
 using AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.Delete;
 
-using FluentValidation;
-
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 using OpenIddict.Validation.AspNetCore;
 
 
 using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace AnonymousStudentReviews.Api.Features.ApplicationToAddAUniversity.Delete;
 

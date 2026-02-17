@@ -55,6 +55,6 @@ public class CreateApplicationToAddAUniversityController : ControllerBase
 
     private CreateApplicationToAddAUniversityResponse ResultToResponse(Core.Aggregates.ApplicationToAddAUniversity.Base.ApplicationToAddAUniversity result)
     {
-        return new CreateApplicationToAddAUniversityResponse { Id = result.Id, UniversityName = result.UniversityName, DomainName = result.DomainName, CreatedAt = result.CreatedAt,  UserId = result.UserId };
+        return new CreateApplicationToAddAUniversityResponse { Id = result.Id, UniversityName = result.UniversityName, DomainName = result.DomainName, CreatedAt = result.CreatedAt, UserId = result.UserId };
     }
 }
