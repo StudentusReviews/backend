@@ -11,7 +11,7 @@ public class UniversityStatisticsConfiguration : IEntityTypeConfiguration<Univer
     {
         builder
             .ToTable("university_statistics");
-        
+
         builder
             .HasKey(e => e.UniversityId);
 
@@ -25,12 +25,12 @@ public class UniversityStatisticsConfiguration : IEntityTypeConfiguration<Univer
             .Property(e => e.TotalReviewCount)
             .HasDefaultValue(0)
             .IsRequired();
-        
+
         builder
             .Property(e => e.TotalScoreSum)
             .HasDefaultValue(0)
             .IsRequired();
-        
+
         builder
             .Property(e => e.Rank)
             .HasDefaultValue(0)

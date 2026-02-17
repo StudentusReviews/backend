@@ -29,7 +29,7 @@ public class UniversityStatistics
         {
             return Result.Failure(UniversityStatisticsErrors.NothingToUpdate);
         }
-        
+
         if (rank <= 0)
         {
             return Result.Failure(UniversityStatisticsErrors.InvalidRank);
@@ -59,7 +59,7 @@ public class UniversityStatistics
         {
             return Result.Failure(UniversityStatisticsErrors.NothingToUpdate);
         }
-        
+
         if (!IsScoreValid(newScore) || !IsScoreValid(newScore))
         {
             return Result.Failure(UniversityStatisticsErrors.ScoreOutOfRange);
