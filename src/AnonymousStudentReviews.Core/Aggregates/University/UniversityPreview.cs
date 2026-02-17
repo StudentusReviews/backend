@@ -2,9 +2,11 @@ namespace AnonymousStudentReviews.Core.Aggregates.University;
 
 public class UniversityPreview
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public string? City { get; set; }
-    public string? Website { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public Guid Id { get; init; }
+    public required string Name { get; init; }
+    public double AverageScore { get; init; }
+    public int Rank { get; init; }
+    public string? City { get; init; }
+    public string? Website { get; init; }
+    public DateTime CreatedAt { get; init; }
 }

@@ -8,6 +8,8 @@ public class University
     public string? Website { get; set; }
     public string? IconUrl { get; set; }
     public DateTime CreatedAt { get; set; }
+
     public ICollection<User.User>? Users { get; set; }
-    public ICollection<AllowedEmailDomain.AllowedEmailDomain>? AllowedEmailDomains { get; set; }
+    public ICollection<AllowedEmailDomain.AllowedEmailDomain>? AllowedEmailDomains { get; init; }
+    public ICollection<Review.Review>? Reviews { get; init; }
 }
