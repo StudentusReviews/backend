@@ -65,7 +65,7 @@ public static class InfrastructureServiceExtensions
     private static void AddMainDbContextWithPostgres(IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("MainDatabase");
-        services.AddDbContext<ApplicationDbContext>(options =>
+        services.AddDbContext<ApplicationDatabaseContext>(options =>
         {
             options.UseNpgsql(connectionString);
             options.UseOpenIddict();

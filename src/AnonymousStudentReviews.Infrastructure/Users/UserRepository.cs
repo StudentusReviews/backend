@@ -11,10 +11,10 @@ namespace AnonymousStudentReviews.Infrastructure.Users;
 
 public class UserRepository : IUserRepository
 {
-    private readonly ApplicationDbContext _context;
+    private readonly ApplicationDatabaseContext _context;
     private readonly LoginOptions _loginOptions;
 
-    public UserRepository(ApplicationDbContext context, IOptions<LoginOptions> loginOptions)
+    public UserRepository(ApplicationDatabaseContext context, IOptions<LoginOptions> loginOptions)
     {
         _context = context;
         _loginOptions = loginOptions.Value;

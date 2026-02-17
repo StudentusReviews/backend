@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(ApplicationDatabaseContext))]
     [Migration("20260214121342_AddCreatedAtColumnToUniversityEntity")]
     partial class AddCreatedAtColumnToUniversityEntity
     {

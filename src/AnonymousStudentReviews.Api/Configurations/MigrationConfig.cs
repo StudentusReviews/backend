@@ -9,7 +9,7 @@ public static class MigrationConfig
     public static void UseMigrations(this IApplicationBuilder app, ILogger logger)
     {
         using var scope = app.ApplicationServices.CreateScope();
-        using var mainDbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        using var mainDbContext = scope.ServiceProvider.GetRequiredService<ApplicationDatabaseContext>();
         using var dataProtectionDbContext = scope.ServiceProvider.GetRequiredService<DataProtectionDatabaseContext>();
 
         mainDbContext.Database.Migrate();

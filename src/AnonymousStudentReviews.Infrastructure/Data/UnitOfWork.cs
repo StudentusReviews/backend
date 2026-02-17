@@ -4,15 +4,15 @@ namespace AnonymousStudentReviews.Infrastructure.Data;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly ApplicationDatabaseContext _databaseContext;
 
-    public UnitOfWork(ApplicationDbContext dbContext)
+    public UnitOfWork(ApplicationDatabaseContext databaseContext)
     {
-        _dbContext = dbContext;
+        _databaseContext = databaseContext;
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        return await _dbContext.SaveChangesAsync(cancellationToken);
+        return await _databaseContext.SaveChangesAsync(cancellationToken);
     }
 }

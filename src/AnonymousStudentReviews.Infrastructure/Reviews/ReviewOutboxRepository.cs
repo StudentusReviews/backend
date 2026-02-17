@@ -7,9 +7,9 @@ namespace AnonymousStudentReviews.Infrastructure.Reviews;
 
 public class ReviewOutboxRepository : IReviewOutboxRepository
 {
-    private readonly ApplicationDbContext _context;
+    private readonly ApplicationDatabaseContext _context;
 
-    public ReviewOutboxRepository(ApplicationDbContext context)
+    public ReviewOutboxRepository(ApplicationDatabaseContext context)
     {
         _context = context;
     }

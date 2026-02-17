@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(ApplicationDatabaseContext))]
     [Migration("20260217072845_ChangeReviewOutboxPrimaryKeyToItsOwnId")]
     partial class ChangeReviewOutboxPrimaryKeyToItsOwnId
     {

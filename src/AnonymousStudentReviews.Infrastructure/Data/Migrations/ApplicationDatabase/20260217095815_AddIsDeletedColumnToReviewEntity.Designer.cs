@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AnonymousStudentReviews.Infrastructure.Data.Migrations.ApplicationDatabase
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(ApplicationDatabaseContext))]
     [Migration("20260217095815_AddIsDeletedColumnToReviewEntity")]
     partial class AddIsDeletedColumnToReviewEntity
     {

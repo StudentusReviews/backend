@@ -10,13 +10,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AnonymousStudentReviews.Infrastructure.Data;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDatabaseContext : DbContext
 {
-    protected ApplicationDbContext()
+    protected ApplicationDatabaseContext()
     {
     }
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    public ApplicationDatabaseContext(DbContextOptions<ApplicationDatabaseContext> options) : base(options)
     {
     }
 

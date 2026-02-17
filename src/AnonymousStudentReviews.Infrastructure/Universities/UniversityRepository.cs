@@ -11,9 +11,9 @@ namespace AnonymousStudentReviews.Infrastructure.Universities;
 
 public class UniversityRepository : IUniversityRepository
 {
-    private readonly ApplicationDbContext _context;
+    private readonly ApplicationDatabaseContext _context;
 
-    public UniversityRepository(ApplicationDbContext context)
+    public UniversityRepository(ApplicationDatabaseContext context)
     {
         _context = context;
     }

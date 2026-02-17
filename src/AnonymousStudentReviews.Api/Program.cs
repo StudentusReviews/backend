@@ -11,7 +11,7 @@ using Serilog.Extensions.Logging;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHealthChecks()
-    .AddDbContextCheck<ApplicationDbContext>();
+    .AddDbContextCheck<ApplicationDatabaseContext>();
 
 var corsOptions = new CorsOptions();
 builder.Configuration.GetSection(CorsOptions.SectionName).Bind(corsOptions);

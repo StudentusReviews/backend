@@ -13,7 +13,7 @@ public static class OpenIddictConfig
             .AddCore(options =>
             {
                 options.UseEntityFrameworkCore()
-                    .UseDbContext<ApplicationDbContext>();
+                    .UseDbContext<ApplicationDatabaseContext>();
                 options.UseQuartz();
             })
             .AddServer(options =>
