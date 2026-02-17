@@ -9,7 +9,7 @@ public class ApplicationToAddAUniversityConfiguration : IEntityTypeConfiguration
 {
     public void Configure(EntityTypeBuilder<ApplicationToAddAUniversity> builder)
     {
-        builder.ToTable("applications");
+        builder.ToTable("applications_to_add_a_university");
 
         builder.HasKey(e => e.Id);
 
@@ -21,20 +21,23 @@ public class ApplicationToAddAUniversityConfiguration : IEntityTypeConfiguration
             .HasMaxLength(50)
             .IsRequired();
 
+        builder.Property(e => e.Comment)
+            .HasMaxLength(500);
+
         builder.Property(e => e.IsDeleted)
             .HasDefaultValue(false)
             .IsRequired();
 
         builder
             .HasOne(e => e.User)
-            .WithMany(e => e.AppToAddAUnis)
+            .WithMany(e => e.ApplicationToAddAUniversities)
             .HasForeignKey(e => e.UserId)
             .IsRequired();
 
         builder
-            .HasOne(e => e.AppToAddAUniStatus)
+            .HasOne(e => e.ApplicationToAddAUniversityStatus)
             .WithMany(e => e.ApplicationToAddAUniversities)
-            .HasForeignKey(e => e.ApplicationStatusId)
+            .HasForeignKey(e => e.ApplicationToAddAUniversityStatusId)
             .IsRequired();
 
     }

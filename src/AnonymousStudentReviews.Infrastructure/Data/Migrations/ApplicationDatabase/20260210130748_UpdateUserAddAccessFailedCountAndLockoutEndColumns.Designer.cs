@@ -43,14 +43,18 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations.ApplicationData
                     b.ToTable("allowed_email_domains", (string)null);
                 });
 
-            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.AppToAddAUni.AppToAddAUni", b =>
+            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Base.ApplicationToAddAUniversity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ApplicationStatusId")
+                    b.Property<Guid>("ApplicationToAddAUniversityStatusId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Comment")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -78,14 +82,14 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations.ApplicationData
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationStatusId");
+                    b.HasIndex("ApplicationToAddAUniversityStatusId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("applications", (string)null);
+                    b.ToTable("applications_to_add_a_university", (string)null);
                 });
 
-            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.AppToAddAUni.AppToAddAUniStatus", b =>
+            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Status.ApplicationToAddAUniversityStatus", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -98,7 +102,7 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations.ApplicationData
 
                     b.HasKey("Id");
 
-                    b.ToTable("application_statuses", (string)null);
+                    b.ToTable("application_to_add_a_university_statuses", (string)null);
                 });
 
             modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.Dummy.Dummy", b =>
@@ -470,21 +474,21 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations.ApplicationData
                     b.Navigation("University");
                 });
 
-            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.AppToAddAUni.AppToAddAUni", b =>
+            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Base.ApplicationToAddAUniversity", b =>
                 {
-                    b.HasOne("AnonymousStudentReviews.Core.Aggregates.AppToAddAUni.AppToAddAUniStatus", "AppToAddAUniStatus")
-                        .WithMany("AppToAddAUnis")
-                        .HasForeignKey("ApplicationStatusId")
+                    b.HasOne("AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Status.ApplicationToAddAUniversityStatus", "ApplicationToAddAUniversityStatus")
+                        .WithMany("ApplicationToAddAUniversities")
+                        .HasForeignKey("ApplicationToAddAUniversityStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("AnonymousStudentReviews.Core.Aggregates.User.User", "User")
-                        .WithMany("AppToAddAUnis")
+                        .WithMany("ApplicationToAddAUniversities")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AppToAddAUniStatus");
+                    b.Navigation("ApplicationToAddAUniversityStatus");
 
                     b.Navigation("User");
                 });
@@ -560,14 +564,14 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations.ApplicationData
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.AppToAddAUni.AppToAddAUniStatus", b =>
+            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Status.ApplicationToAddAUniversityStatus", b =>
                 {
-                    b.Navigation("AppToAddAUnis");
+                    b.Navigation("ApplicationToAddAUniversities");
                 });
 
             modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.User.User", b =>
                 {
-                    b.Navigation("AppToAddAUnis");
+                    b.Navigation("ApplicationToAddAUniversities");
                 });
 
             modelBuilder.Entity("AnonymousStudentReviews.Core.University", b =>

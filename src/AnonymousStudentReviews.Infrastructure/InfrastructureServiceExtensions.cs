@@ -161,25 +161,6 @@ public static class InfrastructureServiceExtensions
 
                 context.SaveChanges();
             });
-            options.UseSeeding((context, _) =>
-            {
-                void InsertApplicationToAddAUniversityIfNotExists(string name)
-                {
-                    if (context.Set<ApplicationToAddAUniversityStatus>().FirstOrDefault(status => status.Name == name) is null)
-                    {
-                        context.Set<ApplicationToAddAUniversityStatus>().Add(new ApplicationToAddAUniversityStatus { Id = Guid.NewGuid(), Name = name });
-                    }
-                }
-
-                var statuses = new[] { StatusNameConstants.Pending, StatusNameConstants.UnderReview, StatusNameConstants.Approved, StatusNameConstants.Rejected };
-
-                foreach (var status in statuses)
-                {
-                    InsertApplicationToAddAUniversityIfNotExists(status);
-                }
-
-                context.SaveChanges();
-            });
         });
     }
 
@@ -220,6 +201,7 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IEmailVerificationTokenRepository, EmailVerificationTokenRepository>();
+<<<<<<< HEAD
         services.AddScoped<IReviewRepository, ReviewRepository>();
         services.AddScoped<IUniversityRepository, UniversityRepository>();
         services.AddScoped<IReviewRepository, ReviewRepository>();
@@ -228,6 +210,10 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IUniversityRepository, UniversityRepository>();
         services.AddScoped<IApplicationRepository, ApplicationRepository>();
         services.AddScoped<IApplicationStatusRepository, ApplicationStatusRepository>();
+=======
+        services.AddScoped<IApplicationToAddAUniversityRepository, ApplicationToAddAUniversityRepository>();
+        services.AddScoped<IApplicationToAddAUniversityStatusRepository, ApplicationToAddAUniversityStatusRepository>();
+>>>>>>> fd43300 (Fixed logic for the DeleteByIdAsync method. Fixed formatting issues. Where necessary, method implementations have been replaced with Async)
     }
 
     private static void RegisterServices(IServiceCollection services, IConfiguration configuration)

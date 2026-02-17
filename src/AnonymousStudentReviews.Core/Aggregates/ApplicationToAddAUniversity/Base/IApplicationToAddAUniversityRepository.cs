@@ -4,8 +4,8 @@ namespace AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Ba
 
 public interface IApplicationToAddAUniversityRepository
 {
-    public void Create(ApplicationToAddAUniversity applicationToAddAUniversity);
+    public Task<Result<ApplicationToAddAUniversity>> Create(ApplicationToAddAUniversity applicationToAddAUniversity);
     public Task<Result> DeleteByIdAsync(Guid id);
-    public Task<List<ApplicationToAddAUniversity>> GetAll();
+    public Task<Result<List<ApplicationToAddAUniversity>>> GetAll();
     public Task<Result<ApplicationToAddAUniversity>> GetByIdAsync(Guid id);
 }

@@ -14,7 +14,7 @@ namespace AnonymousStudentReviews.Api.Features.ApplicationToAddAUniversity.Creat
 
 [Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 [ApiController]
-[Route("api/applications/create")]
+[Route("api/applications")]
 public class CreateApplicationToAddAUniversityController : ControllerBase
 {
     private readonly IValidator<CreateApplicationToAddAUniversityRequest> _createApplicationToAddAUniversityRequestValidator;
@@ -28,7 +28,7 @@ public class CreateApplicationToAddAUniversityController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<CreateApplicationToAddAUniversityResponse>> CreateAppToAddAUni([FromBody] CreateApplicationToAddAUniversityRequest request)
+    public async Task<ActionResult<CreateApplicationToAddAUniversityResponse>> CreateApplicationToAddAUniversity([FromBody] CreateApplicationToAddAUniversityRequest request)
     {
         var validationResult = await _createApplicationToAddAUniversityRequestValidator.ValidateAsync(request);
 
@@ -45,12 +45,12 @@ public class CreateApplicationToAddAUniversityController : ControllerBase
             return createApplicationToAddAUniversityResult.Error.ToProblemDetails(Request.Path);
         }
 
-        return CreatedAtAction(nameof(CreateAppToAddAUni), ResultToResponse(createApplicationToAddAUniversityResult.Value));
+        return CreatedAtAction(nameof(CreateApplicationToAddAUniversity), ResultToResponse(createApplicationToAddAUniversityResult.Value));
     }
 
     private CreateApplicationToAddAUniversityDto RequestToDto(CreateApplicationToAddAUniversityRequest request)
     {
-        return new CreateApplicationToAddAUniversityDto { UniversityName = request.UniversityName, DomainName = request.DomainName };
+        return new CreateApplicationToAddAUniversityDto { UniversityName = request.UniversityName, DomainName = request.DomainName, Comment = request.Comment };
     }
 
     private CreateApplicationToAddAUniversityResponse ResultToResponse(Core.Aggregates.ApplicationToAddAUniversity.Base.ApplicationToAddAUniversity result)
