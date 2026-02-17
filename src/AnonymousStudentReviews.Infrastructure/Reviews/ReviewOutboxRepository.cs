@@ -34,18 +34,18 @@ public class ReviewOutboxRepository : IReviewOutboxRepository
 
         return result;
     }
-    
-    public async Task<ReviewOutboxStateEntity> GetReviewOutboxActionEntityAsync(ReviewOutboxAction action)
+
+    public async Task<ReviewOutboxActionEntity> GetReviewOutboxActionEntityAsync(ReviewOutboxAction action)
     {
-        var reviewOutboxStateName = action.GetName();
+        var reviewOutboxActionName = action.GetName();
 
         var result =
-            await _context.ReviewOutboxStates.FirstOrDefaultAsync(outboxState =>
-                outboxState.Name == reviewOutboxStateName);
+            await _context.ReviewOutboxActions.FirstOrDefaultAsync(outboxAction =>
+                outboxAction.Name == reviewOutboxActionName);
 
         if (result is null)
         {
-            throw new Exception("Review outbox state could not be found by name. Seeding failure.");
+            throw new Exception("Review outbox action could not be found by name. Seeding failure.");
         }
 
         return result;

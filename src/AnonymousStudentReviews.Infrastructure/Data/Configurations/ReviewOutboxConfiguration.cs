@@ -22,6 +22,12 @@ public class ReviewOutboxConfiguration : IEntityTypeConfiguration<ReviewOutbox>
             .IsRequired();
 
         builder
+            .HasOne(e => e.Unversity)
+            .WithMany()
+            .HasForeignKey(e => e.UniversityId)
+            .IsRequired();
+
+        builder
             .HasOne(e => e.Action)
             .WithMany(e => e.ReviewOutboxes)
             .HasForeignKey(e => e.ActionId)
