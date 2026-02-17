@@ -1,14 +1,17 @@
 ﻿using AnonymousStudentReviews.Api.Extensions;
 using AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.Delete;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+using OpenIddict.Validation.AspNetCore;
 
 
 namespace AnonymousStudentReviews.Api.Features.ApplicationToAddAUniversity.Delete;
 
-//[Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
+[Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 [ApiController]
-[Route("api/applications/delete")]
+[Route("api/applications")]
 public class DeleteApplicationToAddAUniversityController : ControllerBase
 {
     private readonly IDeleteApplicationToAddAUniversityService _deleteApplicationToAddAUniversityService;

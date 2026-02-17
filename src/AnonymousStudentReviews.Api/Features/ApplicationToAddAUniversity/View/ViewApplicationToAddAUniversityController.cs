@@ -13,7 +13,7 @@ namespace AnonymousStudentReviews.Api.Features.ApplicationToAddAUniversity.View;
 
 //[Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 [ApiController]
-[Route("api/applications/view")]
+[Route("api/applications")]
 public class ViewApplicationToAddAUniversityController : ControllerBase
 {
     private readonly IViewApplicationToAddAUniversityService _viewApplicationToAddAUniversityService;

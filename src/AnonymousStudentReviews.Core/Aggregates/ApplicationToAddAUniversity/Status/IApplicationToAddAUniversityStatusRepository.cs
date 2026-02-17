@@ -2,7 +2,7 @@
 
 namespace AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Status;
 
-public interface IApplicationStatusRepository
+public interface IApplicationToAddAUniversityStatusRepository
 {
     public Task<Result<ApplicationToAddAUniversityStatus>> GetStatusByNameAsync(string statusName);
 }

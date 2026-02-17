@@ -15,5 +15,8 @@ public class CreateApplicationToAddAUniversityRequestValidator : AbstractValidat
             .MaximumLength(50)
             /*.Must(name => name.Contains("@"))
             .WithMessage("DomainName має містити символ '@'")*/;
+
+        RuleFor(x => x.Comment)
+            .MaximumLength(500);
     }
 }

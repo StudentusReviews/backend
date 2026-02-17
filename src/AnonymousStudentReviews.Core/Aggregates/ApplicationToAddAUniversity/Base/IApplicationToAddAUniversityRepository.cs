@@ -2,9 +2,9 @@
 
 namespace AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Base;
 
-public interface IApplicationRepository
+public interface IApplicationToAddAUniversityRepository
 {
-    public Task<Result<ApplicationToAddAUniversity>> Create(ApplicationToAddAUniversity appToAddAUni);
+    public Task<Result<ApplicationToAddAUniversity>> Create(ApplicationToAddAUniversity applicationToAddAUniversity);
     public Task<Result> DeleteByIdAsync(Guid id);
     public Task<Result<List<ApplicationToAddAUniversity>>> GetAll();
     public Task<Result<ApplicationToAddAUniversity>> GetByIdAsync(Guid id);

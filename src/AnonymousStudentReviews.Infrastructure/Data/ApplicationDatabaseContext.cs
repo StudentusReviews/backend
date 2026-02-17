@@ -27,8 +27,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<AllowedEmailDomain> AllowedEmailDomains { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<Core.Aggregates.EmailVerificationToken.EmailVerificationToken> EmailVerificationTokens { get; set; }
-    public DbSet<ApplicationToAddAUniversity> Applications { get; set; }
-    public DbSet<ApplicationToAddAUniversityStatus> ApplicationStatuses { get; set; }
+    public DbSet<ApplicationToAddAUniversity> ApplicationToAddAUniversities { get; set; }
+    public DbSet<ApplicationToAddAUniversityStatus> ApplicationToAddAUniversityStatuses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

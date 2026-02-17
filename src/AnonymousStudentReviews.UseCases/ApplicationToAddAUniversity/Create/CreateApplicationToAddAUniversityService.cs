@@ -10,12 +10,12 @@ namespace AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.Create;
 public class CreateApplicationToAddAUniversityService : ICreateApplicationToAddAUniversityService
 {
     private readonly ICurrentUserService _currentUser;
-    private readonly IApplicationRepository _applicationRepository;
-    private readonly IApplicationStatusRepository _applicationStatusRepository;
+    private readonly IApplicationToAddAUniversityRepository _applicationRepository;
+    private readonly IApplicationToAddAUniversityStatusRepository _applicationStatusRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserManager _userManager;
 
-    public CreateApplicationToAddAUniversityService(IApplicationRepository applicationRepository, IApplicationStatusRepository applicationStatusRepository, IUnitOfWork unitOfWork,
+    public CreateApplicationToAddAUniversityService(IApplicationToAddAUniversityRepository applicationRepository, IApplicationToAddAUniversityStatusRepository applicationStatusRepository, IUnitOfWork unitOfWork,
         ICurrentUserService currentUser, IUserManager userManager)
     {
         _applicationRepository = applicationRepository;
@@ -32,9 +32,9 @@ public class CreateApplicationToAddAUniversityService : ICreateApplicationToAddA
 
         var pendingStatusResult = await _applicationStatusRepository.GetStatusByNameAsync(StatusNameConstants.Pending);
         if (pendingStatusResult.IsFailure)
-            return Result.Failure<Core.Aggregates.ApplicationToAddAUniversity.Base.ApplicationToAddAUniversity>(pendingStatusResult.Error);
+            throw new Exception("Pending status not found. This should never happen if the database is seeded correctly.");
 
-        var appResult = Core.Aggregates.ApplicationToAddAUniversity.Base.ApplicationToAddAUniversity.Create(dto.UniversityName, dto.DomainName, userId.Value, pendingStatusResult.Value.Id);
+        var appResult = Core.Aggregates.ApplicationToAddAUniversity.Base.ApplicationToAddAUniversity.Create(dto.UniversityName, dto.DomainName, dto.Comment, userId.Value, pendingStatusResult.Value.Id);
 
         if (appResult.IsFailure)
             return Result.Failure<Core.Aggregates.ApplicationToAddAUniversity.Base.ApplicationToAddAUniversity>(appResult.Error);
