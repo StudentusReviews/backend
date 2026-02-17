@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using AnonymousStudentReviews.Api;
 using AnonymousStudentReviews.Api.Configurations;
 using AnonymousStudentReviews.Api.Options;
+using AnonymousStudentReviews.Infrastructure.Data;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
@@ -12,6 +13,8 @@ using Serilog.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<ApplicationDbContext>();
 
 var corsOptions = new CorsOptions();
 builder.Configuration.GetSection(CorsOptions.SectionName).Bind(corsOptions);
@@ -55,8 +58,10 @@ builder.Services.AddDataProtection()
     .PersistKeysToFileSystem(new DirectoryInfo("/app/keys"));
 
 builder.Services.AddControllersWithViews()
-    .AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
-;
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 builder.Services.AddRazorPages();
 
@@ -81,6 +86,20 @@ app.UseAppMiddleware();
 if (app.Environment.IsDevelopment())
 {
     app.MapGet("/", () => Results.Redirect("/swagger"));
+}
+
+var healthCheckBuilder = app.MapHealthChecks("/healthz");
+
+if (app.Environment.IsProduction())
+{
+    var requiredHost = app.Configuration["Healthcheck:RequireHost"];
+
+    if (requiredHost is null)
+    {
+        throw new Exception("Healthcheck:RequireHost not set in config file");
+    }
+
+    healthCheckBuilder.RequireHost();
 }
 
 app.Run();

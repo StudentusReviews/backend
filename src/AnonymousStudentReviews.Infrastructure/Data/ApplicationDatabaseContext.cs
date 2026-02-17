@@ -1,6 +1,7 @@
 using AnonymousStudentReviews.Core;
 using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
 using AnonymousStudentReviews.Core.Aggregates.Dummy;
+using AnonymousStudentReviews.Core.Aggregates.Review;
 using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.Infrastructure.Data.Configurations;
@@ -15,7 +16,7 @@ public class ApplicationDbContext : DbContext
     {
     }
 
-    public ApplicationDbContext(DbContextOptions options) : base(options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
 
@@ -25,6 +26,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<AllowedEmailDomain> AllowedEmailDomains { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<Core.Aggregates.EmailVerificationToken.EmailVerificationToken> EmailVerificationTokens { get; set; }
+    public DbSet<Review> Reviews { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,0 +1,44 @@
+name: push docker images
+on:
+  workflow_call: 
+  workflow_dispatch:
+permissions:
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set SHORT_SHA
+        run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+      - name: Get branch name
+        id: get-branch-name
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            RAW_REF="${{ github.head_ref }}"
+            echo "BRANCH_NAME=${RAW_REF##*/}" >> $GITHUB_OUTPUT
+          else
+            echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
+          fi
+        shell: bash
+      - uses: actions/checkout@v5
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v5.1.1
+        with:
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/github_actions_oidc
+          role-session-name: GHA_DOCKER_PUSH
+          aws-region: eu-central-1
+      - name: Set up Docker
+        uses: docker/setup-docker-action@v4
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/backend:${{ steps.get-branch-name.outputs.BRANCH_NAME }},
+                ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/backend:${{ steps.get-branch-name.outputs.BRANCH_NAME }}-${{ env.SHORT_SHA }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

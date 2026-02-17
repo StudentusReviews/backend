@@ -2,6 +2,7 @@ using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
 using AnonymousStudentReviews.Core.Aggregates.Dummy;
 using AnonymousStudentReviews.Core.Aggregates.EmailVerificationToken;
+using AnonymousStudentReviews.Core.Aggregates.Review;
 using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.Infrastructure.AllowedEmailDomains;
@@ -11,12 +12,14 @@ using AnonymousStudentReviews.Infrastructure.Email;
 using AnonymousStudentReviews.Infrastructure.EmailVerificationToken;
 using AnonymousStudentReviews.Infrastructure.Options;
 using AnonymousStudentReviews.Infrastructure.Password;
+using AnonymousStudentReviews.Infrastructure.Reviews;
 using AnonymousStudentReviews.Infrastructure.Roles;
 using AnonymousStudentReviews.Infrastructure.Users;
 using AnonymousStudentReviews.UseCases.Abstractions;
 using AnonymousStudentReviews.UseCases.Login.Abstractions;
 using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -57,9 +60,9 @@ public static class InfrastructureServiceExtensions
         return services;
     }
 
-    private static void AddDbContextWithPostgres(IServiceCollection services, IConfiguration configuration)
+    private static void AddMainDbContextWithPostgres(IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("Postgres");
+        var connectionString = configuration.GetConnectionString("MainDatabase");
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseNpgsql(connectionString);
@@ -86,10 +89,21 @@ public static class InfrastructureServiceExtensions
         });
     }
 
+    private static void AddDataProtectionDbContextWithPostgres(IServiceCollection services,
+        IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("DataProtectionDatabase");
+        services.AddDbContext<DataProtectionDatabaseContext>(options =>
+        {
+            options.UseNpgsql(connectionString);
+        });
+    }
+
 
     private static void RegisterDevelopmentOnlyDependencies(IServiceCollection services, IConfiguration configuration)
     {
-        AddDbContextWithPostgres(services, configuration);
+        AddMainDbContextWithPostgres(services, configuration);
+        AddDataProtectionDbContextWithPostgres(services, configuration);
     }
 
     private static void RegisterTestingOnlyDependencies(IServiceCollection services)
@@ -98,7 +112,8 @@ public static class InfrastructureServiceExtensions
 
     private static void RegisterProductionOnlyDependencies(IServiceCollection services, IConfiguration configuration)
     {
-        AddDbContextWithPostgres(services, configuration);
+        AddMainDbContextWithPostgres(services, configuration);
+        AddDataProtectionDbContextWithPostgres(services, configuration);
     }
 
     private static void RegisterEFRepositories(IServiceCollection services)
@@ -108,10 +123,14 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IEmailVerificationTokenRepository, EmailVerificationTokenRepository>();
+        services.AddScoped<IReviewRepository, ReviewRepository>();
     }
 
     private static void RegisterServices(IServiceCollection services, IConfiguration configuration)
     {
+        services.AddDataProtection()
+            .PersistKeysToDbContext<DataProtectionDatabaseContext>();
+
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IEmailHasher, EmailHasher>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();

@@ -4,7 +4,7 @@
     container_name: anonymousstudentreviews.api
     build:
       context: .
-      dockerfile: src/AnonymousStudentReviews.Api/Dockerfile
+      dockerfile: ./Dockerfile
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -15,7 +15,6 @@
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     volumes:
       - ${SSL_CERTIFICATE_FOLDER_PATH}:/https:ro
-      - dataprotection-keys:/app/keys
     depends_on:
       - db
 
@@ -30,10 +29,10 @@
       - "5431:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./dev-init-databases.sql:/docker-entrypoint-initdb.d/dev-init-databases.sql
 
 
 
 volumes:
   pgdata:
-  dataprotection-keys:
   

@@ -2,10 +2,15 @@ using AnonymousStudentReviews.UseCases.AccountVerification;
 using AnonymousStudentReviews.UseCases.Dummies.Create;
 using AnonymousStudentReviews.UseCases.Login;
 using AnonymousStudentReviews.UseCases.Registration;
+
 using AnonymousStudentReviews.UseCases.Users.Ban;
 using AnonymousStudentReviews.UseCases.Users.Edit;
 using AnonymousStudentReviews.UseCases.Users.Retrieve.RetrieveMany;
 using AnonymousStudentReviews.UseCases.Users.Retrieve.RetrieveOne;
+
+using AnonymousStudentReviews.UseCases.Reviews.Create;
+using AnonymousStudentReviews.UseCases.Reviews.Delete;
+using AnonymousStudentReviews.UseCases.Reviews.Edit;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,9 +64,14 @@ public static class UseCasesServiceExtensions
         services.AddScoped<IRegistrationService, RegistrationService>();
         services.AddScoped<IAccountVerificationService, AccountVerificationService>();
         services.AddScoped<ILoginService, LoginService>();
+
         services.AddScoped<IBanUserService, BanUserService>();
         services.AddScoped<IRetrieveManyUsersService, RetrieveManyUsersService>();
         services.AddScoped<IRetrieveOneUserService, RetrieveOneUserService>();
         services.AddScoped<IEditUserService, EditUserService>();
+
+        services.AddScoped<ICreateReviewService, CreateReviewService>();
+        services.AddScoped<IEditReviewService, EditReviewService>();
+        services.AddScoped<IDeleteReviewService, DeleteReviewService>();
     }
 }
