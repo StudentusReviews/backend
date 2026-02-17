@@ -13,7 +13,6 @@ using AnonymousStudentReviews.Infrastructure.Email;
 using AnonymousStudentReviews.Infrastructure.EmailVerificationToken;
 using AnonymousStudentReviews.Infrastructure.Options;
 using AnonymousStudentReviews.Infrastructure.Password;
-using AnonymousStudentReviews.Infrastructure.Quartz.Jobs;
 using AnonymousStudentReviews.Infrastructure.Reviews;
 using AnonymousStudentReviews.Infrastructure.Roles;
 using AnonymousStudentReviews.Infrastructure.Universities;
@@ -206,18 +205,6 @@ public static class InfrastructureServiceExtensions
         {
             options.UseSimpleTypeLoader();
             options.UseInMemoryStore();
-
-            options.AddJob<ProcessReviewOutboxMessagesJob>(o => o.WithIdentity(ProcessReviewOutboxMessagesJob.Key));
-
-            options.AddTrigger(o => o
-                .ForJob(ProcessReviewOutboxMessagesJob.Key)
-                .WithIdentity(
-                    ProcessReviewOutboxMessagesJob.Key.Name + "-trigger",
-                    ProcessReviewOutboxMessagesJob.Key.Group)
-                .StartNow()
-                .WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(10)
-                    .RepeatForever()));
         });
 
         services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
