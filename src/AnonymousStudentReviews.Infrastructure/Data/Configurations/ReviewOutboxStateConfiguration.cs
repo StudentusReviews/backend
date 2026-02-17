@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AnonymousStudentReviews.Infrastructure.Data.Configurations;
 
-public class ReviewOutboxStateConfiguration : IEntityTypeConfiguration<ReviewOutboxState>
+public class ReviewOutboxStateConfiguration : IEntityTypeConfiguration<ReviewOutboxStateEntity>
 {
-    public void Configure(EntityTypeBuilder<ReviewOutboxState> builder)
+    public void Configure(EntityTypeBuilder<ReviewOutboxStateEntity> builder)
     {
         builder
             .ToTable("review_outbox_states");

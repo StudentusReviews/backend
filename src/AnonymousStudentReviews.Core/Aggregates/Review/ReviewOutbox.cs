@@ -6,6 +6,6 @@ public class ReviewOutbox
     public Guid ReviewId { get; init; }
     public Guid StateId { get; set; }
 
-    public ReviewOutboxState? State { get; set; }
+    public ReviewOutboxStateEntity? State { get; set; }
     public Review? Review { get; init; }
 }
