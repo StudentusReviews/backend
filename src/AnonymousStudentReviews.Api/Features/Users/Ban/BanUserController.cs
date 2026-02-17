@@ -4,13 +4,13 @@ using AnonymousStudentReviews.UseCases.Users.Ban;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using OpenIddict.Validation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace AnonymousStudentReviews.Api.Features.Users.Ban;
 
 [Route("api/users/{userId:guid}/ban")]
 [Authorize(
-    AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme,
+    AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme,
     Roles = "Admin"
 )]
 [ApiController]

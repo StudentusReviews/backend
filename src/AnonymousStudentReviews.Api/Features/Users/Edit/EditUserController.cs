@@ -4,13 +4,13 @@ using AnonymousStudentReviews.UseCases.Users.Edit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using OpenIddict.Validation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace AnonymousStudentReviews.Api.Features.Users.Edit;
 
 [Route("api/users/{userId:guid}")]
 [Authorize(
-    AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme,
+    AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme,
     Roles = "Admin,SuperAdmin"
 )]
 [ApiController]

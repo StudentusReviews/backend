@@ -52,6 +52,8 @@ builder.Services.AddAuthentication(options =>
         options.LogoutPath = "/api/logout";
     });
 
+builder.Services.AddAuthorization();
+
 builder.AddLoggerConfigs();
 
 builder.Services.AddDataProtection()

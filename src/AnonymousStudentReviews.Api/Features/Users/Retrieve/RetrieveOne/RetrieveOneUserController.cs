@@ -6,12 +6,12 @@ using AnonymousStudentReviews.UseCases.Users.Retrieve.RetrieveOne;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using OpenIddict.Validation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace AnonymousStudentReviews.Api.Features.Users.Retrieve.RetrieveOne;
 
 [Authorize(
-    AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme,
+    AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme,
     Roles = "Admin,SuperAdmin"
 )]
 [Route("api/users/{userId:guid}")]
