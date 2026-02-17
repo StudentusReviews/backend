@@ -1,13 +1,13 @@
 using AnonymousStudentReviews.Core;
 using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
+using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Base;
+using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Status;
 using AnonymousStudentReviews.Core.Aggregates.Dummy;
 using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.Infrastructure.Data.Configurations;
 
 using Microsoft.EntityFrameworkCore;
-using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Base;
-using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Status;
 
 namespace AnonymousStudentReviews.Infrastructure.Data;
 

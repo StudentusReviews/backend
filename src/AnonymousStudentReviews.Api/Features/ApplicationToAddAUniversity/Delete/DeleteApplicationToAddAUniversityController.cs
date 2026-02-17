@@ -1,14 +1,7 @@
 ﻿using AnonymousStudentReviews.Api.Extensions;
 using AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.Delete;
 
-using FluentValidation;
-
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-using OpenIddict.Validation.AspNetCore;
-
-using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity;
 
 
 namespace AnonymousStudentReviews.Api.Features.ApplicationToAddAUniversity.Delete;
@@ -21,9 +14,9 @@ public class DeleteApplicationToAddAUniversityController : ControllerBase
     private readonly IDeleteApplicationToAddAUniversityService _deleteApplicationToAddAUniversityService;
 
     public DeleteApplicationToAddAUniversityController(IDeleteApplicationToAddAUniversityService deleteApplicationToAddAUniversityService)
-        {
+    {
         _deleteApplicationToAddAUniversityService = deleteApplicationToAddAUniversityService;
-        }
+    }
 
     [HttpDelete]
     [ValidateAntiForgeryToken]
