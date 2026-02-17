@@ -30,5 +30,9 @@ public class UniversityConfiguration : IEntityTypeConfiguration<University>
             .HasForeignKey(e => e.UniversityId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
+
+        builder
+            .Property(e => e.IconUrl)
+            .HasMaxLength(500);
     }
 }
