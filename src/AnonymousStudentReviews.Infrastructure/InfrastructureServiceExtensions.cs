@@ -79,50 +79,11 @@ public static class InfrastructureServiceExtensions
                     }
                 }
 
-                void InsertReviewOutboxStateIfNotExists(string name)
-                {
-                    if (context.Set<ReviewOutboxStateEntity>().FirstOrDefault(state => state.Name == name) is null)
-                    {
-                        context.Set<ReviewOutboxStateEntity>()
-                            .Add(new ReviewOutboxStateEntity { Id = Guid.NewGuid(), Name = name });
-                    }
-                }
-
-                void InsertReviewOutboxActionIfNotExists(string name)
-                {
-                    if (context.Set<ReviewOutboxActionEntity>().FirstOrDefault(state => state.Name == name) is null)
-                    {
-                        context.Set<ReviewOutboxActionEntity>()
-                            .Add(new ReviewOutboxActionEntity { Id = Guid.NewGuid(), Name = name });
-                    }
-                }
-
                 var roles = new[] { RoleNameConstants.Student, RoleNameConstants.Admin };
 
                 foreach (var role in roles)
                 {
                     InsertRoleIfNotExists(role);
-                }
-
-                var reviewOutboxStates = new[]
-                {
-                    ReviewOutboxStateNameConstants.Pending, ReviewOutboxStateNameConstants.Processed
-                };
-
-                foreach (var state in reviewOutboxStates)
-                {
-                    InsertReviewOutboxStateIfNotExists(state);
-                }
-
-                var reviewOutboxActions = new[]
-                {
-                    ReviewOutboxActionNameConstants.Add, ReviewOutboxActionNameConstants.Delete,
-                    ReviewOutboxActionNameConstants.Update
-                };
-
-                foreach (var state in reviewOutboxStates)
-                {
-                    InsertReviewOutboxActionIfNotExists(state);
                 }
 
                 context.SaveChanges();
