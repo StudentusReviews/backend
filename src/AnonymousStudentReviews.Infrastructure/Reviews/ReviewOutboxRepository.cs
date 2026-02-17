@@ -34,10 +34,20 @@ public class ReviewOutboxRepository : IReviewOutboxRepository
 
         return result;
     }
-
-    public async Task<bool> ReviewOutboxExistsAsync(ReviewOutboxStateEntity state, Review review)
+    
+    public async Task<ReviewOutboxStateEntity> GetReviewOutboxActionEntityAsync(ReviewOutboxAction action)
     {
-        return await _context.ReviewOutbox.AnyAsync(reviewOutbox =>
-            reviewOutbox.ReviewId == review.Id && reviewOutbox.StateId == state.Id);
+        var reviewOutboxStateName = action.GetName();
+
+        var result =
+            await _context.ReviewOutboxStates.FirstOrDefaultAsync(outboxState =>
+                outboxState.Name == reviewOutboxStateName);
+
+        if (result is null)
+        {
+            throw new Exception("Review outbox state could not be found by name. Seeding failure.");
+        }
+
+        return result;
     }
 }

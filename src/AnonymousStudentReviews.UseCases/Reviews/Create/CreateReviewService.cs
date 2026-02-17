@@ -74,7 +74,7 @@ public class CreateReviewService : ICreateReviewService
 
         await _createMessageInReviewOutboxService.HandleAsync(new CreateMessageInReviewOutboxDto
         {
-            Review = createReviewResult.Value, ReviewOutboxState = ReviewOutboxState.PendingAdd
+            Score = createReviewResult.Value.Score, OldScore = 0, ReviewOutboxAction = ReviewOutboxAction.Add
         });
 
         return Result.Success(createReviewResult.Value);

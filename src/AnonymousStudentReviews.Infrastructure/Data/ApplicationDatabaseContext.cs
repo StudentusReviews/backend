@@ -30,6 +30,7 @@ public class ApplicationDatabaseContext : DbContext
     public DbSet<UniversityStatistics> UniversityStatistics { get; set; }
     public DbSet<ReviewOutbox> ReviewOutbox { get; set; }
     public DbSet<ReviewOutboxStateEntity> ReviewOutboxStates { get; set; }
+    public DbSet<ReviewOutboxActionEntity> ReviewOutboxActions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

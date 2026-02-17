@@ -2,9 +2,7 @@ namespace AnonymousStudentReviews.Core.Aggregates.Review;
 
 public enum ReviewOutboxState
 {
-    PendingAdd,
-    PendingUpdate,
-    PendingDelete,
+    Pending,
     Processed
 }
 
@@ -14,10 +12,8 @@ public static class ReviewOutboxStateExtensions
     {
         return reviewOutboxState switch
         {
-            ReviewOutboxState.PendingAdd => ReviewOutboxStateNameConstants.PendingAdd,
-            ReviewOutboxState.PendingUpdate => ReviewOutboxStateNameConstants.PendingUpdate,
+            ReviewOutboxState.Pending => ReviewOutboxStateNameConstants.Pending,
             ReviewOutboxState.Processed => ReviewOutboxStateNameConstants.Processed,
-            ReviewOutboxState.PendingDelete => ReviewOutboxStateNameConstants.PendingDelete,
             _ => throw new ArgumentOutOfRangeException(nameof(reviewOutboxState), reviewOutboxState, null)
         };
     }

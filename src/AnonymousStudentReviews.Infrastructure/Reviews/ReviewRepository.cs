@@ -31,12 +31,7 @@ public class ReviewRepository : IReviewRepository
             .AnyAsync(r => r.UniversityId == universityId && r.UserId == userId, cancellationToken);
     }
 
-    public void SoftDelete(Review review)
-    {
-        review.IsDeleted = true;
-    }
-
-    public void HardDelete(Review review)
+    public void Delete(Review review)
     {
         _databaseContext.Set<Review>().Remove(review);
     }

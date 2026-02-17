@@ -44,6 +44,9 @@ public class EditReviewService : IEditReviewService
             return Result.Failure<Review>(ReviewErrors.AccessDenied);
         }
 
+        var oldScore = review.Score;
+        var newScore = dto.Score;
+
         var updateResult = review.Update(dto.Score, dto.Body);
 
         if (updateResult.IsFailure)
@@ -51,15 +54,14 @@ public class EditReviewService : IEditReviewService
             return Result.Failure<Review>(updateResult.Error);
         }
 
+        await _createMessageInReviewOutboxService.HandleAsync(new CreateMessageInReviewOutboxDto
+        {
+            Score = newScore, OldScore = oldScore, ReviewOutboxAction = ReviewOutboxAction.Update
+        });
+
         await _unitOfWork.SaveChangesAsync();
 
 
-        await _createMessageInReviewOutboxService.HandleAsync(new CreateMessageInReviewOutboxDto
-        {
-            Review = review,
-            ReviewOutboxState = ReviewOutboxState.PendingUpdate
-        });
-        
         return Result.Success(review);
     }
 }

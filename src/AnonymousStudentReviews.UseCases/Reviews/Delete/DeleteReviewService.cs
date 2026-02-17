@@ -44,13 +44,13 @@ public class DeleteReviewService : IDeleteReviewService
             return Result.Failure(ReviewErrors.AccessDenied);
         }
 
-        _reviewRepository.SoftDelete(review);
-        await _unitOfWork.SaveChangesAsync();
-
         await _createMessageInReviewOutboxService.HandleAsync(new CreateMessageInReviewOutboxDto
         {
-            Review = review, ReviewOutboxState = ReviewOutboxState.PendingDelete
+            Score = review.Score, ReviewOutboxAction = ReviewOutboxAction.Delete
         });
+
+        _reviewRepository.Delete(review);
+        await _unitOfWork.SaveChangesAsync();
 
         return Result.Success();
     }

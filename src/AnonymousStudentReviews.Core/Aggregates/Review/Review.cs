@@ -11,7 +11,6 @@ public class Review
 
     public int Score { get; set; }
     public string Body { get; set; } = string.Empty;
-    public bool IsDeleted { get; set; } = false;
 
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
