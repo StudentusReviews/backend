@@ -11,9 +11,9 @@ namespace AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.View;
 
 public class ViewApplicationToAddAUniversityService : IViewApplicationToAddAUniversityService
 {
-    private readonly IApplicationRepository _applicationRepository;
+    private readonly IApplicationToAddAUniversityRepository _applicationRepository;
 
-    public ViewApplicationToAddAUniversityService(IApplicationRepository applicationRepository)
+    public ViewApplicationToAddAUniversityService(IApplicationToAddAUniversityRepository applicationRepository)
     {
         _applicationRepository = applicationRepository;
     }

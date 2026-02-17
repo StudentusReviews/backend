@@ -144,10 +144,6 @@ public static class InfrastructureServiceExtensions
                     InsertRoleIfNotExists(role);
                 }
 
-                context.SaveChanges();
-            });
-            options.UseSeeding((context, _) =>
-            {
                 void InsertApplicationToAddAUniversityIfNotExists(string name)
                 {
                     if (context.Set<ApplicationToAddAUniversityStatus>().FirstOrDefault(status => status.Name == name) is null)
@@ -156,7 +152,7 @@ public static class InfrastructureServiceExtensions
                     }
                 }
 
-                var statuses = new[] { StatusNameConstants.Pending, StatusNameConstants.UnderReview, StatusNameConstants.Approved, StatusNameConstants.Rejected };
+                var statuses = new[] { StatusNameConstants.Pending, StatusNameConstants.Approved, StatusNameConstants.Rejected };
 
                 foreach (var status in statuses)
                 {
@@ -211,8 +207,8 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IUniversityRepository, UniversityRepository>();
         services.AddScoped<IReviewRepository, ReviewRepository>();
         services.AddScoped<IUniversityRepository, UniversityRepository>();
-        services.AddScoped<IApplicationRepository, ApplicationRepository>();
-        services.AddScoped<IApplicationStatusRepository, ApplicationStatusRepository>();
+        services.AddScoped<IApplicationToAddAUniversityRepository, ApplicationToAddAUniversityRepository>();
+        services.AddScoped<IApplicationToAddAUniversityStatusRepository, ApplicationToAddAUniversityStatusRepository>();
     }
 
     private static void RegisterServices(IServiceCollection services, IConfiguration configuration)
