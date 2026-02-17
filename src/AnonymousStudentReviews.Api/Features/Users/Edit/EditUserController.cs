@@ -1,10 +1,9 @@
 using AnonymousStudentReviews.Api.Extensions;
 using AnonymousStudentReviews.UseCases.Users.Edit;
 
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace AnonymousStudentReviews.Api.Features.Users.Edit;
 

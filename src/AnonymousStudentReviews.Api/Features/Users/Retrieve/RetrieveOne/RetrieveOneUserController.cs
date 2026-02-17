@@ -3,10 +3,9 @@ using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.UseCases.Users.Retrieve.RetrieveOne;
 
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace AnonymousStudentReviews.Api.Features.Users.Retrieve.RetrieveOne;
 

@@ -5,10 +5,9 @@ using AnonymousStudentReviews.UseCases.Users.Retrieve.RetrieveMany;
 
 using FluentValidation;
 
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace AnonymousStudentReviews.Api.Features.Users.Retrieve.RetrieveMany;
 
