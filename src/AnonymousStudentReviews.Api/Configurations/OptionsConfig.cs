@@ -18,6 +18,8 @@ public static class OptionsConfig
             builder.Configuration.GetSection(OpenIddictOptions.SectionName));
         services.Configure<LoginOptions>(
             builder.Configuration.GetSection(LoginOptions.SectionName));
+        services.Configure<HeaderForwardingOptions>(
+            builder.Configuration.GetSection(HeaderForwardingOptions.SectionName));
 
         logger.LogInformation("Options registered successfully");
 
