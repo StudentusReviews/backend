@@ -42,7 +42,8 @@ public static class OpenIddictConfig
                     .EnableTokenEndpointPassthrough()
                     .EnableUserInfoEndpointPassthrough()
                     .EnableStatusCodePagesIntegration()
-                    .DisableTransportSecurityRequirement();
+                    .DisableTransportSecurityRequirement()
+                    .AcceptAnonymousClients();
             })
             .AddValidation(options =>
             {

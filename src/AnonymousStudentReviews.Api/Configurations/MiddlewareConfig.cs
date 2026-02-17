@@ -1,15 +1,15 @@
+using Microsoft.AspNetCore.HttpOverrides;
+
 namespace AnonymousStudentReviews.Api.Configurations;
 
 public static class MiddlewareConfig
 {
     public static IApplicationBuilder UseAppMiddleware(this WebApplication app)
     {
-        if (!app.Environment.IsDevelopment())
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
         {
-            app.UseHsts();
-        }
-
-        app.UseHttpsRedirection();
+            ForwardedHeaders = ForwardedHeaders.XForwardedProto
+        });
 
         if (app.Environment.IsDevelopment())
         {
