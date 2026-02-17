@@ -81,10 +81,10 @@ public static class InfrastructureServiceExtensions
 
                 void InsertReviewOutboxStateIfNotExists(string name)
                 {
-                    if (context.Set<ReviewOutboxState>().FirstOrDefault(state => state.Name == name) is null)
+                    if (context.Set<ReviewOutboxStateEntity>().FirstOrDefault(state => state.Name == name) is null)
                     {
-                        context.Set<ReviewOutboxState>()
-                            .Add(new ReviewOutboxState { Id = Guid.NewGuid(), Name = name });
+                        context.Set<ReviewOutboxStateEntity>()
+                            .Add(new ReviewOutboxStateEntity { Id = Guid.NewGuid(), Name = name });
                     }
                 }
 
@@ -151,6 +151,7 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IUniversityRepository, UniversityRepository>();
         services.AddScoped<IReviewRepository, ReviewRepository>();
         services.AddScoped<IUniversityRepository, UniversityRepository>();
+        services.AddScoped<IReviewOutboxRepository, ReviewOutboxRepository>();
     }
 
     private static void RegisterServices(IServiceCollection services, IConfiguration configuration)
