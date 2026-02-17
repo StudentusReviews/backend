@@ -1,4 +1,3 @@
-using AnonymousStudentReviews.Core;
 using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
 using AnonymousStudentReviews.Core.Aggregates.Dummy;
 using AnonymousStudentReviews.Core.Aggregates.Review;
@@ -28,6 +27,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<Role> Roles { get; set; }
     public DbSet<Core.Aggregates.EmailVerificationToken.EmailVerificationToken> EmailVerificationTokens { get; set; }
     public DbSet<Review> Reviews { get; set; }
+    public DbSet<UniversityStatistics> UniversityStatistics { get; set; }
+    public DbSet<ReviewOutbox> ReviewOutbox { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
