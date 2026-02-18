@@ -60,6 +60,7 @@ public static class UseCasesServiceExtensions
         services.AddScoped<ILoginService, LoginService>();
         services.AddScoped<ICreateApplicationToAddAUniversityService, CreateApplicationToAddAUniversityService>();
         services.AddScoped<IDeleteApplicationToAddAUniversityService, DeleteApplicationToAddAUniversityService>();
-        services.AddScoped<IViewApplicationToAddAUniversityService, ViewApplicationToAddAUniversityService>();
+        services.AddScoped<IViewAllApplicationsToAddAUniversityService, ViewAllApplicationToAddAUniversityService>();
+        services.AddScoped<IViewByIdApplicationToAddAUniversityService, ViewByIdApplicationToAddAUniversityService>();
     }
 }

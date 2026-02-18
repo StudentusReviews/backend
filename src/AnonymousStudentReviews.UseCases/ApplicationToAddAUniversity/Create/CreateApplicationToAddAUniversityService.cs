@@ -39,7 +39,7 @@ public class CreateApplicationToAddAUniversityService : ICreateApplicationToAddA
         if (appResult.IsFailure)
             return Result.Failure<Core.Aggregates.ApplicationToAddAUniversity.Base.ApplicationToAddAUniversity>(appResult.Error);
 
-        await _applicationRepository.Create(appResult.Value);
+        _applicationRepository.Create(appResult.Value);
         await _unitOfWork.SaveChangesAsync();
 
         return Result.Success(appResult.Value);

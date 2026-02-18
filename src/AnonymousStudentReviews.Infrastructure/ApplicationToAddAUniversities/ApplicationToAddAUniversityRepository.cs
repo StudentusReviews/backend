@@ -14,10 +14,9 @@ public class ApplicationToAddAUniversityRepository : IApplicationToAddAUniversit
         _dbContext = dbContext;
     }
 
-    public async Task<Result<ApplicationToAddAUniversity>> Create(ApplicationToAddAUniversity applicationToAddAUniversity)
+    public void Create(ApplicationToAddAUniversity applicationToAddAUniversity)
     {
         _dbContext.ApplicationToAddAUniversities.Add(applicationToAddAUniversity);
-        return Result.Success(applicationToAddAUniversity);
     }
 
     public async Task<Result> DeleteByIdAsync(Guid id)
@@ -29,10 +28,10 @@ public class ApplicationToAddAUniversityRepository : IApplicationToAddAUniversit
         return Result.Success();
     }
 
-    public async Task<Result<List<ApplicationToAddAUniversity>>> GetAll()
+    public async Task<List<ApplicationToAddAUniversity>> GetAll()
     {
         var applications = await _dbContext.ApplicationToAddAUniversities.Where(a => !a.IsDeleted).ToListAsync();
-        return Result.Success<List<ApplicationToAddAUniversity>>(applications);
+        return applications;
     }
 
     public async Task<Result<ApplicationToAddAUniversity>> GetByIdAsync(Guid id)

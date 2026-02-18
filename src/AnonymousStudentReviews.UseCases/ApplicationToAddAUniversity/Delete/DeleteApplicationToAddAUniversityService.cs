@@ -23,11 +23,17 @@ public class DeleteApplicationToAddAUniversityService : IDeleteApplicationToAddA
     public async Task<Result> ExecuteAsync(Guid applicationToAddAUniversityId)
     {
         var userId = _currentUser.UserId;
-        if (userId == null) return Result.Failure(UserErrors.NotFound);
+        if (userId == null)
+            return Result.Failure(UserErrors.NotFound);
+
         var application = await _applicationRepository.GetByIdAsync(applicationToAddAUniversityId);
-        if (application == null) return Result.Failure(ApplicationToAddAUniversityErrors.ApplicationToAddAUniversityNotFound(applicationToAddAUniversityId));
+        if (application == null)
+            return Result.Failure(ApplicationToAddAUniversityErrors.ApplicationToAddAUniversityNotFound(applicationToAddAUniversityId));
+
         if (application.Value.UserId != userId)
-            await _applicationRepository.DeleteByIdAsync(applicationToAddAUniversityId);
+            return Result.Failure(ApplicationToAddAUniversityErrors.ApplicationToAddAUniversityInaccessible(applicationToAddAUniversityId, (Guid)userId));
+
+        await _applicationRepository.DeleteByIdAsync(applicationToAddAUniversityId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Success();
     }

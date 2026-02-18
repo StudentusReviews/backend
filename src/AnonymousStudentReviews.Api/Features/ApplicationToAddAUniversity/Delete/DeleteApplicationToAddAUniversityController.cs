@@ -22,7 +22,6 @@ public class DeleteApplicationToAddAUniversityController : ControllerBase
     }
 
     [HttpDelete]
-    [ValidateAntiForgeryToken]
     public async Task<ActionResult> DeleteApplicationToAddAUniversity([FromQuery] Guid appId)
     {
         var deleteApplicationToAddAUniversityResult = await _deleteApplicationToAddAUniversityService.ExecuteAsync(appId);
