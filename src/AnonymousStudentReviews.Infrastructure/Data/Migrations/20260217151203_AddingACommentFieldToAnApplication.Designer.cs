@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(ApplicationDatabaseContext))]
     [Migration("20260217151203_AddingACommentFieldToAnApplication")]
     partial class AddingACommentFieldToAnApplication
     {
