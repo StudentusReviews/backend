@@ -26,6 +26,8 @@ jobs:
           8.0.x
     - name: Restore dependencies
       run: dotnet restore
+    - name: Install EF Core CLI tools
+      run: dotnet tool install --global dotnet-ef
     - name: create migration
       run: |
         dotnet ef migrations script \
