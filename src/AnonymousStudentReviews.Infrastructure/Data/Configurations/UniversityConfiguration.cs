@@ -34,5 +34,9 @@ public class UniversityConfiguration : IEntityTypeConfiguration<University>
         builder
             .Property(e => e.IconUrl)
             .HasMaxLength(500);
+
+        builder
+            .Property(e => e.Description)
+            .HasMaxLength(1000);
     }
 }
