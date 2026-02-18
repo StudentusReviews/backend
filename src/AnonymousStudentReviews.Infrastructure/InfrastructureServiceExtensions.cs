@@ -27,6 +27,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
+using Npgsql;
+
 using Quartz;
 
 using Resend;
@@ -35,6 +37,56 @@ namespace AnonymousStudentReviews.Infrastructure;
 
 public static class InfrastructureServiceExtensions
 {
+    private static string GetConnectionString(
+        IConfiguration configuration,
+        string connectionStringName,
+        string sectionPath)
+    {
+        var fromConnectionStrings = configuration.GetConnectionString(connectionStringName);
+        if (!string.IsNullOrWhiteSpace(fromConnectionStrings))
+        {
+            return fromConnectionStrings;
+        }
+
+        var section = configuration.GetSection(sectionPath);
+        if (!section.Exists())
+        {
+            throw new Exception(
+                $"Neither ConnectionStrings:{connectionStringName} nor {sectionPath} section is configured.");
+        }
+
+        var host = section["Host"];
+        var portRaw = section["Port"];
+        var database = section["Database"];
+        var username = section["Username"];
+        var password = section["Password"];
+
+        if (string.IsNullOrWhiteSpace(host) ||
+            string.IsNullOrWhiteSpace(portRaw) ||
+            string.IsNullOrWhiteSpace(database) ||
+            string.IsNullOrWhiteSpace(username) ||
+            string.IsNullOrWhiteSpace(password))
+        {
+            throw new Exception($"Incomplete database config in {sectionPath}. Required: Host, Port, Database, Username, Password.");
+        }
+
+        if (!int.TryParse(portRaw, out var port))
+        {
+            throw new Exception($"Invalid Port value in {sectionPath}: '{portRaw}'.");
+        }
+
+        var builder = new NpgsqlConnectionStringBuilder
+        {
+            Host = host,
+            Port = port,
+            Database = database,
+            Username = username,
+            Password = password
+        };
+
+        return builder.ConnectionString;
+    }
+
     public static IServiceCollection AddInfrastructureServices(
         this IServiceCollection services,
         IConfiguration configuration,
@@ -64,7 +116,10 @@ public static class InfrastructureServiceExtensions
 
     private static void AddMainDbContextWithPostgres(IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("MainDatabase");
+        var connectionString = GetConnectionString(
+            configuration,
+            "MainDatabase",
+            "DatabaseConnections:MainDatabase");
         services.AddDbContext<ApplicationDatabaseContext>(options =>
         {
             options.UseNpgsql(connectionString);
@@ -94,7 +149,10 @@ public static class InfrastructureServiceExtensions
     private static void AddDataProtectionDbContextWithPostgres(IServiceCollection services,
         IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("DataProtectionDatabase");
+        var connectionString = GetConnectionString(
+            configuration,
+            "DataProtectionDatabase",
+            "DatabaseConnections:DataProtectionDatabase");
         services.AddDbContext<DataProtectionDatabaseContext>(options =>
         {
             options.UseNpgsql(connectionString);
