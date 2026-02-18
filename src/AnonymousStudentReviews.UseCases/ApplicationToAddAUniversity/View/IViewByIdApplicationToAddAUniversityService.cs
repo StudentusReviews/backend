@@ -8,8 +8,7 @@ using AnonymousStudentReviews.Core.Abstractions;
 
 namespace AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.View;
 
-public interface IViewApplicationToAddAUniversityService
+public interface IViewByIdApplicationToAddAUniversityService
 {
-    public Task<Result<List<Core.Aggregates.ApplicationToAddAUniversity.Base.ApplicationToAddAUniversity>>> ExecuteAsync();
     public Task<Result<Core.Aggregates.ApplicationToAddAUniversity.Base.ApplicationToAddAUniversity>> ExecuteAsync(Guid id);
 }

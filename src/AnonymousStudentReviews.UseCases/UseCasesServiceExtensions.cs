@@ -82,6 +82,7 @@ public static class UseCasesServiceExtensions
         services.AddScoped<IRetrieveOneUniversityService, RetrieveOneUniversityService>();
         services.AddScoped<ICreateApplicationToAddAUniversityService, CreateApplicationToAddAUniversityService>();
         services.AddScoped<IDeleteApplicationToAddAUniversityService, DeleteApplicationToAddAUniversityService>();
-        services.AddScoped<IViewApplicationToAddAUniversityService, ViewApplicationToAddAUniversityService>();
+        services.AddScoped<IViewAllApplicationsToAddAUniversityService, ViewAllApplicationToAddAUniversityService>();
+        services.AddScoped<IViewByIdApplicationToAddAUniversityService, ViewByIdApplicationToAddAUniversityService>();
     }
 }
