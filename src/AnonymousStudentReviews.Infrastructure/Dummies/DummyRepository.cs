@@ -5,15 +5,15 @@ namespace AnonymousStudentReviews.Infrastructure.Dummies;
 
 public class DummyRepository : IDummyRepository
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly ApplicationDatabaseContext _databaseContext;
 
-    public DummyRepository(ApplicationDbContext dbContext)
+    public DummyRepository(ApplicationDatabaseContext databaseContext)
     {
-        _dbContext = dbContext;
+        _databaseContext = databaseContext;
     }
 
     public void Create(Dummy dummy)
     {
-        _dbContext.Dummies.Add(dummy);
+        _databaseContext.Dummies.Add(dummy);
     }
 }

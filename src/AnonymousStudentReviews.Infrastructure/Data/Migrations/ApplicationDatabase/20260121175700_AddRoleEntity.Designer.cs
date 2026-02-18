@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AnonymousStudentReviews.Infrastructure.Data.Migrations.ApplicationDatabase
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(ApplicationDatabaseContext))]
     [Migration("20260121175700_AddRoleEntity")]
     partial class AddRoleEntity
     {

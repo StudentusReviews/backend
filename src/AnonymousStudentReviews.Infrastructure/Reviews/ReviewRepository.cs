@@ -7,32 +7,32 @@ namespace AnonymousStudentReviews.Infrastructure.Reviews;
 
 public class ReviewRepository : IReviewRepository
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly ApplicationDatabaseContext _databaseContext;
 
-    public ReviewRepository(ApplicationDbContext dbContext)
+    public ReviewRepository(ApplicationDatabaseContext databaseContext)
     {
-        _dbContext = dbContext;
+        _databaseContext = databaseContext;
     }
 
     public void Create(Review review)
     {
-        _dbContext.Set<Review>().Add(review);
+        _databaseContext.Set<Review>().Add(review);
     }
 
     public async Task<Review?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Set<Review>()
+        return await _databaseContext.Set<Review>()
             .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
     }
 
     public async Task<bool> ExistsAsync(Guid universityId, Guid userId, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Set<Review>()
+        return await _databaseContext.Set<Review>()
             .AnyAsync(r => r.UniversityId == universityId && r.UserId == userId, cancellationToken);
     }
 
     public void Delete(Review review)
     {
-        _dbContext.Set<Review>().Remove(review);
+        _databaseContext.Set<Review>().Remove(review);
     }
 }

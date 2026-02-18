@@ -12,6 +12,6 @@ public class User
     public bool IsBanned { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public University? University { get; set; }
+    public University.University? University { get; set; }
     public ICollection<Role.Role> Roles { get; set; }
 }

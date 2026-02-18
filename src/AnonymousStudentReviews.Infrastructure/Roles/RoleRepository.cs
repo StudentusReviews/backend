@@ -8,9 +8,9 @@ namespace AnonymousStudentReviews.Infrastructure.Roles;
 
 public class RoleRepository : IRoleRepository
 {
-    private readonly ApplicationDbContext _context;
+    private readonly ApplicationDatabaseContext _context;
 
-    public RoleRepository(ApplicationDbContext context)
+    public RoleRepository(ApplicationDatabaseContext context)
     {
         _context = context;
     }

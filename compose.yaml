@@ -11,10 +11,10 @@
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:8081;http://+:8080
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=${SSL_CERTIFICATE_PASSWORD}
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    env_file:
+      - .env
     volumes:
-      - ${SSL_CERTIFICATE_FOLDER_PATH}:/https:ro
+      - ${SSL_CERTIFICATE_FOLDER_ABSOLUTE_PATH}:/https:ro
     depends_on:
       - db
 

@@ -14,7 +14,7 @@ using Serilog.Extensions.Logging;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHealthChecks()
-    .AddDbContextCheck<ApplicationDbContext>();
+    .AddDbContextCheck<ApplicationDatabaseContext>();
 
 var corsOptions = new CorsOptions();
 builder.Configuration.GetSection(CorsOptions.SectionName).Bind(corsOptions);
@@ -56,9 +56,6 @@ builder.Services.AddAuthorization();
 
 builder.AddLoggerConfigs();
 
-builder.Services.AddDataProtection()
-    .PersistKeysToFileSystem(new DirectoryInfo("/app/keys"));
-
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(options =>
     {
@@ -73,7 +70,7 @@ builder.Services.AddOptionsConfig(appLogger, builder);
 
 builder.Services.AddServiceConfigs(appLogger, builder);
 
-builder.Services.AddOpenIddictConfig();
+builder.Services.AddOpenIddictConfig(builder);
 
 var app = builder.Build();
 
