@@ -17,4 +17,10 @@ public interface IUniversityRepository
     Task<Result<UniversityDetailedPreview>> FindByIdFetchDetailedPreviewAsync(Guid universityId);
 
     Task AddAsync(University university);
+
+    Task<Result<University>> UpdateAsync(University university);
+
+    Task<Result> DeleteAsync(Guid universityId);
+
+    Task<Result<University>> FindByIdAsync(Guid universityId);
 }

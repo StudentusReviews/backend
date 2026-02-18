@@ -269,6 +269,41 @@ public class UniversityRepository : IUniversityRepository
         return result;
     }
 
+    public async Task<Result<University>> FindByIdAsync(Guid universityId)
+    {
+        var university = await _context.Universities.FirstOrDefaultAsync(u => u.Id == universityId);
+
+        if (university is null)
+        {
+            return Result.Failure<University>(UniversityErrors.NotFound);
+        }
+
+        return university;
+    }
+
+    public async Task<Result<University>> UpdateAsync(University university)
+    {
+        _context.Universities.Update(university);
+        await _context.SaveChangesAsync();
+
+        return university;
+    }
+
+    public async Task<Result> DeleteAsync(Guid universityId)
+    {
+        var university = await _context.Universities.FirstOrDefaultAsync(u => u.Id == universityId);
+
+        if (university is null)
+        {
+            return Result.Failure(UniversityErrors.NotFound);
+        }
+
+        _context.Universities.Remove(university);
+        await _context.SaveChangesAsync();
+
+        return Result.Success();
+    }
+
     public async Task AddAsync(University university)
     {
         _context.Universities.Add(university);
