@@ -268,4 +268,10 @@ public class UniversityRepository : IUniversityRepository
 
         return result;
     }
+
+    public async Task AddAsync(University university)
+    {
+        _context.Universities.Add(university);
+        await _context.SaveChangesAsync();
+    }
 }

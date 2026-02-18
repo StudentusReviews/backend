@@ -15,4 +15,6 @@ public interface IUniversityRepository
         int offset, int limit);
 
     Task<Result<UniversityDetailedPreview>> FindByIdFetchDetailedPreviewAsync(Guid universityId);
+
+    Task AddAsync(University university);
 }
