@@ -29,6 +29,27 @@ public class ReviewRepository : IReviewRepository
             .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
     }
 
+    public async Task<Result<ReviewPreview>> GetPreviewByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var result = await _databaseContext.Reviews.FindAsync([id], cancellationToken);
+
+        if (result is null)
+        {
+            return Result.Failure<ReviewPreview>(ReviewErrors.NotFound);
+        }
+
+        return Result.Success(new ReviewPreview
+        {
+            Id = result.Id,
+            UniversityId = result.UniversityId,
+            UserId = result.UserId,
+            Score = result.Score,
+            Body = result.Body,
+            CreatedAt = result.CreatedAt,
+            UpdatedAt = result.UpdatedAt
+        });
+    }
+
     public async Task<bool> ExistsAsync(Guid universityId, Guid userId, CancellationToken cancellationToken = default)
     {
         return await _databaseContext.Set<Review>()

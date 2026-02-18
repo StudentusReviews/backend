@@ -32,8 +32,4 @@
         <None Include="wwwroot\css\styles.css"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="Features\Reviews\RetrieveOne\"/>
-    </ItemGroup>
-
 </Project>
