@@ -27,7 +27,7 @@ public class AssignUserRoleService : IAssignUserRoleService
         {
             return Result.Failure(UserRoleErrors.InvalidRoleName);
         }
-        
+
         var userResult = await _userRepository.FindByIdAsync(userId);
         if (userResult.IsFailure)
         {
@@ -43,7 +43,7 @@ public class AssignUserRoleService : IAssignUserRoleService
         var user = userResult.Value;
         var role = roleResult.Value;
 
-        user.Roles ??= new List<Role>(); 
+        user.Roles ??= new List<Role>();
 
         if (user.Roles.Any(r => r.Name == role.Name))
         {

@@ -1,6 +1,6 @@
 using AnonymousStudentReviews.Api.Extensions;
-using AnonymousStudentReviews.UseCases.Users.Edit;
 using AnonymousStudentReviews.Core.Aggregates.Role;
+using AnonymousStudentReviews.UseCases.Users.Edit;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;

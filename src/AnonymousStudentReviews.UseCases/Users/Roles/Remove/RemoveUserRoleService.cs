@@ -27,7 +27,7 @@ public class RemoveUserRoleService : IRemoveUserRoleService
         {
             return Result.Failure(UserRoleErrors.InvalidRoleName);
         }
-        
+
         var userResult = await _userRepository.FindByIdAsync(userId);
         if (userResult.IsFailure)
         {
@@ -43,7 +43,7 @@ public class RemoveUserRoleService : IRemoveUserRoleService
         var user = userResult.Value;
         var role = roleResult.Value;
 
-        user.Roles ??= new List<Role>(); 
+        user.Roles ??= new List<Role>();
 
         var roleToRemove = user.Roles.FirstOrDefault(r => r.Name == role.Name);
         if (roleToRemove is null)
