@@ -15,6 +15,7 @@
       - .env
     volumes:
       - ${SSL_CERTIFICATE_FOLDER_ABSOLUTE_PATH}:/https:ro
+      - ${ENCRYPTION_CERTIFICATES_FOLDER_ABSOLUTE_PATH}:/encryption_certs:ro
     depends_on:
       - db
 
