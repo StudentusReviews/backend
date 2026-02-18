@@ -11,8 +11,7 @@ public class RetrieveManyUniversitiesQueryParameters
     public string? Name { get; set; }
     public string? City { get; set; }
 
-    public SortBy SortBy { get; set; } =
-        SortBy.Newest; // TODO: when review system is ready, the default should be changed to SortBy.Rating 
+    public UniversitySortBy SortBy { get; set; } = UniversitySortBy.Rating;
 
-    public SortOrder SortOrder { get; set; } = SortOrder.Ascending;
+    public SortOrder SortOrder { get; set; } = SortOrder.Descending;
 }
