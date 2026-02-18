@@ -1,4 +1,3 @@
-using Npgsql;
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
 using AnonymousStudentReviews.Core.Aggregates.Dummy;
@@ -27,6 +26,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+
+using Npgsql;
 
 using Quartz;
 
@@ -85,7 +86,7 @@ public static class InfrastructureServiceExtensions
 
         return builder.ConnectionString;
     }
-    
+
     public static IServiceCollection AddInfrastructureServices(
         this IServiceCollection services,
         IConfiguration configuration,
