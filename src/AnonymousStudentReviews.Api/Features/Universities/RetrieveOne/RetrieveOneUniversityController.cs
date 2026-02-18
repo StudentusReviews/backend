@@ -17,6 +17,7 @@ public class RetrieveOneUniversityController : ControllerBase
         _retrieveOneUniversityService = retrieveOneUniversityService;
     }
 
+    [HttpGet]
     public async Task<ActionResult<UniversityDetailedPreview>> RetrieveOneUniversityAsync(
         [FromRoute] Guid universityId)
     {

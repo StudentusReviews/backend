@@ -1,30 +1,15 @@
 using AnonymousStudentReviews.UseCases.AccountVerification;
-<<<<<<< HEAD
-<<<<<<< HEAD
 using AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.Create;
 using AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.Delete;
 using AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.View;
-using AnonymousStudentReviews.UseCases.Dummies.Create;
-=======
->>>>>>> f5cb2cd (Add Delete and View controllers. Created configurations for AppToAddAUni and AppToAddAUniStatus)
-using AnonymousStudentReviews.UseCases.AppToAddAUni.Create;
-using AnonymousStudentReviews.UseCases.AppToAddAUni.Delete;
-using AnonymousStudentReviews.UseCases.AppToAddAUni.View;
-=======
-using AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.Create;
-using AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.Delete;
-using AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.View;
->>>>>>> 7eca784 (Changed names of classes. AppToAddAUni -> ApplicationToAddAUniversity)
 using AnonymousStudentReviews.UseCases.Dummies.Create;
 using AnonymousStudentReviews.UseCases.Login;
 using AnonymousStudentReviews.UseCases.Registration;
 using AnonymousStudentReviews.UseCases.Reviews.Create;
-using AnonymousStudentReviews.UseCases.Reviews.Create;
-using AnonymousStudentReviews.UseCases.Reviews.Delete;
 using AnonymousStudentReviews.UseCases.Reviews.Delete;
 using AnonymousStudentReviews.UseCases.Reviews.Edit;
-using AnonymousStudentReviews.UseCases.Reviews.Edit;
-using AnonymousStudentReviews.UseCases.Universities.RetrieveMany;
+using AnonymousStudentReviews.UseCases.Reviews.RetrieveMany;
+using AnonymousStudentReviews.UseCases.Reviews.RetrieveOne;
 using AnonymousStudentReviews.UseCases.Universities.RetrieveMany;
 using AnonymousStudentReviews.UseCases.Universities.RetrieveOne;
 
@@ -97,5 +82,7 @@ public static class UseCasesServiceExtensions
         services.AddScoped<IDeleteApplicationToAddAUniversityService, DeleteApplicationToAddAUniversityService>();
         services.AddScoped<IViewAllApplicationsToAddAUniversityService, ViewAllApplicationToAddAUniversityService>();
         services.AddScoped<IViewByIdApplicationToAddAUniversityService, ViewByIdApplicationToAddAUniversityService>();
+        services.AddScoped<IRetrieveManyReviewsService, RetrieveManyReviewsService>();
+        services.AddScoped<IRetrieveOneReviewService, RetrieveOneReviewService>();
     }
 }

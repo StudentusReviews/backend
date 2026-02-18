@@ -19,7 +19,7 @@ public class UniversityRepository : IUniversityRepository
     }
 
     public async Task<CursorPagedResult<UniversityPreview>> GetAllAsync(string? query, string? name, string? city,
-        SortBy sortBy, SortOrder sortOrder,
+        UniversitySortBy universitySortBy, SortOrder sortOrder,
         UniversityCursor? cursor, int limit)
     {
         var dbQuery = _context.Universities.AsNoTracking();
@@ -43,9 +43,9 @@ public class UniversityRepository : IUniversityRepository
             dbQuery = dbQuery.Where(u => u.City != null && u.City.ToLower().Contains(city.Trim()));
         }
 
-        switch (sortBy)
+        switch (universitySortBy)
         {
-            case SortBy.Newest:
+            case UniversitySortBy.Newest:
             default:
                 if (cursor != null && DateTime.TryParse(cursor.Value, CultureInfo.InvariantCulture,
                         DateTimeStyles.AdjustToUniversal, out var cursorDate))
@@ -69,7 +69,7 @@ public class UniversityRepository : IUniversityRepository
                     : dbQuery.OrderBy(u => u.CreatedAt).ThenBy(u => u.Id);
                 break;
 
-            case SortBy.Rating:
+            case UniversitySortBy.Rating:
                 if (cursor != null && double.TryParse(cursor.Value, NumberStyles.Float, CultureInfo.InvariantCulture,
                         out var cursorAverageScore))
                 {
@@ -98,7 +98,7 @@ public class UniversityRepository : IUniversityRepository
                         .ThenBy(u => u.Id);
                 break;
 
-            case SortBy.ReviewCount:
+            case UniversitySortBy.ReviewCount:
                 if (cursor != null && int.TryParse(cursor.Value, NumberStyles.Integer, CultureInfo.InvariantCulture,
                         out var cursorReviewCount))
                 {
@@ -151,11 +151,11 @@ public class UniversityRepository : IUniversityRepository
             items.RemoveAt(items.Count - 1);
             var lastItem = items.Last();
 
-            var nextValue = sortBy switch
+            var nextValue = universitySortBy switch
             {
-                SortBy.Newest => lastItem.CreatedAt.ToString("O"),
-                SortBy.Rating => lastItem.AverageScore.ToString(CultureInfo.InvariantCulture),
-                SortBy.ReviewCount => lastItem.ReviewCount.ToString(),
+                UniversitySortBy.Newest => lastItem.CreatedAt.ToString("O"),
+                UniversitySortBy.Rating => lastItem.AverageScore.ToString(CultureInfo.InvariantCulture),
+                UniversitySortBy.ReviewCount => lastItem.ReviewCount.ToString(),
                 _ => string.Empty
             };
 

@@ -1,6 +1,6 @@
 namespace AnonymousStudentReviews.Core.Aggregates.University;
 
-public enum SortBy
+public enum UniversitySortBy
 {
     Newest,
     Rating,

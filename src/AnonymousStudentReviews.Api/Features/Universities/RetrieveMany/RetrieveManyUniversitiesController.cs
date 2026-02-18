@@ -53,7 +53,7 @@ public class RetrieveManyUniversitiesController : ControllerBase
             Query = request.Query,
             Name = request.Name,
             City = request.City,
-            SortBy = request.SortBy,
+            UniversitySortBy = request.SortBy,
             SortOrder = request.SortOrder
         };
     }
