@@ -26,7 +26,7 @@ public class RetrieveOneUniversityController : ControllerBase
         {
             return result.Error.ToProblemDetails(Request.Path);
         }
-        
+
         return Ok(result.Value);
     }
 }

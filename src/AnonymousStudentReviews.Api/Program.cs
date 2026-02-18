@@ -57,7 +57,7 @@ builder.Services.AddControllersWithViews()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    });;
+    }); ;
 
 builder.Services.AddRazorPages();
 
