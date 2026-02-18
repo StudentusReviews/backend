@@ -8,9 +8,9 @@ namespace AnonymousStudentReviews.Infrastructure.Applications;
 
 public class ApplicationToAddAUniversityStatusRepository : IApplicationToAddAUniversityStatusRepository
 {
-    private readonly ApplicationDbContext _context;
+    private readonly ApplicationDatabaseContext _context;
 
-    public ApplicationToAddAUniversityStatusRepository(ApplicationDbContext context)
+    public ApplicationToAddAUniversityStatusRepository(ApplicationDatabaseContext context)
     {
         _context = context;
     }

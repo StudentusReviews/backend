@@ -8,8 +8,8 @@ namespace AnonymousStudentReviews.Infrastructure.Applications;
 
 public class ApplicationToAddAUniversityRepository : IApplicationToAddAUniversityRepository
 {
-    private readonly ApplicationDbContext _dbContext;
-    public ApplicationToAddAUniversityRepository(ApplicationDbContext dbContext)
+    private readonly ApplicationDatabaseContext _dbContext;
+    public ApplicationToAddAUniversityRepository(ApplicationDatabaseContext dbContext)
     {
         _dbContext = dbContext;
     }
