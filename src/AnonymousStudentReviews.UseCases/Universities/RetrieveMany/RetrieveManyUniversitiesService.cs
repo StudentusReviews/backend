@@ -18,7 +18,7 @@ public class RetrieveManyUniversitiesService : IRetrieveManyUniversitiesService
         var cursor = CursorUtils.FromCursor<UniversityCursor>(dto.Cursor);
 
         var result =
-            await _universityRepository.GetAllAsync(dto.Query, dto.Name, dto.City, dto.SortBy,
+            await _universityRepository.GetAllAsync(dto.Query, dto.Name, dto.City, dto.UniversitySortBy,
                 dto.SortOrder, cursor, dto.Limit);
 
 

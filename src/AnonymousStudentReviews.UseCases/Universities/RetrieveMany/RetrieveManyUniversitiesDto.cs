@@ -10,6 +10,6 @@ public class RetrieveManyUniversitiesDto
     public string? Query { get; set; }
     public string? Name { get; set; }
     public string? City { get; set; }
-    public SortBy SortBy { get; set; }
+    public UniversitySortBy UniversitySortBy { get; set; }
     public SortOrder SortOrder { get; set; }
 }
