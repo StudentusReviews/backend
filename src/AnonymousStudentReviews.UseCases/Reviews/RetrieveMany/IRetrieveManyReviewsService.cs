@@ -1,7 +1,7 @@
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.Review;
 
-namespace AnonymousStudentReviews.UseCases.Reviews.Retrieve;
+namespace AnonymousStudentReviews.UseCases.Reviews.RetrieveMany;
 
 public interface IRetrieveManyReviewsService
 {

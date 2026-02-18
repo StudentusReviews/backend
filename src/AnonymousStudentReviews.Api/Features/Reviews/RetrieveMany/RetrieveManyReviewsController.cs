@@ -1,7 +1,7 @@
 using AnonymousStudentReviews.Api.Extensions;
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.Review;
-using AnonymousStudentReviews.UseCases.Reviews.Retrieve;
+using AnonymousStudentReviews.UseCases.Reviews.RetrieveMany;
 
 using FluentValidation;
 

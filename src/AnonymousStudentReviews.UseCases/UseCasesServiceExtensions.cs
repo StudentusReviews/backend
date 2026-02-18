@@ -5,7 +5,7 @@ using AnonymousStudentReviews.UseCases.Registration;
 using AnonymousStudentReviews.UseCases.Reviews.Create;
 using AnonymousStudentReviews.UseCases.Reviews.Delete;
 using AnonymousStudentReviews.UseCases.Reviews.Edit;
-using AnonymousStudentReviews.UseCases.Reviews.Retrieve;
+using AnonymousStudentReviews.UseCases.Reviews.RetrieveMany;
 using AnonymousStudentReviews.UseCases.Universities.RetrieveMany;
 using AnonymousStudentReviews.UseCases.Universities.RetrieveOne;
 

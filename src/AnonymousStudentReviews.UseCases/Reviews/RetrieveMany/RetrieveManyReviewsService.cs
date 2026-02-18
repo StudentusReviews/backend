@@ -2,7 +2,7 @@ using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.Review;
 using AnonymousStudentReviews.UseCases.Utils;
 
-namespace AnonymousStudentReviews.UseCases.Reviews.Retrieve;
+namespace AnonymousStudentReviews.UseCases.Reviews.RetrieveMany;
 
 public class RetrieveManyReviewsService : IRetrieveManyReviewsService
 {

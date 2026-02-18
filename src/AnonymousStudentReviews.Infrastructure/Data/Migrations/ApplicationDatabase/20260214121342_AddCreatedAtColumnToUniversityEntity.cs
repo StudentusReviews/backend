@@ -1,10 +1,8 @@
-﻿using System;
+﻿#nullable disable
 
 using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
-
-namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
+namespace AnonymousStudentReviews.Infrastructure.Data.Migrations.ApplicationDatabase
 {
     /// <inheritdoc />
     public partial class AddCreatedAtColumnToUniversityEntity : Migration

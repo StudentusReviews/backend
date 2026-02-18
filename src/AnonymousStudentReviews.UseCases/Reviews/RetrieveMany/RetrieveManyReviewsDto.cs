@@ -1,6 +1,6 @@
 using AnonymousStudentReviews.Core.Abstractions;
 
-namespace AnonymousStudentReviews.UseCases.Reviews.Retrieve;
+namespace AnonymousStudentReviews.UseCases.Reviews.RetrieveMany;
 
 public class RetrieveManyReviewsDto
 {
