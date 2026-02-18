@@ -1,14 +1,21 @@
 using AnonymousStudentReviews.Api.Extensions;
+using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.UseCases.Universities.RetrieveMany;
 
 using FluentValidation;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+using OpenIddict.Validation.AspNetCore;
 
 namespace AnonymousStudentReviews.Api.Features.Universities.RetrieveMany;
 
 [Route("api/universities")]
 [ApiController]
+[Authorize(
+    AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme,
+    Roles = RoleNameConstants.Admin)]
 public class RetrieveManyUniversitiesController : ControllerBase
 {
     private readonly IRetrieveManyUniversitiesService _retrieveManyUniversitiesService;
@@ -49,7 +56,7 @@ public class RetrieveManyUniversitiesController : ControllerBase
         return new RetrieveManyUniversitiesDto
         {
             Limit = request.Limit,
-            Cursor = request.Cursor,
+            Offset = request.Offset,
             Query = request.Query,
             Name = request.Name,
             City = request.City,

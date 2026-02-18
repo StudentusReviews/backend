@@ -8,5 +8,11 @@ public interface IUniversityRepository
         SortOrder sortOrder,
         UniversityCursor? cursor, int limit);
 
+    Task<OffsetPagedResult<UniversityPreview>> GetAllOffsetAsync(
+        string? query, string? name, string? city,
+        UniversitySortBy sortBy,
+        SortOrder sortOrder,
+        int offset, int limit);
+
     Task<Result<UniversityDetailedPreview>> FindByIdFetchDetailedPreviewAsync(Guid universityId);
 }
