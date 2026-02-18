@@ -4,6 +4,7 @@ using AnonymousStudentReviews.Core.Aggregates.Dummy;
 using AnonymousStudentReviews.Core.Aggregates.EmailVerificationToken;
 using AnonymousStudentReviews.Core.Aggregates.Review;
 using AnonymousStudentReviews.Core.Aggregates.Role;
+using AnonymousStudentReviews.Core.Aggregates.University;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.Infrastructure.AllowedEmailDomains;
 using AnonymousStudentReviews.Infrastructure.Data;
@@ -14,6 +15,7 @@ using AnonymousStudentReviews.Infrastructure.Options;
 using AnonymousStudentReviews.Infrastructure.Password;
 using AnonymousStudentReviews.Infrastructure.Reviews;
 using AnonymousStudentReviews.Infrastructure.Roles;
+using AnonymousStudentReviews.Infrastructure.Universities;
 using AnonymousStudentReviews.Infrastructure.Users;
 using AnonymousStudentReviews.UseCases.Abstractions;
 using AnonymousStudentReviews.UseCases.Login.Abstractions;
@@ -63,7 +65,7 @@ public static class InfrastructureServiceExtensions
     private static void AddMainDbContextWithPostgres(IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("MainDatabase");
-        services.AddDbContext<ApplicationDbContext>(options =>
+        services.AddDbContext<ApplicationDatabaseContext>(options =>
         {
             options.UseNpgsql(connectionString);
             options.UseOpenIddict();
@@ -77,7 +79,7 @@ public static class InfrastructureServiceExtensions
                     }
                 }
 
-                var roles = new[] { "Student", "Admin" };
+                var roles = new[] { RoleNameConstants.Student, RoleNameConstants.Admin };
 
                 foreach (var role in roles)
                 {
@@ -124,6 +126,11 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IEmailVerificationTokenRepository, EmailVerificationTokenRepository>();
         services.AddScoped<IReviewRepository, ReviewRepository>();
+        services.AddScoped<IUniversityRepository, UniversityRepository>();
+        services.AddScoped<IReviewRepository, ReviewRepository>();
+        services.AddScoped<IUniversityRepository, UniversityRepository>();
+        services.AddScoped<IReviewRepository, ReviewRepository>();
+        services.AddScoped<IUniversityRepository, UniversityRepository>();
     }
 
     private static void RegisterServices(IServiceCollection services, IConfiguration configuration)

@@ -41,6 +41,7 @@ public class EditReviewService : IEditReviewService
             return Result.Failure<Review>(ReviewErrors.AccessDenied);
         }
 
+
         var updateResult = review.Update(dto.Score, dto.Body);
 
         if (updateResult.IsFailure)
@@ -49,6 +50,7 @@ public class EditReviewService : IEditReviewService
         }
 
         await _unitOfWork.SaveChangesAsync();
+
 
         return Result.Success(review);
     }

@@ -1,4 +1,5 @@
 using AnonymousStudentReviews.Core;
+using AnonymousStudentReviews.Core.Aggregates.University;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -29,5 +30,13 @@ public class UniversityConfiguration : IEntityTypeConfiguration<University>
             .HasForeignKey(e => e.UniversityId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
+
+        builder
+            .Property(e => e.IconUrl)
+            .HasMaxLength(500);
+
+        builder
+            .Property(e => e.Description)
+            .HasMaxLength(1000);
     }
 }

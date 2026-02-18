@@ -8,9 +8,9 @@ namespace AnonymousStudentReviews.Infrastructure.EmailVerificationToken;
 
 public class EmailVerificationTokenRepository : IEmailVerificationTokenRepository
 {
-    private readonly ApplicationDbContext _context;
+    private readonly ApplicationDatabaseContext _context;
 
-    public EmailVerificationTokenRepository(ApplicationDbContext context)
+    public EmailVerificationTokenRepository(ApplicationDatabaseContext context)
     {
         _context = context;
     }

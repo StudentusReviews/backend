@@ -6,5 +6,5 @@ public class AllowedEmailDomain
     public Guid UniversityId { get; set; }
     public string Domain { get; set; }
 
-    public University University { get; set; }
+    public University.University University { get; set; }
 }

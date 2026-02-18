@@ -3,17 +3,20 @@ using System;
 using AnonymousStudentReviews.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
+namespace AnonymousStudentReviews.Infrastructure.Data.Migrations.ApplicationDatabase
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(ApplicationDatabaseContext))]
+    [Migration("20260217095815_AddIsDeletedColumnToReviewEntity")]
+    partial class AddIsDeletedColumnToReviewEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -110,6 +113,11 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
                     b.Property<int>("Score")
                         .HasColumnType("integer");
 
@@ -130,6 +138,47 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
                     b.ToTable("reviews", (string)null);
                 });
 
+            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.Review.ReviewOutbox", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ReviewId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("StateId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReviewId")
+                        .IsUnique();
+
+                    b.HasIndex("StateId");
+
+                    b.ToTable("review_outbox", (string)null);
+                });
+
+            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.Review.ReviewOutboxStateEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("review_outbox_states", (string)null);
+                });
+
             modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.Role.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -143,7 +192,62 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("roles", (string)null);
+                });
+
+            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.University.University", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("City")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("Website")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("universities", (string)null);
+                });
+
+            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.University.UniversityStatistics", b =>
+                {
+                    b.Property<Guid>("UniversityId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Rank")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
+
+                    b.Property<int>("TotalReviewCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
+
+                    b.Property<int>("TotalScoreSum")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
+
+                    b.HasKey("UniversityId");
+
+                    b.ToTable("university_statistics", (string)null);
                 });
 
             modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.User.User", b =>
@@ -191,30 +295,6 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
                     b.HasIndex("UniversityId");
 
                     b.ToTable("users", (string)null);
-                });
-
-            modelBuilder.Entity("AnonymousStudentReviews.Core.University", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("City")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Website")
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("universities", (string)null);
                 });
 
             modelBuilder.Entity("OpenIddict.EntityFrameworkCore.Models.OpenIddictEntityFrameworkCoreApplication", b =>
@@ -442,7 +522,7 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain.AllowedEmailDomain", b =>
                 {
-                    b.HasOne("AnonymousStudentReviews.Core.University", "University")
+                    b.HasOne("AnonymousStudentReviews.Core.Aggregates.University.University", "University")
                         .WithMany("AllowedEmailDomains")
                         .HasForeignKey("UniversityId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -473,9 +553,39 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.Review.ReviewOutbox", b =>
+                {
+                    b.HasOne("AnonymousStudentReviews.Core.Aggregates.Review.Review", "Review")
+                        .WithOne()
+                        .HasForeignKey("AnonymousStudentReviews.Core.Aggregates.Review.ReviewOutbox", "ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AnonymousStudentReviews.Core.Aggregates.Review.ReviewOutboxStateEntity", "State")
+                        .WithMany("ReviewOutboxItems")
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Review");
+
+                    b.Navigation("State");
+                });
+
+            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.University.UniversityStatistics", b =>
+                {
+                    b.HasOne("AnonymousStudentReviews.Core.Aggregates.University.University", "University")
+                        .WithOne("UniversityStatistics")
+                        .HasForeignKey("AnonymousStudentReviews.Core.Aggregates.University.UniversityStatistics", "UniversityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("University");
+                });
+
             modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.User.User", b =>
                 {
-                    b.HasOne("AnonymousStudentReviews.Core.University", "University")
+                    b.HasOne("AnonymousStudentReviews.Core.Aggregates.University.University", "University")
                         .WithMany("Users")
                         .HasForeignKey("UniversityId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -522,9 +632,17 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AnonymousStudentReviews.Core.University", b =>
+            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.Review.ReviewOutboxStateEntity", b =>
+                {
+                    b.Navigation("ReviewOutboxItems");
+                });
+
+            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.University.University", b =>
                 {
                     b.Navigation("AllowedEmailDomains");
+
+                    b.Navigation("UniversityStatistics")
+                        .IsRequired();
 
                     b.Navigation("Users");
                 });

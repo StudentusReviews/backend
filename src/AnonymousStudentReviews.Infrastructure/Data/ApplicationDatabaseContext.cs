@@ -1,8 +1,8 @@
-using AnonymousStudentReviews.Core;
 using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
 using AnonymousStudentReviews.Core.Aggregates.Dummy;
 using AnonymousStudentReviews.Core.Aggregates.Review;
 using AnonymousStudentReviews.Core.Aggregates.Role;
+using AnonymousStudentReviews.Core.Aggregates.University;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.Infrastructure.Data.Configurations;
 
@@ -10,13 +10,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AnonymousStudentReviews.Infrastructure.Data;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDatabaseContext : DbContext
 {
-    protected ApplicationDbContext()
+    protected ApplicationDatabaseContext()
     {
     }
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    public ApplicationDatabaseContext(DbContextOptions<ApplicationDatabaseContext> options) : base(options)
     {
     }
 

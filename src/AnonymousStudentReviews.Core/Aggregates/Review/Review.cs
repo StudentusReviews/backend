@@ -5,15 +5,14 @@ namespace AnonymousStudentReviews.Core.Aggregates.Review;
 public class Review
 {
     public Guid Id { get; set; }
-
     public Guid UniversityId { get; set; }
     public Guid UserId { get; set; }
-
     public int Score { get; set; }
     public string Body { get; set; } = string.Empty;
-
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+
+    public University.University? University { get; init; }
 
     public static Result<Review> Create(Guid universityId, Guid userId, int score, string body)
     {

@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 using AnonymousStudentReviews.Api;
 using AnonymousStudentReviews.Api.Configurations;
 using AnonymousStudentReviews.Api.Options;
@@ -11,7 +13,7 @@ using Serilog.Extensions.Logging;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHealthChecks()
-    .AddDbContextCheck<ApplicationDbContext>();
+    .AddDbContextCheck<ApplicationDatabaseContext>();
 
 var corsOptions = new CorsOptions();
 builder.Configuration.GetSection(CorsOptions.SectionName).Bind(corsOptions);
@@ -51,7 +53,11 @@ builder.Services.AddAuthentication(options =>
 
 builder.AddLoggerConfigs();
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    }); ;
 
 builder.Services.AddRazorPages();
 

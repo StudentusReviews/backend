@@ -8,9 +8,9 @@ namespace AnonymousStudentReviews.Infrastructure.AllowedEmailDomains;
 
 public class AllowedEmailDomainRepository : IAllowedEmailDomainRepository
 {
-    private readonly ApplicationDbContext _context;
+    private readonly ApplicationDatabaseContext _context;
 
-    public AllowedEmailDomainRepository(ApplicationDbContext context)
+    public AllowedEmailDomainRepository(ApplicationDatabaseContext context)
     {
         _context = context;
     }
