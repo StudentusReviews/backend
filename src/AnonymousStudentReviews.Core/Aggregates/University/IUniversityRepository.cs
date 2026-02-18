@@ -7,4 +7,6 @@ public interface IUniversityRepository
     Task<CursorPagedResult<UniversityPreview>> GetAllAsync(string? query, string? name, string? city, SortBy sortBy,
         SortOrder sortOrder,
         UniversityCursor? cursor, int limit);
+
+    Task<Result<UniversityDetailedPreview>> FindByIdFetchDetailedPreviewAsync(Guid universityId);
 }

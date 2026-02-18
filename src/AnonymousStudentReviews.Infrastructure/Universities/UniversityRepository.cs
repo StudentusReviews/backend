@@ -165,4 +165,28 @@ public class UniversityRepository : IUniversityRepository
 
         return new CursorPagedResult<UniversityPreview>(items, encodedNextCursor, hasNextPage);
     }
+
+    public async Task<Result<UniversityDetailedPreview>> FindByIdFetchDetailedPreviewAsync(Guid universityId)
+    {
+        var result = await _context.Universities
+            .Select(e => new UniversityDetailedPreview
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Description = e.Description,
+                AverageScore = e.Reviews.Any() ? e.Reviews.Average(r => r.Score) : 0,
+                ReviewCount = e.Reviews.Any() ? e.Reviews.Count() : 0,
+                City = e.City,
+                Website = e.Website,
+                CreatedAt = e.CreatedAt,
+                IconUrl = e.IconUrl
+            }).FirstOrDefaultAsync(e => e.Id == universityId);
+
+        if (result is null)
+        {
+            return Result.Failure<UniversityDetailedPreview>(UniversityErrors.NotFound);
+        }
+
+        return result;
+    }
 }
