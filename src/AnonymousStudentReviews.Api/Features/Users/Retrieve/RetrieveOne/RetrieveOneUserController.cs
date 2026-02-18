@@ -11,7 +11,7 @@ namespace AnonymousStudentReviews.Api.Features.Users.Retrieve.RetrieveOne;
 
 [Authorize(
     AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme,
-    Roles = "Admin,SuperAdmin"
+    Roles = RoleNameConstants.AdminOrSuperAdmin
 )]
 [Route("api/users/{userId:guid}")]
 [ApiController]

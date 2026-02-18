@@ -1,5 +1,6 @@
 using AnonymousStudentReviews.Api.Extensions;
 using AnonymousStudentReviews.UseCases.Users.Edit;
+using AnonymousStudentReviews.Core.Aggregates.Role;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -10,7 +11,7 @@ namespace AnonymousStudentReviews.Api.Features.Users.Edit;
 [Route("api/users/{userId:guid}")]
 [Authorize(
     AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme,
-    Roles = "Admin,SuperAdmin"
+    Roles = RoleNameConstants.AdminOrSuperAdmin
 )]
 [ApiController]
 public class EditUserController : ControllerBase

@@ -1,6 +1,7 @@
 using AnonymousStudentReviews.Api.Extensions;
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.User;
+using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.UseCases.Users.Retrieve.RetrieveMany;
 
 using FluentValidation;
@@ -13,7 +14,7 @@ namespace AnonymousStudentReviews.Api.Features.Users.Retrieve.RetrieveMany;
 
 [Authorize(
     AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme,
-    Roles = "Admin,SuperAdmin"
+    Roles = RoleNameConstants.AdminOrSuperAdmin
 )]
 [Route("api/users")]
 [ApiController]

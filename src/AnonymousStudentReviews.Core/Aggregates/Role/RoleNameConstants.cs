@@ -2,7 +2,9 @@ namespace AnonymousStudentReviews.Core.Aggregates.Role;
 
 public static class RoleNameConstants
 {
-    public static string Admin = "Admin";
-    public static string Student = "Student";
-    public static string SuperAdmin = "SuperAdmin";
+    public const string Admin = "Admin";
+    public const string Student = "Student";
+    public const string SuperAdmin = "SuperAdmin";
+    
+    public const string AdminOrSuperAdmin = Admin + "," + SuperAdmin;
 }
