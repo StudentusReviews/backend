@@ -70,21 +70,75 @@ public class UniversityRepository : IUniversityRepository
                 break;
 
             case SortBy.Rating:
-                throw new NotImplementedException("Rating sort not yet implemented.");
+                if (cursor != null && double.TryParse(cursor.Value, NumberStyles.Float, CultureInfo.InvariantCulture,
+                        out var cursorAverageScore))
+                {
+                    if (sortOrder == SortOrder.Descending)
+                    {
+                        dbQuery = dbQuery.Where(u =>
+                            (u.Reviews.Any() ? u.Reviews.Average(e => e.Score) : 0) < cursorAverageScore ||
+                            ((u.Reviews.Any() ? u.Reviews.Average(e => e.Score) : 0) == cursorAverageScore &&
+                             u.Id > cursor.Id));
+                    }
+                    else
+                    {
+                        dbQuery = dbQuery.Where(u =>
+                            (u.Reviews.Any() ? u.Reviews.Average(e => e.Score) : 0) > cursorAverageScore ||
+                            ((u.Reviews.Any() ? u.Reviews.Average(e => e.Score) : 0) == cursorAverageScore &&
+                             u.Id > cursor.Id));
+                    }
+                }
+
+                dbQuery = sortOrder == SortOrder.Descending
+                    ? dbQuery.OrderByDescending(u =>
+                            u.Reviews.Any() ? u.Reviews.Average(e => e.Score) : 0)
+                        .ThenBy(u => u.Id)
+                    : dbQuery.OrderBy(u =>
+                            u.Reviews.Any() ? u.Reviews.Average(e => e.Score) : 0)
+                        .ThenBy(u => u.Id);
+                break;
 
             case SortBy.ReviewCount:
-                throw new NotImplementedException("Review count sort not yet implemented.");
+                if (cursor != null && int.TryParse(cursor.Value, NumberStyles.Integer, CultureInfo.InvariantCulture,
+                        out var cursorReviewCount))
+                {
+                    if (sortOrder == SortOrder.Descending)
+                    {
+                        dbQuery = dbQuery.Where(u =>
+                            (u.Reviews.Any() ? u.Reviews.Count() : 0) < cursorReviewCount ||
+                            ((u.Reviews.Any() ? u.Reviews.Count : 0) == cursorReviewCount &&
+                             u.Id > cursor.Id));
+                    }
+                    else
+                    {
+                        dbQuery = dbQuery.Where(u =>
+                            (u.Reviews.Any() ? u.Reviews.Count() : 0) > cursorReviewCount ||
+                            ((u.Reviews.Any() ? u.Reviews.Count() : 0) == cursorReviewCount &&
+                             u.Id > cursor.Id));
+                    }
+                }
+
+                dbQuery = sortOrder == SortOrder.Descending
+                    ? dbQuery.OrderByDescending(u =>
+                            u.Reviews.Any() ? u.Reviews.Count() : 0)
+                        .ThenBy(u => u.Id)
+                    : dbQuery.OrderBy(u =>
+                            u.Reviews.Any() ? u.Reviews.Count() : 0)
+                        .ThenBy(u => u.Id);
+                break;
         }
 
-
-        var projectedQuery = dbQuery.Select(u => new UniversityPreview
-        {
-            Id = u.Id,
-            Name = u.Name,
-            City = u.City,
-            Website = u.Website,
-            CreatedAt = u.CreatedAt
-        });
+        var projectedQuery = dbQuery
+            .Select(u => new UniversityPreview
+            {
+                Id = u.Id,
+                Name = u.Name,
+                City = u.City,
+                Website = u.Website,
+                CreatedAt = u.CreatedAt,
+                AverageScore = u.Reviews.Any() ? u.Reviews.Average(e => e.Score) : 0,
+                ReviewCount = u.Reviews.Any() ? u.Reviews.Count() : 0
+            });
 
 
         var items = await projectedQuery.Take(limit + 1).ToListAsync();
@@ -100,6 +154,8 @@ public class UniversityRepository : IUniversityRepository
             var nextValue = sortBy switch
             {
                 SortBy.Newest => lastItem.CreatedAt.ToString("O"),
+                SortBy.Rating => lastItem.AverageScore.ToString(CultureInfo.InvariantCulture),
+                SortBy.ReviewCount => lastItem.ReviewCount.ToString(),
                 _ => string.Empty
             };
 
