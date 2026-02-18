@@ -1,0 +1,21 @@
+name: Application Database Migration
+
+on:
+  push:
+    branches: [ main, dev ]
+    paths:
+      - "src/AnonymousStudentReviews.Infrastructure/Data/Migrations/ApplicationDatabase"
+  pull_request:
+    branches: [ main, dev ]
+    paths:
+      - "src/AnonymousStudentReviews.Infrastructure/Data/Migrations/ApplicationDatabase"
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+
+jobs:
+  start-migration:
+    uses: ./.github/workflows/db_migrations.yml
+    with:
+      db_context: "ApplicationDbContext"

@@ -1,0 +1,60 @@
+name: db migrations
+on:
+  workflow_call:
+    inputs:
+      db_context:
+        required: true
+        type: string
+      
+permissions:
+  id-token: write
+
+jobs:
+  create:
+    runs-on: ubuntu-latest
+    outputs:
+      timestamp: ${{ steps.timestamp.outputs.timestamp }}
+    steps:
+    - name: Get current timestamp
+      id: timestamp
+      run: echo "timestamp=$(date +'%Y_%m_%d_%H_%M_%S')" >> $GITHUB_OUTPUT
+    - uses: actions/checkout@v5
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: |
+          8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: create migration
+      run: |
+        dotnet ef migrations script \
+        --idempotent \
+        --context ${{ inputs.db_context }} \
+        --project src/AnonymousStudentReviews.Infrastructure \
+        --startup-project src/AnonymousStudentReviews.Api \
+        --output "${{ inputs.db_context }}_${{ steps.timestamp.outputs.timestamp }}.sql"
+    - name: Archive migration script
+      uses: actions/upload-artifact@v4
+      with:
+        name: migration-script-${{ inputs.db_context }}
+        path: ${{ inputs.db_context }}_${{ steps.timestamp.outputs.timestamp }}.sql
+
+  push:
+    environment: db_migration  
+    runs-on: ubuntu-latest
+    needs: create
+    steps:     
+    - name: configure aws credentials
+      uses: aws-actions/configure-aws-credentials@v5.1.1
+      with:
+        role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/github_actions_oidc
+        role-session-name: GHA_DB_MIGRATIONS
+        aws-region: eu-central-1
+    - name: Download migration script
+      uses: actions/download-artifact@v4
+      with:
+        name: migration-script-${{ inputs.db_context }}
+    - name: Put migration script to S3
+      run: |
+        aws s3 cp ${{ inputs.db_context }}_${{ needs.create.outputs.timestamp }}.sql s3://${{ vars.AWS_MIGRATIONS_BUCKET_NAME }}/migrations/${{ inputs.db_context }}_${{ needs.create.outputs.timestamp }}.sql
