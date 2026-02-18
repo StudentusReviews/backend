@@ -19,4 +19,4 @@ jobs:
   start-migration:
     uses: ./.github/workflows/db_migrations.yml
     with:
-      db_context: "ApplicationDbContext"
+      db_context: "ApplicationDatabaseContext"
