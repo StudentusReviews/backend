@@ -309,4 +309,19 @@ public class UniversityRepository : IUniversityRepository
         _context.Universities.Add(university);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<Result<University>> UpdateIconUrlAsync(Guid universityId, string iconUrl)
+    {
+        var getResult = await FindByIdAsync(universityId);
+
+        if (getResult.IsFailure)
+        {
+            return Result.Failure<University>(getResult.Error);
+        }
+
+        var university = getResult.Value;
+        university.IconUrl = iconUrl;
+
+        return await UpdateAsync(university);
+    }
 }

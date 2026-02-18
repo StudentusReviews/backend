@@ -11,6 +11,7 @@ using AnonymousStudentReviews.UseCases.Universities.Delete;
 using AnonymousStudentReviews.UseCases.Universities.RetrieveMany;
 using AnonymousStudentReviews.UseCases.Universities.RetrieveOne;
 using AnonymousStudentReviews.UseCases.Universities.Update;
+using AnonymousStudentReviews.UseCases.Universities.UploadIcon;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -81,5 +82,6 @@ public static class UseCasesServiceExtensions
         services.AddScoped<IRetrieveOneReviewService, RetrieveOneReviewService>();
         services.AddScoped<IUpdateUniversityService, UpdateUniversityService>();
         services.AddScoped<IDeleteUniversityService, DeleteUniversityService>();
+        services.AddScoped<IUploadUniversityIconService, UploadUniversityIconService>();
     }
 }

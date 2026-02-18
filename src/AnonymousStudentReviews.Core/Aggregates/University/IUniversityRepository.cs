@@ -23,4 +23,6 @@ public interface IUniversityRepository
     Task<Result> DeleteAsync(Guid universityId);
 
     Task<Result<University>> FindByIdAsync(Guid universityId);
+
+    Task<Result<University>> UpdateIconUrlAsync(Guid universityId, string iconUrl);
 }
