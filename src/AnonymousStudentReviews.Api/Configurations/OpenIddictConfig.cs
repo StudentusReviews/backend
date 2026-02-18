@@ -1,3 +1,5 @@
+using System.Security.Cryptography.X509Certificates;
+
 using AnonymousStudentReviews.Infrastructure.Data;
 
 using OpenIddict.Abstractions;
@@ -38,6 +40,45 @@ public static class OpenIddictConfig
                 {
                     options.AddDevelopmentEncryptionCertificate()
                         .AddDevelopmentSigningCertificate();
+                }
+
+                if (!builder.Environment.IsDevelopment())
+                {
+                    var encryptionCertificateFilePath =
+                        builder.Configuration["OPENIDDICT_ENCRYPTION_CERTIFICATE_FILE_CONTAINER_PATH"];
+
+                    var signingCertificateFilePath =
+                        builder.Configuration["OPENIDDICT_SIGNING_CERTIFICATE_FILE_CONTAINER_PATH"];
+
+                    if (encryptionCertificateFilePath is null || signingCertificateFilePath is null)
+                    {
+                        throw new Exception(
+                            "OPENIDDICT_ENCRYPTION_CERTIFICATE_FILE_CONTAINER_PATH or OPENIDDICT_SIGNING_CERTIFICATE_FILE_CONTAINER_PATH not set in env");
+                    }
+
+                    var encryptionCertificatePassword =
+                        builder.Configuration["OPENIDDICT_ENCRYPTION_CERTIFICATE_PASSWORD"];
+
+                    var signingCertificatePassword =
+                        builder.Configuration["OPENIDDICT_SIGNING_CERTIFICATE_PASSWORD"];
+
+                    if (encryptionCertificatePassword is null || signingCertificatePassword is null)
+                    {
+                        throw new Exception(
+                            "OPENIDDICT_ENCRYPTION_CERTIFICATE_PASSWORD or OPENIDDICT_SIGNING_CERTIFICATE_PASSWORD not set in env");
+                    }
+
+                    var encryptionCert =
+                        X509CertificateLoader.LoadPkcs12FromFile(encryptionCertificateFilePath,
+                            encryptionCertificatePassword);
+
+                    options.AddEncryptionCertificate(encryptionCert);
+
+                    var signingCert =
+                        X509CertificateLoader.LoadPkcs12FromFile(signingCertificateFilePath,
+                            signingCertificatePassword);
+
+                    options.AddSigningCertificate(signingCert);
                 }
 
 
