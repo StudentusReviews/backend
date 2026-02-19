@@ -25,6 +25,7 @@ public class Worker : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
+        Console.WriteLine("Starting OpenIddict application registration...");
         await using var scope = _serviceProvider.CreateAsyncScope();
 
         var openIddictApplicationManager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
@@ -83,11 +84,13 @@ public class Worker : IHostedService
             if (clientFromDatabase is null)
             {
                 await openIddictApplicationManager.CreateAsync(openIddictApplicationDescriptor, cancellationToken);
+                Console.WriteLine($"Created client with id {openIddictApplicationOptions.ClientId}");
             }
             else
             {
                 await openIddictApplicationManager.UpdateAsync(clientFromDatabase, openIddictApplicationDescriptor,
                     cancellationToken);
+                Console.WriteLine($"Updated client with id {openIddictApplicationOptions.ClientId}");
             }
         }
     }
