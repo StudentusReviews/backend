@@ -6,6 +6,7 @@ using AnonymousStudentReviews.Api.Options;
 using AnonymousStudentReviews.Infrastructure.Data;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.DataProtection;
 
 using Serilog;
 using Serilog.Extensions.Logging;
@@ -51,13 +52,15 @@ builder.Services.AddAuthentication(options =>
         options.LogoutPath = "/api/logout";
     });
 
+builder.Services.AddAuthorization();
+
 builder.AddLoggerConfigs();
 
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    }); ;
+    });
 
 builder.Services.AddRazorPages();
 
