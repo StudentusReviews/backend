@@ -134,7 +134,7 @@ public static class InfrastructureServiceExtensions
                     }
                 }
 
-                var roles = new[] { RoleNameConstants.Student, RoleNameConstants.Admin };
+                var roles = new[] { RoleNameConstants.Student, RoleNameConstants.Admin, RoleNameConstants.SuperAdmin };
 
                 foreach (var role in roles)
                 {
@@ -183,10 +183,6 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IEmailVerificationTokenRepository, EmailVerificationTokenRepository>();
-        services.AddScoped<IReviewRepository, ReviewRepository>();
-        services.AddScoped<IUniversityRepository, UniversityRepository>();
-        services.AddScoped<IReviewRepository, ReviewRepository>();
-        services.AddScoped<IUniversityRepository, UniversityRepository>();
         services.AddScoped<IReviewRepository, ReviewRepository>();
         services.AddScoped<IUniversityRepository, UniversityRepository>();
     }

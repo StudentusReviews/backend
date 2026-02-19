@@ -9,6 +9,11 @@ using AnonymousStudentReviews.UseCases.Reviews.RetrieveMany;
 using AnonymousStudentReviews.UseCases.Reviews.RetrieveOne;
 using AnonymousStudentReviews.UseCases.Universities.RetrieveMany;
 using AnonymousStudentReviews.UseCases.Universities.RetrieveOne;
+using AnonymousStudentReviews.UseCases.Users.Edit;
+using AnonymousStudentReviews.UseCases.Users.Retrieve.RetrieveMany;
+using AnonymousStudentReviews.UseCases.Users.Retrieve.RetrieveOne;
+using AnonymousStudentReviews.UseCases.Users.Roles.Assign;
+using AnonymousStudentReviews.UseCases.Users.Roles.Remove;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -62,20 +67,21 @@ public static class UseCasesServiceExtensions
         services.AddScoped<IRegistrationService, RegistrationService>();
         services.AddScoped<IAccountVerificationService, AccountVerificationService>();
         services.AddScoped<ILoginService, LoginService>();
-        services.AddScoped<ICreateReviewService, CreateReviewService>();
-        services.AddScoped<IEditReviewService, EditReviewService>();
-        services.AddScoped<IDeleteReviewService, DeleteReviewService>();
-        services.AddScoped<IRetrieveManyUniversitiesService, RetrieveManyUniversitiesService>();
-        services.AddScoped<ICreateReviewService, CreateReviewService>();
-        services.AddScoped<IEditReviewService, EditReviewService>();
-        services.AddScoped<IDeleteReviewService, DeleteReviewService>();
-        services.AddScoped<IRetrieveManyUniversitiesService, RetrieveManyUniversitiesService>();
-        services.AddScoped<ICreateReviewService, CreateReviewService>();
-        services.AddScoped<IEditReviewService, EditReviewService>();
-        services.AddScoped<IDeleteReviewService, DeleteReviewService>();
+
+        services.AddScoped<IRetrieveManyUsersService, RetrieveManyUsersService>();
+        services.AddScoped<IRetrieveOneUserService, RetrieveOneUserService>();
+        services.AddScoped<IEditUserService, EditUserService>();
+
         services.AddScoped<IRetrieveManyUniversitiesService, RetrieveManyUniversitiesService>();
         services.AddScoped<IRetrieveOneUniversityService, RetrieveOneUniversityService>();
+
+        services.AddScoped<ICreateReviewService, CreateReviewService>();
+        services.AddScoped<IEditReviewService, EditReviewService>();
+        services.AddScoped<IDeleteReviewService, DeleteReviewService>();
         services.AddScoped<IRetrieveManyReviewsService, RetrieveManyReviewsService>();
         services.AddScoped<IRetrieveOneReviewService, RetrieveOneReviewService>();
+
+        services.AddScoped<IAssignUserRoleService, AssignUserRoleService>();
+        services.AddScoped<IRemoveUserRoleService, RemoveUserRoleService>();
     }
 }
