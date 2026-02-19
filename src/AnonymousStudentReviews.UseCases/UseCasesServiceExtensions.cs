@@ -1,4 +1,7 @@
 using AnonymousStudentReviews.UseCases.AccountVerification;
+using AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.Create;
+using AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.Delete;
+using AnonymousStudentReviews.UseCases.ApplicationToAddAUniversity.View;
 using AnonymousStudentReviews.UseCases.Dummies.Create;
 using AnonymousStudentReviews.UseCases.Login;
 using AnonymousStudentReviews.UseCases.Registration;
@@ -75,6 +78,10 @@ public static class UseCasesServiceExtensions
         services.AddScoped<IDeleteReviewService, DeleteReviewService>();
         services.AddScoped<IRetrieveManyUniversitiesService, RetrieveManyUniversitiesService>();
         services.AddScoped<IRetrieveOneUniversityService, RetrieveOneUniversityService>();
+        services.AddScoped<ICreateApplicationToAddAUniversityService, CreateApplicationToAddAUniversityService>();
+        services.AddScoped<IDeleteApplicationToAddAUniversityService, DeleteApplicationToAddAUniversityService>();
+        services.AddScoped<IViewAllApplicationsToAddAUniversityService, ViewAllApplicationToAddAUniversityService>();
+        services.AddScoped<IViewByIdApplicationToAddAUniversityService, ViewByIdApplicationToAddAUniversityService>();
         services.AddScoped<IRetrieveManyReviewsService, RetrieveManyReviewsService>();
         services.AddScoped<IRetrieveOneReviewService, RetrieveOneReviewService>();
     }

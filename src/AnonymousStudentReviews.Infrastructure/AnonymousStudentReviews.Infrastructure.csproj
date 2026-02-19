@@ -23,8 +23,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\AnonymousStudentReviews.Core\AnonymousStudentReviews.Core.csproj"/>
-        <ProjectReference Include="..\AnonymousStudentReviews.UseCases\AnonymousStudentReviews.UseCases.csproj"/>
+        <Folder Include="Data\Migrations\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\AnonymousStudentReviews.Core\AnonymousStudentReviews.Core.csproj" />
+        <ProjectReference Include="..\AnonymousStudentReviews.UseCases\AnonymousStudentReviews.UseCases.csproj" />
     </ItemGroup>
 
 </Project>

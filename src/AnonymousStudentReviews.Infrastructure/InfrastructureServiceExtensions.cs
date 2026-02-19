@@ -1,5 +1,7 @@
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
+using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Base;
+using AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Status;
 using AnonymousStudentReviews.Core.Aggregates.Dummy;
 using AnonymousStudentReviews.Core.Aggregates.EmailVerificationToken;
 using AnonymousStudentReviews.Core.Aggregates.Review;
@@ -7,6 +9,7 @@ using AnonymousStudentReviews.Core.Aggregates.Role;
 using AnonymousStudentReviews.Core.Aggregates.University;
 using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.Infrastructure.AllowedEmailDomains;
+using AnonymousStudentReviews.Infrastructure.Applications;
 using AnonymousStudentReviews.Infrastructure.Data;
 using AnonymousStudentReviews.Infrastructure.Dummies;
 using AnonymousStudentReviews.Infrastructure.Email;
@@ -141,6 +144,21 @@ public static class InfrastructureServiceExtensions
                     InsertRoleIfNotExists(role);
                 }
 
+                void InsertApplicationToAddAUniversityIfNotExists(string name)
+                {
+                    if (context.Set<ApplicationToAddAUniversityStatus>().FirstOrDefault(status => status.Name == name) is null)
+                    {
+                        context.Set<ApplicationToAddAUniversityStatus>().Add(new ApplicationToAddAUniversityStatus { Id = Guid.NewGuid(), Name = name });
+                    }
+                }
+
+                var statuses = new[] { StatusNameConstants.Pending, StatusNameConstants.Approved, StatusNameConstants.Rejected };
+
+                foreach (var status in statuses)
+                {
+                    InsertApplicationToAddAUniversityIfNotExists(status);
+                }
+
                 context.SaveChanges();
             });
         });
@@ -189,6 +207,8 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IUniversityRepository, UniversityRepository>();
         services.AddScoped<IReviewRepository, ReviewRepository>();
         services.AddScoped<IUniversityRepository, UniversityRepository>();
+        services.AddScoped<IApplicationToAddAUniversityRepository, ApplicationToAddAUniversityRepository>();
+        services.AddScoped<IApplicationToAddAUniversityStatusRepository, ApplicationToAddAUniversityStatusRepository>();
     }
 
     private static void RegisterServices(IServiceCollection services, IConfiguration configuration)

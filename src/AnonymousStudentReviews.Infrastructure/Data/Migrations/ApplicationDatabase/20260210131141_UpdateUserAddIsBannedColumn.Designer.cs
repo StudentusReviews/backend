@@ -43,6 +43,68 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations.ApplicationData
                     b.ToTable("allowed_email_domains", (string)null);
                 });
 
+            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Base.ApplicationToAddAUniversity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ApplicationToAddAUniversityStatusId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Comment")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DomainName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("UniversityName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationToAddAUniversityStatusId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("applications_to_add_a_university", (string)null);
+                });
+
+            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Status.ApplicationToAddAUniversityStatus", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("application_to_add_a_university_statuses", (string)null);
+                });
+
             modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.Dummy.Dummy", b =>
                 {
                     b.Property<long>("Id")
@@ -417,6 +479,25 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations.ApplicationData
                     b.Navigation("University");
                 });
 
+            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Base.ApplicationToAddAUniversity", b =>
+                {
+                    b.HasOne("AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Status.ApplicationToAddAUniversityStatus", "ApplicationToAddAUniversityStatus")
+                        .WithMany("ApplicationToAddAUniversities")
+                        .HasForeignKey("ApplicationToAddAUniversityStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AnonymousStudentReviews.Core.Aggregates.User.User", "User")
+                        .WithMany("ApplicationToAddAUniversities")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationToAddAUniversityStatus");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.Dummy.Dummy", b =>
                 {
                     b.HasOne("AnonymousStudentReviews.Core.Aggregates.User.User", "User")
@@ -486,6 +567,16 @@ namespace AnonymousStudentReviews.Infrastructure.Data.Migrations.ApplicationData
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.ApplicationToAddAUniversity.Status.ApplicationToAddAUniversityStatus", b =>
+                {
+                    b.Navigation("ApplicationToAddAUniversities");
+                });
+
+            modelBuilder.Entity("AnonymousStudentReviews.Core.Aggregates.User.User", b =>
+                {
+                    b.Navigation("ApplicationToAddAUniversities");
                 });
 
             modelBuilder.Entity("AnonymousStudentReviews.Core.University", b =>
