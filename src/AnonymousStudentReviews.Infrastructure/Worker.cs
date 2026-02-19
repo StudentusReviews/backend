@@ -130,6 +130,7 @@ public class Worker : IHostedService
             {
                 await applicationManager.UpdateAsync(clientFromDatabase, openIddictApplicationDescriptor,
                     cancellationToken);
+                Console.WriteLine($"Updated client with id {openIddictApplicationOptions.ClientId}");
             }
         }
     }
