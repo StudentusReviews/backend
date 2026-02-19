@@ -97,7 +97,13 @@ public class SignInManager : ISignInManager
         var userRoleNames = user.Roles.Select(role => role.Name).ToImmutableArray();
 
         claimsIdentity.SetClaim(OpenIddictConstants.Claims.Subject, user.Id.ToString());
+        claimsIdentity.SetClaim(ClaimTypes.NameIdentifier, user.Id.ToString());
+
         claimsIdentity.SetClaims(OpenIddictConstants.Claims.Role, userRoleNames);
+        foreach (var role in userRoleNames)
+        {
+            claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role));
+        }
 
         var principal = new ClaimsPrincipal(claimsIdentity);
 

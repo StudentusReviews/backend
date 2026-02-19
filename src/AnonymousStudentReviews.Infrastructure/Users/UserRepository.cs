@@ -37,7 +37,10 @@ public class UserRepository : IUserRepository
 
     public async Task<Result<User>> FindByIdAsync(Guid id)
     {
-        var result = await _context.Users.FirstOrDefaultAsync(user => user.Id == id);
+        var result = await _context.Users
+            .Include(user => user.University)
+            .Include(user => user.Roles)
+            .FirstOrDefaultAsync(user => user.Id == id);
 
         if (result is null)
         {
@@ -85,5 +88,94 @@ public class UserRepository : IUserRepository
     public void LockOutUser(User user)
     {
         user.LockoutEnd = DateTimeOffset.UtcNow.AddMinutes(_loginOptions.LockoutTimeMinutes);
+    }
+
+    public void Ban(User user)
+    {
+        user.IsBanned = true;
+    }
+
+    public async Task<bool> UserHasRoleAsync(User user, Role role)
+    {
+        return await _context.Users
+            .Include(e => e.Roles)
+            .AnyAsync(e => e.Id == user.Id && e.Roles.Contains(role));
+    }
+
+    public async Task<ICollection<Role>> GetUserRoles(User user)
+    {
+        return await _context.Users
+            .Include(e => e.Roles)
+            .Where(e => e.Id == user.Id)
+            .Select(e => e.Roles)
+            .FirstOrDefaultAsync() ?? [];
+    }
+
+    public async Task<PagedResponse<UserPreview>> GetAllAsync(string? queryString = null, Guid? userId = null,
+        Guid? universityId = null,
+        string? universityName = null,
+        string? emailHash = null, SortBy sortBy = SortBy.UniversityName, SortOrder sortOrder = SortOrder.Ascending,
+        int pageNumber = 1, int pageSize = 10)
+    {
+        var query = _context.Users.Include(user => user.University).AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(queryString))
+        {
+            var queryToGuidResult = Guid.TryParse(queryString, out var queryGuid);
+
+            if (queryToGuidResult)
+            {
+                query = query
+                    .Where(user => user.Id == queryGuid || user.UniversityId == queryGuid);
+            }
+            else
+            {
+                query = query
+                    .Where(user => user.University != null && user.University.Name.Contains(queryString));
+            }
+        }
+
+        if (userId is not null)
+        {
+            query = query.Where(user => user.Id == userId);
+        }
+
+        if (universityId is not null)
+        {
+            query = query.Where(user => user.UniversityId == universityId);
+        }
+
+        if (universityName is not null)
+        {
+            query = query
+                .Where(user => user.University != null && user.University.Name.Contains(universityName));
+        }
+
+        if (emailHash is not null)
+        {
+            query = query.Where(user => user.EmailHash == emailHash);
+        }
+
+        query = (sortBy, sortOrder) switch
+        {
+            (SortBy.UniversityName, SortOrder.Ascending) =>
+                query.OrderBy(u => u.University != null ? u.University.Name : null),
+            (SortBy.UniversityName, SortOrder.Descending) =>
+                query.OrderByDescending(u => u.University != null ? u.University.Name : null),
+            _ => query.OrderBy(u => u.Id)
+        };
+
+        var count = await query.CountAsync();
+
+        var offset = (pageNumber - 1) * pageSize;
+
+        var result = await query.Skip(offset).Take(pageSize).Select(user => new UserPreview
+        {
+            UserId = user.Id,
+            UniversityId = user.UniversityId,
+            UniversityName = user.University != null ? user.University.Name : null
+        }).ToListAsync();
+
+        return new PagedResponse<UserPreview>(result, count, pageNumber, pageSize);
     }
 }

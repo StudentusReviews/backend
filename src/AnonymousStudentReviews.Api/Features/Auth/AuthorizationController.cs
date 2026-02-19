@@ -2,6 +2,7 @@ using System.Security.Claims;
 
 using AnonymousStudentReviews.Api.Features.Auth.Helpers;
 using AnonymousStudentReviews.Api.Features.Auth.ViewModels;
+using AnonymousStudentReviews.Infrastructure.OpenId;
 using AnonymousStudentReviews.UseCases.Login.Abstractions;
 using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 
@@ -153,6 +154,11 @@ public class AuthorizationController : Controller
                     // .SetClaim(Claims.PreferredUsername, await _userManager.GetUserNameAsync(user))
                     .SetClaims(Claims.Role, [.. await _userManager.GetRolesAsync(user)]);
 
+                if (request.HasScope(CustomOpenIdScopes.UniversityId) && user.UniversityId is not null)
+                {
+                    identity.SetClaim(CustomOpenIdClaims.UniversityId, user.UniversityId.ToString());
+                }
+
                 // Note: in this sample, the granted scopes match the requested scope,
                 // but you may want to allow the user to uncheck specific scopes.
                 // For that, simply restrict the list of scopes before calling SetScopes.
@@ -257,6 +263,11 @@ public class AuthorizationController : Controller
             // .SetClaim(Claims.Name, await _userManager.GetUserNameAsync(user))
             // .SetClaim(Claims.PreferredUsername, await _userManager.GetUserNameAsync(user))
             .SetClaims(Claims.Role, [.. await _userManager.GetRolesAsync(user)]);
+
+        if (request.HasScope(CustomOpenIdScopes.UniversityId) && user.UniversityId is not null)
+        {
+            identity.SetClaim(CustomOpenIdClaims.UniversityId, user.UniversityId.ToString());
+        }
 
         // Note: in this sample, the granted scopes match the requested scope,
         // but you may want to allow the user to uncheck specific scopes.
@@ -371,6 +382,11 @@ public class AuthorizationController : Controller
                 // .SetClaim(Claims.PreferredUsername, await _userManager.GetUserNameAsync(user))
                 .SetClaims(Claims.Role, [.. await _userManager.GetRolesAsync(user)]);
 
+            if (request.HasScope(CustomOpenIdScopes.UniversityId) && user.UniversityId is not null)
+            {
+                identity.SetClaim(CustomOpenIdClaims.UniversityId, user.UniversityId.ToString());
+            }
+
             identity.SetDestinations(GetDestinations);
 
             // Returning a SignInResult will ask OpenIddict to issue the appropriate access/identity tokens.
@@ -418,6 +434,16 @@ public class AuthorizationController : Controller
 
                 yield break;
 
+            case CustomOpenIdClaims.UniversityId:
+                yield return Destinations.AccessToken;
+
+                if (claim.Subject!.HasScope(CustomOpenIdScopes.UniversityId))
+                {
+                    yield return Destinations.IdentityToken;
+                }
+
+                yield break;
+
             // Never include the security stamp in the access and identity tokens, as it's a secret value.
             case "AspNet.Identity.SecurityStamp": yield break;
 
@@ -458,6 +484,11 @@ public class AuthorizationController : Controller
         if (User.HasScope(Scopes.Roles))
         {
             claims[Claims.Role] = await _userManager.GetRolesAsync(user);
+        }
+
+        if (User.HasScope(CustomOpenIdScopes.UniversityId) && user.UniversityId is not null)
+        {
+            claims[CustomOpenIdClaims.UniversityId] = user.UniversityId;
         }
 
         return Ok(claims);
