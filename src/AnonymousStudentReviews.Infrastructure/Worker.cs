@@ -30,7 +30,7 @@ public class Worker : IHostedService
 
         var openIddictApplicationManager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
         var openIddictScopeManager = scope.ServiceProvider.GetRequiredService<IOpenIddictScopeManager>();
-        
+
         await RegisterScopesAsync(cancellationToken, openIddictScopeManager);
         await RegisterApplicationsAsync(cancellationToken, openIddictApplicationManager);
     }
