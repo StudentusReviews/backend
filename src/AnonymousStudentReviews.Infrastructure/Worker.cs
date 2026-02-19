@@ -2,6 +2,7 @@ using AnonymousStudentReviews.Infrastructure.OpenId;
 using AnonymousStudentReviews.Infrastructure.Options;
 
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
@@ -12,24 +13,26 @@ namespace AnonymousStudentReviews.Infrastructure;
 public class Worker : IHostedService
 {
     private readonly IConfiguration _configuration;
-    private readonly IOpenIddictApplicationManager _openIddictApplicationManager;
     private readonly OpenIddictOptions _openIddictOptions;
-    private readonly IOpenIddictScopeManager _openIddictScopeManager;
+    private readonly IServiceProvider _serviceProvider;
 
     public Worker(IOptions<OpenIddictOptions> openIddictOptions,
-        IConfiguration configuration, IOpenIddictApplicationManager openIddictApplicationManager,
-        IOpenIddictScopeManager openIddictScopeManager)
+        IConfiguration configuration, IServiceProvider serviceProvider)
     {
         _configuration = configuration;
-        _openIddictApplicationManager = openIddictApplicationManager;
-        _openIddictScopeManager = openIddictScopeManager;
+        _serviceProvider = serviceProvider;
         _openIddictOptions = openIddictOptions.Value;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        await RegisterScopesAsync(cancellationToken);
-        await RegisterApplicationsAsync(cancellationToken);
+        await using var scope = _serviceProvider.CreateAsyncScope();
+
+        var openIddictApplicationManager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
+        var openIddictScopeManager = scope.ServiceProvider.GetRequiredService<IOpenIddictScopeManager>();
+
+        await RegisterScopesAsync(cancellationToken, openIddictScopeManager);
+        await RegisterApplicationsAsync(cancellationToken, openIddictApplicationManager);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -49,7 +52,7 @@ public class Worker : IHostedService
         return secret;
     }
 
-    private async Task RegisterScopesAsync(CancellationToken cancellationToken)
+    private async Task RegisterScopesAsync(CancellationToken cancellationToken, IOpenIddictScopeManager scopeManager)
     {
         var universityScopeDescriptor = new OpenIddictScopeDescriptor
         {
@@ -57,16 +60,16 @@ public class Worker : IHostedService
             DisplayName = "University id"
         };
 
-        var scopeExists = await _openIddictScopeManager
+        var scopeExists = await scopeManager
             .FindByNameAsync(universityScopeDescriptor.Name, cancellationToken) is not null;
 
         if (!scopeExists)
         {
-            await _openIddictScopeManager.CreateAsync(universityScopeDescriptor, cancellationToken);
+            await scopeManager.CreateAsync(universityScopeDescriptor, cancellationToken);
         }
     }
 
-    private async Task RegisterApplicationsAsync(CancellationToken cancellationToken)
+    private async Task RegisterApplicationsAsync(CancellationToken cancellationToken, IOpenIddictApplicationManager applicationManager)
     {
         foreach (var openIddictApplicationOptions in _openIddictOptions.Applications)
         {
@@ -116,16 +119,16 @@ public class Worker : IHostedService
             }
 
             var clientFromDatabase =
-                await _openIddictApplicationManager.FindByClientIdAsync(openIddictApplicationOptions.ClientId,
+                await applicationManager.FindByClientIdAsync(openIddictApplicationOptions.ClientId,
                     cancellationToken);
 
             if (clientFromDatabase is null)
             {
-                await _openIddictApplicationManager.CreateAsync(openIddictApplicationDescriptor, cancellationToken);
+                await applicationManager.CreateAsync(openIddictApplicationDescriptor, cancellationToken);
             }
             else
             {
-                await _openIddictApplicationManager.UpdateAsync(clientFromDatabase, openIddictApplicationDescriptor,
+                await applicationManager.UpdateAsync(clientFromDatabase, openIddictApplicationDescriptor,
                     cancellationToken);
                 Console.WriteLine($"Updated client with id {openIddictApplicationOptions.ClientId}");
             }
