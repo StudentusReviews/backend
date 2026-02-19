@@ -153,7 +153,7 @@ public class AuthorizationController : Controller
                     // .SetClaim(Claims.Name, await _userManager.GetUserNameAsync(user))
                     // .SetClaim(Claims.PreferredUsername, await _userManager.GetUserNameAsync(user))
                     .SetClaims(Claims.Role, [.. await _userManager.GetRolesAsync(user)]);
-                
+
                 if (request.HasScope(CustomOpenIdScopes.UniversityId) && user.UniversityId is not null)
                 {
                     identity.SetClaim(CustomOpenIdClaims.UniversityId, user.UniversityId.ToString());
@@ -263,7 +263,7 @@ public class AuthorizationController : Controller
             // .SetClaim(Claims.Name, await _userManager.GetUserNameAsync(user))
             // .SetClaim(Claims.PreferredUsername, await _userManager.GetUserNameAsync(user))
             .SetClaims(Claims.Role, [.. await _userManager.GetRolesAsync(user)]);
-        
+
         if (request.HasScope(CustomOpenIdScopes.UniversityId) && user.UniversityId is not null)
         {
             identity.SetClaim(CustomOpenIdClaims.UniversityId, user.UniversityId.ToString());
@@ -381,7 +381,7 @@ public class AuthorizationController : Controller
                 // .SetClaim(Claims.Name, await _userManager.GetUserNameAsync(user))
                 // .SetClaim(Claims.PreferredUsername, await _userManager.GetUserNameAsync(user))
                 .SetClaims(Claims.Role, [.. await _userManager.GetRolesAsync(user)]);
-            
+
             if (request.HasScope(CustomOpenIdScopes.UniversityId) && user.UniversityId is not null)
             {
                 identity.SetClaim(CustomOpenIdClaims.UniversityId, user.UniversityId.ToString());
@@ -433,7 +433,7 @@ public class AuthorizationController : Controller
                 }
 
                 yield break;
-            
+
             case CustomOpenIdClaims.UniversityId:
                 yield return Destinations.AccessToken;
 
