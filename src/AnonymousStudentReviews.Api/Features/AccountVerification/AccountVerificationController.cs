@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AnonymousStudentReviews.Api.Features.AccountVerification;
 
-[Route("verify_account")]
+[Route("api/verify_account")]
 public class AccountVerificationController : Controller
 {
     private readonly IValidator<AccountVerificationQueryParameters> _accountVerificationQueryParamsValidator;
