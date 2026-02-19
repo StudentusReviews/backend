@@ -1,3 +1,5 @@
+using AnonymousStudentReviews.Infrastructure.OpenId;
+
 using OpenIddict.Abstractions;
 
 namespace AnonymousStudentReviews.Infrastructure.Options;
@@ -130,7 +132,8 @@ public enum ScopeOption
     Email,
     Phone,
     Profile,
-    Roles
+    Roles,
+    UniversityId
 }
 
 public static class ScopeOptionExtensions
@@ -144,6 +147,8 @@ public static class ScopeOptionExtensions
             ScopeOption.Phone => OpenIddictConstants.Permissions.Scopes.Phone,
             ScopeOption.Profile => OpenIddictConstants.Permissions.Scopes.Profile,
             ScopeOption.Roles => OpenIddictConstants.Permissions.Scopes.Roles,
+            ScopeOption.UniversityId => OpenIddictConstants.Permissions.Prefixes.Scope +
+                                        CustomOpenIdScopes.UniversityId,
             _ => throw new NotImplementedException($"Scope permission {scope} is not supported.")
         };
     }
@@ -168,7 +173,6 @@ public static class FeatureOptionExtensions
         };
     }
 }
-
 
 public enum ConsentTypeOption
 {
