@@ -28,7 +28,8 @@ public class AccountVerificationLinkFactory : IAccountVerificationLinkFactory
             action: "ConfirmAccount",
             values: new RouteValueDictionary
             {
-                ["email-verification-token"] = emailVerificationToken, ["return-url"] = returnUrl
+                ["email-verification-token"] = emailVerificationToken,
+                ["return-url"] = returnUrl
             });
 
         if (accountVerificationLink is null)

@@ -56,7 +56,8 @@ public class Worker : IHostedService
     {
         var universityScopeDescriptor = new OpenIddictScopeDescriptor
         {
-            Name = CustomOpenIdScopes.UniversityId, DisplayName = "University id"
+            Name = CustomOpenIdScopes.UniversityId,
+            DisplayName = "University id"
         };
 
         var scopeExists = await scopeManager
