@@ -1,6 +1,7 @@
 using System.Security.Cryptography.X509Certificates;
 
 using AnonymousStudentReviews.Infrastructure.Data;
+using AnonymousStudentReviews.Infrastructure.OpenId;
 
 using OpenIddict.Abstractions;
 
@@ -31,7 +32,8 @@ public static class OpenIddictConfig
                     OpenIddictConstants.Permissions.Scopes.Roles,
                     OpenIddictConstants.Scopes.Profile,
                     OpenIddictConstants.Scopes.Roles,
-                    OpenIddictConstants.Scopes.OfflineAccess
+                    OpenIddictConstants.Scopes.OfflineAccess,
+                    CustomOpenIdScopes.UniversityId
                 );
 
                 options.AllowAuthorizationCodeFlow().AllowRefreshTokenFlow();
