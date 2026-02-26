@@ -73,10 +73,7 @@ public class UserManager : IUserManager
 
         var createdUser = new User
         {
-            Id = Guid.NewGuid(),
-            EmailHash = emailHash,
-            PasswordHash = hashedPassword,
-            CreatedAt = DateTime.UtcNow
+            Id = Guid.NewGuid(), EmailHash = emailHash, PasswordHash = hashedPassword, CreatedAt = DateTime.UtcNow
         };
 
         var userRoles = await DetermineUserRolesAsync(createdUser, email, emailDomain);
@@ -90,7 +87,7 @@ public class UserManager : IUserManager
         return Result.Success(createdUser);
     }
 
-    public async Task RequestAccountVerificationAsync(User user, string email)
+    public async Task RequestAccountVerificationAsync(User user, string email, string returnUrl)
     {
         var emailVerificationTokenString = _emailVerificationTokenGenerator.Generate();
         var emailVerificationTokenStringHash = _emailVerificationTokenHasher.Hash(emailVerificationTokenString);
@@ -110,7 +107,7 @@ public class UserManager : IUserManager
         _emailVerificationTokenRepository.Create(emailVerificationToken);
         await _unitOfWork.SaveChangesAsync();
 
-        var accountVerificationLink = _accountVerificationLinkFactory.Create(emailVerificationTokenString);
+        var accountVerificationLink = _accountVerificationLinkFactory.Create(emailVerificationTokenString, returnUrl);
         await SendAccountVerificationEmailAsync(email, accountVerificationLink);
     }
 

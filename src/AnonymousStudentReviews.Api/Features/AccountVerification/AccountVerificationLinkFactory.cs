@@ -13,7 +13,7 @@ public class AccountVerificationLinkFactory : IAccountVerificationLinkFactory
         _linkGenerator = linkGenerator;
     }
 
-    public string Create(string emailVerificationToken)
+    public string Create(string emailVerificationToken, string returnUrl)
     {
         var httpContext = _httpContextAccessor.HttpContext;
 
@@ -26,9 +26,9 @@ public class AccountVerificationLinkFactory : IAccountVerificationLinkFactory
             httpContext,
             controller: "AccountVerification",
             action: "ConfirmAccount",
-            values: new RouteValueDictionary()
+            values: new RouteValueDictionary
             {
-                ["email-verification-token"] = emailVerificationToken
+                ["email-verification-token"] = emailVerificationToken, ["return-url"] = returnUrl
             });
 
         if (accountVerificationLink is null)

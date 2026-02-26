@@ -18,6 +18,7 @@
                 </h1>
 
                 <form asp-action="Index" asp-controller="Registration" method="post"
+                      asp-route-return-url="@ViewData["ReturnUrl"]"
                       class="space-y-4" id="regForm">
                     @Html.AntiForgeryToken()
 

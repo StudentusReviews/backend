@@ -1,5 +1,4 @@
 using AnonymousStudentReviews.Api.Extensions;
-using AnonymousStudentReviews.Api.Features.Dummies.Create;
 using AnonymousStudentReviews.UseCases.AccountVerification;
 
 using FluentValidation;
@@ -53,6 +52,7 @@ public class AccountVerificationController : Controller
             }
         }
 
+        ViewData["ReturnUrl"] = queryParameters.ReturnUrl;
         return View("Success");
     }
 }

@@ -20,7 +20,7 @@ public class LoginController : Controller
     }
 
     [HttpGet]
-    public IActionResult Index(string? returnUrl = null)
+    public IActionResult Index([FromQuery(Name = "return-url")] string? returnUrl = null)
     {
         ViewData["Title"] = "Вхід";
         ViewData["ReturnUrl"] = returnUrl;
@@ -29,7 +29,8 @@ public class LoginController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login([FromForm] LoginRequest request, string? returnUrl = null)
+    public async Task<IActionResult> Login([FromForm] LoginRequest request,
+        [FromQuery(Name = "return-url")] string? returnUrl = null)
     {
         ViewData["Title"] = "Вхід";
 

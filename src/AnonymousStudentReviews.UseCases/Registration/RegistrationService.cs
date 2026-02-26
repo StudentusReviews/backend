@@ -1,6 +1,5 @@
 using AnonymousStudentReviews.Core.Abstractions;
 using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
-using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.UseCases.Registration.Abstractions;
 
 using Microsoft.Extensions.Logging;
@@ -31,7 +30,7 @@ public class RegistrationService : IRegistrationService
         if (createUserResult.IsSuccess)
         {
             var createdUser = createUserResult.Value;
-            await _userManager.RequestAccountVerificationAsync(createdUser, dto.Email);
+            await _userManager.RequestAccountVerificationAsync(createdUser, dto.Email, dto.ReturnUrl);
         }
 
         return Result.Success();

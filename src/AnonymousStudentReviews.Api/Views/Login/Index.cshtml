@@ -15,7 +15,7 @@
                 Увійти
             </h1>
 
-            <form asp-controller="Login" asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]"
+            <form asp-controller="Login" asp-action="Login" asp-route-return-url="@ViewData["ReturnUrl"]"
                   class="space-y-4" id="loginForm">
                 @Html.AntiForgeryToken()
 
@@ -80,10 +80,11 @@
                     <button
                         type="submit"
                         class="w-full mt-4 mb-4 py-3 rounded-2xl disabled:opacity-60 disabled:cursor-not-allowed bg-blue-500 hover:bg-blue-700 text-white transition"
-                        >
+                    >
                         Увійти
                     </button>
                     <p>Ще не маєте акаунта? <a asp-controller="Registration" asp-action="Index"
+                                               asp-route-return-url="@ViewData["ReturnUrl"]"
                                                class="text-blue-500 font-bold hover:underline">Зареєструватися</a>
                     </p>
                 </div>
