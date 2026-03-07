@@ -35,7 +35,6 @@ jobs:
 
       - name: Verify code formatting
         run: dotnet format --verify-no-changes
-        continue-on-error: false
 
       - name: Build solution
         run: dotnet build --configuration Release --no-restore
@@ -59,7 +58,7 @@ jobs:
           path: coveragereport
 
       - name: Check vulnerable packages
-        run: dotnet list package --vulnerable || true
+        run: dotnet list package --vulnerable 
 
   push-docker:
     needs: build-test
