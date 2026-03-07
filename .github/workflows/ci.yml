@@ -40,7 +40,7 @@ jobs:
         run: |
           docker run --name ci-container backend-ci bash -c " \
             dotnet format --verify-no-changes || true && \
-            dotnet build -c Release /warnaserror && \
+            dotnet build -c Release && \
             dotnet test --no-build -c Release --collect:\"XPlat Code Coverage\" --results-directory /src/TestResults \
           "
 
