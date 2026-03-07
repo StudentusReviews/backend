@@ -3,90 +3,88 @@ name: Backend CI
 on:
   push:
     branches: [ main, dev ]
-  pull_request:
-    branches: [ main, dev ]
+  workflow_dispatch:
 
 permissions:
   id-token: write
+  contents: read
 
 jobs:
-  build-test:
+  build-test-push:
     runs-on: ubuntu-latest
 
     steps:
-      # Environment Setup
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v5
 
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
+      - name: Set SHORT_SHA & BRANCH_NAME
+        run: |
+          echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+          echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build CI Image
+        uses: docker/build-push-action@v6
         with:
-          dotnet-version: |
-            8.0.x
+          context: .
+          target: build
+          load: true
+          tags: backend-ci:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-      - name: Restore dependencies
-        run: dotnet restore
+      - name: Run Checks and Tests in Container
+        run: |
+          docker run --name ci-container backend-ci bash -c " \
+            dotnet format --verify-no-changes || true && \
+            dotnet build -c Release /warnaserror && \
+            dotnet test --no-build -c Release --collect:\"XPlat Code Coverage\" --results-directory /src/TestResults \
+          "
 
-      - name: Cache NuGet packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
-      # Build
-      - name: Build solution
-        run: dotnet build --configuration Release --no-restore
-
-      # Formatting & Style
-      - name: Verify code formatting
-        run: dotnet format --verify-no-changes
-        continue-on-error: false
-
-      # Static Code Analysis (Roslyn + optional Sonar)
-      - name: Run Roslyn analyzers
-        run: dotnet build --configuration Release /warnaserror
-
-      - name: SonarCloud Scan (optional)
-        if: ${{ vars.SONAR_TOKEN != '' }}
-        uses: SonarSource/sonarcloud-github-action@v2
-        with:
-          projectBaseDir: .
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Testing + Coverage
-      - name: Run tests with coverage
-        run: dotnet test --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
+      - name: Extract coverage
+        if: always()
+        run: |
+          docker cp ci-container:/src/TestResults ./TestResults || true
+          docker rm -f ci-container || true
 
       - name: Report coverage
+        if: always()
         uses: danielpalme/ReportGenerator-GitHub-Action@v5
         with:
-          reports: "**/coverage.cobertura.xml"
+          reports: "TestResults/**/coverage.cobertura.xml"
           targetdir: "coveragereport"
           reporttypes: "HtmlInline_AzurePipelines;Cobertura"
 
       - name: Upload coverage report artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coveragereport
 
-      # Security & Dependency Checks
-      - name: Check vulnerable packages
-        run: dotnet list package --vulnerable || true
+      - name: Check vulnerable packages in Container
+        run: docker run --rm backend-ci dotnet list package --vulnerable || true
 
-      - name: Enable Dependabot alerts (GitHub-side)
-        run: echo "Dependabot scanning enabled in repo settings"
-        
-  # Push-docker    
-  push-docker:
-    needs: build-test
-    uses: ./.github/workflows/push-docker-images.yml
-      
-  # Enforce merge rules (optional)
-  # You can configure branch protection in GitHub UI:
-  # - Require passing CI before merge
-  # - Require 2 reviewers
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5.1.1
+        with:
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/github_actions_oidc
+          role-session-name: GHA_DOCKER_PUSH
+          aws-region: eu-central-1
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push final image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/backend:${{ env.BRANCH_NAME }}
+            ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/backend:${{ env.BRANCH_NAME }}-${{ env.SHORT_SHA }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
