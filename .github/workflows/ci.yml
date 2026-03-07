@@ -10,45 +10,38 @@ permissions:
   contents: read
 
 jobs:
-  build-test-push:
+  build-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Set SHORT_SHA & BRANCH_NAME
-        run: |
-          echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
-          echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
-        shell: bash
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build CI Image
-        uses: docker/build-push-action@v6
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
         with:
-          context: .
-          target: build
-          load: true
-          tags: backend-ci:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          dotnet-version: 8.0.x
 
-      - name: Run Checks and Tests in Container
-        run: |
-          docker run --name ci-container backend-ci bash -c " \
-            dotnet format --verify-no-changes || true && \
-            dotnet build -c Release && \
-            dotnet test --no-build -c Release --collect:\"XPlat Code Coverage\" --results-directory /src/TestResults \
-          "
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
 
-      - name: Extract coverage
-        if: always()
-        run: |
-          docker cp ci-container:/src/TestResults ./TestResults || true
-          docker rm -f ci-container || true
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Verify code formatting
+        run: dotnet format --verify-no-changes
+        continue-on-error: false
+
+      - name: Build solution
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Run tests with coverage
+        run: dotnet test --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
 
       - name: Report coverage
         if: always()
@@ -65,26 +58,12 @@ jobs:
           name: coverage-report
           path: coveragereport
 
-      - name: Check vulnerable packages in Container
-        run: docker run --rm backend-ci dotnet list package --vulnerable || true
+      - name: Check vulnerable packages
+        run: dotnet list package --vulnerable || true
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v5.1.1
-        with:
-          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/github_actions_oidc
-          role-session-name: GHA_DOCKER_PUSH
-          aws-region: eu-central-1
-
-      - name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Build and push final image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: |
-            ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/backend:${{ env.BRANCH_NAME }}
-            ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/backend:${{ env.BRANCH_NAME }}-${{ env.SHORT_SHA }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+  push-docker:
+    needs: build-test
+    permissions:
+      id-token: write
+      contents: read
+    uses: ./.github/workflows/push-docker-images.yml
