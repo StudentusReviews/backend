@@ -5,11 +5,11 @@ namespace AnonymousStudentReviews.Api.Configurations;
 
 public static class CorsConfig
 {
-    public static WebApplicationBuilder AddCorsConfig(this WebApplicationBuilder builder)
+    public static IServiceCollection AddCorsConfig(this IServiceCollection services, IConfiguration configuration)
     {
-        var corsOptions = builder.Configuration.GetValidated<CorsOptions>(CorsOptions.SectionName);
+        var corsOptions = configuration.GetValidated<CorsOptions>(CorsOptions.SectionName);
 
-        builder.Services.AddCors(options =>
+        services.AddCors(options =>
         {
             options.AddPolicy(ApiConstants.CorsPolicyName,
                 policy =>
@@ -21,6 +21,6 @@ public static class CorsConfig
                 });
         });
 
-        return builder;
+        return services;
     }
 }
