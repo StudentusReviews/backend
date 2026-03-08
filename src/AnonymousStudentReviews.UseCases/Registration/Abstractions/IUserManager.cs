@@ -8,7 +8,7 @@ namespace AnonymousStudentReviews.UseCases.Registration.Abstractions;
 public interface IUserManager
 {
     Task<Result<User>> CreateAsync(string email, string password);
-    Task RequestAccountVerificationAsync(User user, string email);
+    Task RequestAccountVerificationAsync(User user, string email, string returnUrl);
     Task<Result<User>> GetUserAsync(ClaimsPrincipal principal);
     Task<string> GetUserIdAsync(User user);
     Task<List<string>> GetRolesAsync(User user);

@@ -21,15 +21,17 @@ public class RegistrationController : Controller
     }
 
     [HttpGet]
-    public IActionResult Index()
+    public IActionResult Index([FromQuery(Name = "return-url")] string? returnUrl = null)
     {
         ViewData["Title"] = "Реєстрація";
+        ViewData["ReturnUrl"] = returnUrl;
         return View();
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Index([FromForm] RegistrationRequest request)
+    public async Task<IActionResult> Register([FromForm] RegistrationRequest request,
+        [FromQuery(Name = "return-url")] string? returnUrl = null)
     {
         ViewData["Title"] = "Реєстрація";
 
@@ -38,22 +40,23 @@ public class RegistrationController : Controller
         if (!validationResult.IsValid)
         {
             validationResult.AddToModelState(ModelState);
-            return View(request);
+            return View("Index", request);
         }
 
-        var result = await _registrationService.HandleAsync(RequestToDto(request));
+        var result = await _registrationService.HandleAsync(RequestToDto(request, returnUrl));
 
         if (result.IsFailure)
         {
             ViewData["ErrorName"] = "Error";
-            return View();
+            return View("Index");
         }
 
         return View("Sucess");
     }
 
-    private RegistrationDto RequestToDto(RegistrationRequest request)
+    private RegistrationDto RequestToDto(RegistrationRequest request, string? returnUrl)
     {
-        return new RegistrationDto { Email = request.Email, Password = request.Password };
+        returnUrl ??= "~/";
+        return new RegistrationDto { Email = request.Email, Password = request.Password, ReturnUrl = returnUrl };
     }
 }

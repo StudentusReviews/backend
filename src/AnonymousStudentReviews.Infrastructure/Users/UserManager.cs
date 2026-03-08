@@ -90,7 +90,7 @@ public class UserManager : IUserManager
         return Result.Success(createdUser);
     }
 
-    public async Task RequestAccountVerificationAsync(User user, string email)
+    public async Task RequestAccountVerificationAsync(User user, string email, string returnUrl)
     {
         var emailVerificationTokenString = _emailVerificationTokenGenerator.Generate();
         var emailVerificationTokenStringHash = _emailVerificationTokenHasher.Hash(emailVerificationTokenString);
@@ -110,7 +110,7 @@ public class UserManager : IUserManager
         _emailVerificationTokenRepository.Create(emailVerificationToken);
         await _unitOfWork.SaveChangesAsync();
 
-        var accountVerificationLink = _accountVerificationLinkFactory.Create(emailVerificationTokenString);
+        var accountVerificationLink = _accountVerificationLinkFactory.Create(emailVerificationTokenString, returnUrl);
         await SendAccountVerificationEmailAsync(email, accountVerificationLink);
     }
 

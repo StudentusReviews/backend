@@ -5,5 +5,7 @@ namespace AnonymousStudentReviews.Api.Features.AccountVerification;
 public class AccountVerificationQueryParameters
 {
     [FromQuery(Name = "email-verification-token")]
-    public string EmailVerificationToken { get; set; }
+    public required string EmailVerificationToken { get; init; }
+
+    [FromQuery(Name = "return-url")] public required string ReturnUrl { get; init; }
 }

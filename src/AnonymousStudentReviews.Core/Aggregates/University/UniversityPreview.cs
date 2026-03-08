@@ -8,5 +8,6 @@ public class UniversityPreview
     public int ReviewCount { get; init; }
     public string? City { get; init; }
     public string? Website { get; init; }
+    public string? IconUrl { get; init; }
     public DateTime CreatedAt { get; init; }
 }

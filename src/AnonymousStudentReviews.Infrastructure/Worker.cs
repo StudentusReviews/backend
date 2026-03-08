@@ -69,7 +69,8 @@ public class Worker : IHostedService
         }
     }
 
-    private async Task RegisterApplicationsAsync(CancellationToken cancellationToken, IOpenIddictApplicationManager applicationManager)
+    private async Task RegisterApplicationsAsync(CancellationToken cancellationToken,
+        IOpenIddictApplicationManager applicationManager)
     {
         foreach (var openIddictApplicationOptions in _openIddictOptions.Applications)
         {
@@ -77,11 +78,16 @@ public class Worker : IHostedService
             {
                 ApplicationType = openIddictApplicationOptions.ApplicationType.ToOpenIddictApplicationType(),
                 ClientType = openIddictApplicationOptions.ClientType.ToOpenIddictClientType(),
-                ClientSecret = GetClientSecretByClientId(openIddictApplicationOptions.ClientId),
                 ClientId = openIddictApplicationOptions.ClientId,
                 ConsentType = openIddictApplicationOptions.ConsentType.ToOpenIddictConsentType(),
                 DisplayName = openIddictApplicationOptions.DisplayName
             };
+
+            if (openIddictApplicationDescriptor.ClientType == OpenIddictConstants.ClientTypes.Confidential)
+            {
+                openIddictApplicationDescriptor.ClientSecret =
+                    GetClientSecretByClientId(openIddictApplicationOptions.ClientId);
+            }
 
             foreach (var endpointOption in openIddictApplicationOptions.Permissions.Endpoints)
             {

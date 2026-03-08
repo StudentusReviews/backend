@@ -1,4 +1,6 @@
 using AnonymousStudentReviews.Api.Extensions;
+using AnonymousStudentReviews.Core.Abstractions;
+using AnonymousStudentReviews.Core.Aggregates.University;
 using AnonymousStudentReviews.UseCases.Universities.RetrieveMany;
 
 using FluentValidation;
@@ -23,7 +25,7 @@ public class RetrieveManyUniversitiesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult> RetrieveAllUniversitiesAsync(
+    public async Task<ActionResult<CursorPagedResult<UniversityPreview>>> RetrieveAllUniversitiesAsync(
         [FromQuery] RetrieveManyUniversitiesQueryParameters queryParameters)
 
     {

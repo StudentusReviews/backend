@@ -6,7 +6,6 @@ using AnonymousStudentReviews.Api.Options;
 using AnonymousStudentReviews.Infrastructure.Data;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.DataProtection;
 
 using Serilog;
 using Serilog.Extensions.Logging;
@@ -50,6 +49,7 @@ builder.Services.AddAuthentication(options =>
         options.Cookie.SameSite = SameSiteMode.Lax;
         options.LoginPath = "/api/login";
         options.LogoutPath = "/api/logout";
+        options.ReturnUrlParameter = "return-url";
     });
 
 builder.Services.AddAuthorization();
