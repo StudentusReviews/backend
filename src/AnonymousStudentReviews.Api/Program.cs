@@ -66,8 +66,6 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddSwaggerConfig();
 
-builder.Services.AddOptionsConfig(appLogger, builder);
-
 builder.Services.AddServiceConfigs(appLogger, builder);
 
 builder.Services.AddOpenIddictConfig(builder);
