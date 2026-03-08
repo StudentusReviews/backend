@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+
 using AnonymousStudentReviews.Infrastructure.OpenId;
+
 using OpenIddict.Abstractions;
 
 namespace AnonymousStudentReviews.Infrastructure.Options;
@@ -16,26 +18,26 @@ public class OpenIddictOptions
 public class OpenIddictApplicationOptions
 {
     public ClientTypeOption ClientType { get; init; }
-    
+
     [Required(ErrorMessage = "Missing configuration value for an application's 'ClientId' within 'OpenIddict:Applications'.")]
     public string ClientId { get; init; } = string.Empty;
-    
+
     [Required(ErrorMessage = "Missing configuration value for an application's 'DisplayName' within 'OpenIddict:Applications'.")]
     public string DisplayName { get; init; } = string.Empty;
-    
+
     public ConsentTypeOption ConsentType { get; init; }
-    
+
     public ApplicationTypeOption ApplicationType { get; init; }
-    
+
     [Required(ErrorMessage = "Missing configuration value for 'RedirectUris' in an OpenIddict application.")]
     public List<string> RedirectUris { get; init; } = [];
-    
+
     [Required(ErrorMessage = "Missing configuration value for 'PostLogoutRedirectUris' in an OpenIddict application.")]
     public List<string> PostLogoutRedirectUris { get; init; } = [];
-    
+
     [Required(ErrorMessage = "Missing configuration value for 'Permissions' in an OpenIddict application.")]
     public ApplicationPermissionsOptions Permissions { get; init; } = new();
-    
+
     [Required(ErrorMessage = "Missing configuration value for 'Requirements' in an OpenIddict application.")]
     public ApplicationRequirementsOptions Requirements { get; init; } = new();
 }

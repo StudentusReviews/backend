@@ -179,24 +179,24 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IViewToStringRenderer, ViewToStringRenderer>();
         services.AddScoped<IVerificationEmailGenerator, VerificationEmailGenerator>();
     }
-    
+
     private static void RegisterOptions(IServiceCollection services, ILogger logger, IConfiguration configuration)
     {
         services.AddOptions<EmailSecretOptions>()
             .Bind(configuration.GetSection(EmailSecretOptions.SectionName))
             .ValidateDataAnnotations()
             .ValidateOnStart();
-        
+
         services.AddOptions<ResendApiOptions>()
             .Bind(configuration.GetSection(ResendApiOptions.SectionName))
             .ValidateDataAnnotations()
             .ValidateOnStart();
-        
+
         services.AddOptions<AccountConfirmationOptions>()
             .Bind(configuration.GetSection(AccountConfirmationOptions.SectionName))
             .ValidateDataAnnotations()
             .ValidateOnStart();
-        
+
         services.AddOptions<OpenIddictOptions>()
             .Bind(configuration.GetSection(OpenIddictOptions.SectionName))
             .ValidateDataAnnotations()
@@ -214,7 +214,7 @@ public static class InfrastructureServiceExtensions
 
         logger.LogInformation("Infrastructure options registered successfully");
     }
-    
+
     private static string GetConnectionString(
         IConfiguration configuration,
         string connectionStringName,

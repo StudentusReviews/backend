@@ -3,18 +3,17 @@ using AnonymousStudentReviews.Api.Configurations;
 using Serilog;
 using Serilog.Extensions.Logging;
 
-var builder = WebApplication.CreateBuilder(args);
-
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
-    .CreateLogger();
+    .CreateBootstrapLogger();
 
 Log.Information("Starting web host");
 
-var loggerFactory = new SerilogLoggerFactory(Log.Logger);
-var appLogger = loggerFactory.CreateLogger<AnonymousStudentReviews.Api.Program>();
+var builder = WebApplication.CreateBuilder(args);
 
 builder.AddLoggerConfig();
+
+var appLogger = new SerilogLoggerFactory(Log.Logger).CreateLogger<Program>();
 
 builder.Services.AddServiceConfig(appLogger, builder.Configuration, builder.Environment);
 
