@@ -35,12 +35,12 @@ public class UniversityRepository : IUniversityRepository
 
         if (!string.IsNullOrWhiteSpace(name))
         {
-            dbQuery = dbQuery.Where(u => u.Name.ToLower().Contains(name.Trim()));
+            dbQuery = dbQuery.Where(u => u.Name.ToLower().Contains(name.ToLower().Trim()));
         }
 
         if (!string.IsNullOrWhiteSpace(city))
         {
-            dbQuery = dbQuery.Where(u => u.City != null && u.City.ToLower().Contains(city.Trim()));
+            dbQuery = dbQuery.Where(u => u.City != null && u.City.ToLower().Contains(city.ToLower().Trim()));
         }
 
         switch (universitySortBy)
