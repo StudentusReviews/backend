@@ -8,17 +8,19 @@ public static class MigrationConfig
 {
     public static void UseMigrations(this IApplicationBuilder app, ILogger logger)
     {
-        using IServiceScope scope = app.ApplicationServices.CreateScope();
-        using ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        using var scope = app.ApplicationServices.CreateScope();
+        using var mainDbContext = scope.ServiceProvider.GetRequiredService<ApplicationDatabaseContext>();
+        using var dataProtectionDbContext = scope.ServiceProvider.GetRequiredService<DataProtectionDatabaseContext>();
 
-        dbContext.Database.Migrate();
+        mainDbContext.Database.Migrate();
+        dataProtectionDbContext.Database.Migrate();
 
         logger.LogInformation("Migrations applied successfully");
     }
 
     public static bool ShouldApplyMigrationsOnStartup(IConfiguration configuration, ILogger logger)
     {
-        string? applyMigrationsOnStartupString = configuration["Migrations:ApplyMigrationsOnStartup"];
+        var applyMigrationsOnStartupString = configuration["Migrations:ApplyMigrationsOnStartup"];
 
         if (applyMigrationsOnStartupString is null)
         {
@@ -26,7 +28,7 @@ public static class MigrationConfig
             return false;
         }
 
-        bool applyMigrationsOnStartup = bool.Parse(applyMigrationsOnStartupString);
+        var applyMigrationsOnStartup = bool.Parse(applyMigrationsOnStartupString);
 
         return applyMigrationsOnStartup;
     }

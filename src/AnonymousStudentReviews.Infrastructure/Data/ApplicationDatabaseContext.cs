@@ -1,21 +1,32 @@
-using AnonymousStudentReviews.Core.DummyAggregate;
+using AnonymousStudentReviews.Core.Aggregates.AllowedEmailDomain;
+using AnonymousStudentReviews.Core.Aggregates.Dummy;
+using AnonymousStudentReviews.Core.Aggregates.Review;
+using AnonymousStudentReviews.Core.Aggregates.Role;
+using AnonymousStudentReviews.Core.Aggregates.University;
+using AnonymousStudentReviews.Core.Aggregates.User;
 using AnonymousStudentReviews.Infrastructure.Data.Configurations;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace AnonymousStudentReviews.Infrastructure.Data;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDatabaseContext : DbContext
 {
-    protected ApplicationDbContext()
+    protected ApplicationDatabaseContext()
     {
     }
 
-    public ApplicationDbContext(DbContextOptions options) : base(options)
+    public ApplicationDatabaseContext(DbContextOptions<ApplicationDatabaseContext> options) : base(options)
     {
     }
 
     public DbSet<Dummy> Dummies { get; set; }
+    public DbSet<University> Universities { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<AllowedEmailDomain> AllowedEmailDomains { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<Core.Aggregates.EmailVerificationToken.EmailVerificationToken> EmailVerificationTokens { get; set; }
+    public DbSet<Review> Reviews { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

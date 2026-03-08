@@ -4,7 +4,12 @@ public static class MiddlewareConfig
 {
     public static IApplicationBuilder UseAppMiddleware(this WebApplication app)
     {
-        app.UseHttpsRedirection();
+        if (!app.Environment.IsDevelopment())
+        {
+            app.UseForwardedHeaders();
+        }
+
+        app.UseExceptionHandler();
 
         if (app.Environment.IsDevelopment())
         {
@@ -13,7 +18,11 @@ public static class MiddlewareConfig
             app.MapGet("/", () => Results.Redirect("/swagger"));
         }
 
-        app.UseExceptionHandler();
+        app.UseStaticFiles();
+
+        app.UseCors(ApiConstants.CorsPolicyName);
+
+        app.UseAuthentication();
 
         app.UseAuthorization();
 

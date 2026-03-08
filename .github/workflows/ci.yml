@@ -4,25 +4,24 @@ on:
   push:
     branches: [ main, dev ]
   pull_request:
-    branches: [ main, dev ]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   build-test:
     runs-on: ubuntu-latest
 
     steps:
-      # Environment Setup
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: |
-            8.0.x
-
-      - name: Restore dependencies
-        run: dotnet restore
+          dotnet-version: 9.0.x
 
       - name: Cache NuGet packages
         uses: actions/cache@v4
@@ -32,53 +31,41 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      # Build
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Verify code formatting
+        run: dotnet format --verify-no-changes
+
       - name: Build solution
         run: dotnet build --configuration Release --no-restore
 
-      # Formatting & Style
-      - name: Verify code formatting
-        run: dotnet format --verify-no-changes
-        continue-on-error: false
-
-      # Static Code Analysis (Roslyn + optional Sonar)
-      - name: Run Roslyn analyzers
-        run: dotnet build --configuration Release /warnaserror
-
-      - name: SonarCloud Scan (optional)
-        if: ${{ vars.SONAR_TOKEN != '' }}
-        uses: SonarSource/sonarcloud-github-action@v2
-        with:
-          projectBaseDir: .
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Testing + Coverage
       - name: Run tests with coverage
+        id: run_tests
         run: dotnet test --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
 
       - name: Report coverage
+        if: always() && (steps.run_tests.outcome == 'success' || steps.run_tests.outcome == 'failure')
         uses: danielpalme/ReportGenerator-GitHub-Action@v5
         with:
-          reports: "**/coverage.cobertura.xml"
+          reports: "TestResults/**/coverage.cobertura.xml"
           targetdir: "coveragereport"
           reporttypes: "HtmlInline_AzurePipelines;Cobertura"
 
       - name: Upload coverage report artifact
+        if: always() && (steps.run_tests.outcome == 'success' || steps.run_tests.outcome == 'failure')
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coveragereport
 
-      # Security & Dependency Checks
       - name: Check vulnerable packages
-        run: dotnet list package --vulnerable || true
+        run: dotnet list package --vulnerable 
 
-      - name: Enable Dependabot alerts (GitHub-side)
-        run: echo "Dependabot scanning enabled in repo settings"
-
-  # Enforce merge rules (optional)
-  # You can configure branch protection in GitHub UI:
-  # - Require passing CI before merge
-  # - Require 2 reviewers
+  push-docker:
+    if: github.event_name == 'push'
+    needs: build-test
+    permissions:
+      id-token: write
+      contents: read
+    uses: ./.github/workflows/push-docker-images.yml

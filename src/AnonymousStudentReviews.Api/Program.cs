@@ -3,27 +3,21 @@ using AnonymousStudentReviews.Api.Configurations;
 using Serilog;
 using Serilog.Extensions.Logging;
 
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
+
+Log.Information("Starting web host");
+
 var builder = WebApplication.CreateBuilder(args);
 
-var logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .CreateLogger();
+builder.AddLoggerConfig();
 
-logger.Information("Starting web host");
+var appLogger = new SerilogLoggerFactory(Log.Logger).CreateLogger<Program>();
 
-builder.AddLoggerConfigs();
-
-var appLogger = new SerilogLoggerFactory(logger)
-    .CreateLogger<Program>();
-
-builder.Services.AddControllers();
-
-builder.Services.AddSwaggerConfig();
-
-builder.Services.AddServiceConfigs(appLogger, builder);
+builder.Services.AddServiceConfig(appLogger, builder.Configuration, builder.Environment);
 
 var app = builder.Build();
-
 
 if (app.Environment.IsDevelopment() && MigrationConfig.ShouldApplyMigrationsOnStartup(app.Configuration, appLogger))
 {
@@ -32,8 +26,25 @@ if (app.Environment.IsDevelopment() && MigrationConfig.ShouldApplyMigrationsOnSt
 
 app.UseAppMiddleware();
 
+var healthCheckBuilder = app.MapHealthChecks("/healthz");
+
+if (app.Environment.IsProduction())
+{
+    var requiredHost = app.Configuration["Healthcheck:RequireHost"];
+
+    if (requiredHost is null)
+    {
+        throw new Exception("Healthcheck:RequireHost not set in config file");
+    }
+
+    healthCheckBuilder.RequireHost();
+}
+
 app.Run();
 
-public partial class Program
+namespace AnonymousStudentReviews.Api
 {
+    public class Program
+    {
+    }
 }

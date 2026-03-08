@@ -15,7 +15,11 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="9.0.4"/>
         <PackageReference Include="NSwag.AspNetCore" Version="14.5.0"/>
+        <PackageReference Include="OpenIddict.Quartz" Version="7.2.0"/>
+        <PackageReference Include="Quartz" Version="3.15.1"/>
+        <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.15.1"/>
         <PackageReference Include="Serilog.AspNetCore" Version="9.0.0"/>
     </ItemGroup>
 
@@ -25,7 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Features\"/>
+        <None Include="wwwroot\css\styles.css"/>
     </ItemGroup>
 
 </Project>

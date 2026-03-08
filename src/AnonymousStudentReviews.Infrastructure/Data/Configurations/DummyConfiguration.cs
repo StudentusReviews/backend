@@ -1,4 +1,4 @@
-using AnonymousStudentReviews.Core.DummyAggregate;
+using AnonymousStudentReviews.Core.Aggregates.Dummy;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -15,6 +15,12 @@ public class DummyConfiguration : IEntityTypeConfiguration<Dummy>
 
         builder.Property(e => e.Name)
             .HasMaxLength(20)
+            .IsRequired();
+
+        builder
+            .HasOne(e => e.User)
+            .WithMany()
+            .HasForeignKey(e => e.UserId)
             .IsRequired();
     }
 }
