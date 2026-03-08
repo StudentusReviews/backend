@@ -6,12 +6,14 @@ repos:
         entry: dotnet format
         language: system
         pass_filenames: false
+        stages: [pre-push]
 
       - id: dotnet-test
         name: dotnet test
         entry: dotnet test
         language: system
         pass_filenames: false
+        stages: [pre-push]
 
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.18.2
