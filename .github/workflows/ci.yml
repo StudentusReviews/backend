@@ -63,7 +63,7 @@ jobs:
         run: dotnet list package --vulnerable 
 
   push-docker:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     needs: build-test
     permissions:
       id-token: write
