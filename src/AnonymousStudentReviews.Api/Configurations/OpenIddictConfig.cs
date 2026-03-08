@@ -10,7 +10,7 @@ namespace AnonymousStudentReviews.Api.Configurations;
 public static class OpenIddictConfig
 {
     public static IServiceCollection AddOpenIddictConfig(this IServiceCollection services,
-        WebApplicationBuilder builder)
+        IWebHostEnvironment environment, IConfiguration configuration)
     {
         services.AddOpenIddict()
             .AddCore(options =>
@@ -41,19 +41,19 @@ public static class OpenIddictConfig
 
                 options.AllowAuthorizationCodeFlow().AllowRefreshTokenFlow();
 
-                if (builder.Environment.IsDevelopment())
+                if (environment.IsDevelopment())
                 {
                     options.AddDevelopmentEncryptionCertificate()
                         .AddDevelopmentSigningCertificate();
                 }
 
-                if (!builder.Environment.IsDevelopment())
+                if (!environment.IsDevelopment())
                 {
                     var encryptionCertificateFilePath =
-                        builder.Configuration["OPENIDDICT_ENCRYPTION_CERTIFICATE_FILE_CONTAINER_PATH"];
+                        configuration["OPENIDDICT_ENCRYPTION_CERTIFICATE_FILE_CONTAINER_PATH"];
 
                     var signingCertificateFilePath =
-                        builder.Configuration["OPENIDDICT_SIGNING_CERTIFICATE_FILE_CONTAINER_PATH"];
+                        configuration["OPENIDDICT_SIGNING_CERTIFICATE_FILE_CONTAINER_PATH"];
 
                     if (encryptionCertificateFilePath is null || signingCertificateFilePath is null)
                     {
@@ -62,10 +62,10 @@ public static class OpenIddictConfig
                     }
 
                     var encryptionCertificatePassword =
-                        builder.Configuration["OPENIDDICT_ENCRYPTION_CERTIFICATE_PASSWORD"];
+                        configuration["OPENIDDICT_ENCRYPTION_CERTIFICATE_PASSWORD"];
 
                     var signingCertificatePassword =
-                        builder.Configuration["OPENIDDICT_SIGNING_CERTIFICATE_PASSWORD"];
+                        configuration["OPENIDDICT_SIGNING_CERTIFICATE_PASSWORD"];
 
                     if (encryptionCertificatePassword is null || signingCertificatePassword is null)
                     {

@@ -38,7 +38,7 @@ public class UserManagerTests
     {
         _accountConfirmationOptions = new AccountConfirmationOptions
         {
-            EmailVerificationTokenExpirationHours = 24,
+            EmailVerificationTokenExpirationMinutes = 24,
             SendConfirmationLetterFromAddress = "no-reply@test.com",
             ConfirmationLetterSubject = "Confirm your account"
         };

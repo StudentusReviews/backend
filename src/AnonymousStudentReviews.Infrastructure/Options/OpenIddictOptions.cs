@@ -1,5 +1,5 @@
+using System.ComponentModel.DataAnnotations;
 using AnonymousStudentReviews.Infrastructure.OpenId;
-
 using OpenIddict.Abstractions;
 
 namespace AnonymousStudentReviews.Infrastructure.Options;
@@ -8,33 +8,49 @@ public class OpenIddictOptions
 {
     public const string SectionName = "OpenIddict";
 
-    public List<OpenIddictApplicationOptions> Applications { get; set; } = new();
+    [Required(ErrorMessage = "Missing configuration value for 'OpenIddict:Applications'.")]
+    [MinLength(1, ErrorMessage = "At least one application must be configured in 'OpenIddict:Applications'.")]
+    public List<OpenIddictApplicationOptions> Applications { get; init; } = [];
 }
 
 public class OpenIddictApplicationOptions
 {
-    public ClientTypeOption ClientType { get; set; }
-    public string ClientId { get; set; } = string.Empty;
-    public string DisplayName { get; set; } = string.Empty;
-    public ConsentTypeOption ConsentType { get; set; }
-    public ApplicationTypeOption ApplicationType { get; set; }
-    public List<string> RedirectUris { get; set; } = new();
-    public List<string> PostLogoutRedirectUris { get; set; } = new();
-    public ApplicationPermissionsOptions Permissions { get; set; } = new();
-    public ApplicationRequirementsOptions Requirements { get; set; } = new();
+    public ClientTypeOption ClientType { get; init; }
+    
+    [Required(ErrorMessage = "Missing configuration value for an application's 'ClientId' within 'OpenIddict:Applications'.")]
+    public string ClientId { get; init; } = string.Empty;
+    
+    [Required(ErrorMessage = "Missing configuration value for an application's 'DisplayName' within 'OpenIddict:Applications'.")]
+    public string DisplayName { get; init; } = string.Empty;
+    
+    public ConsentTypeOption ConsentType { get; init; }
+    
+    public ApplicationTypeOption ApplicationType { get; init; }
+    
+    [Required(ErrorMessage = "Missing configuration value for 'RedirectUris' in an OpenIddict application.")]
+    public List<string> RedirectUris { get; init; } = [];
+    
+    [Required(ErrorMessage = "Missing configuration value for 'PostLogoutRedirectUris' in an OpenIddict application.")]
+    public List<string> PostLogoutRedirectUris { get; init; } = [];
+    
+    [Required(ErrorMessage = "Missing configuration value for 'Permissions' in an OpenIddict application.")]
+    public ApplicationPermissionsOptions Permissions { get; init; } = new();
+    
+    [Required(ErrorMessage = "Missing configuration value for 'Requirements' in an OpenIddict application.")]
+    public ApplicationRequirementsOptions Requirements { get; init; } = new();
 }
 
 public class ApplicationPermissionsOptions
 {
-    public List<EndpointOption> Endpoints { get; set; } = new();
-    public List<GrantTypeOption> GrantTypes { get; set; } = new();
-    public List<ScopeOption> Scopes { get; set; } = new();
-    public List<ResponseTypeOption> ResponseTypes { get; set; } = new();
+    public List<EndpointOption> Endpoints { get; init; } = [];
+    public List<GrantTypeOption> GrantTypes { get; init; } = [];
+    public List<ScopeOption> Scopes { get; init; } = [];
+    public List<ResponseTypeOption> ResponseTypes { get; init; } = [];
 }
 
 public class ApplicationRequirementsOptions
 {
-    public List<FeatureOption> Features { get; set; } = new();
+    public List<FeatureOption> Features { get; init; } = [];
 }
 
 public enum EndpointOption

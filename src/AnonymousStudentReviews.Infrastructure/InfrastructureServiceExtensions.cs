@@ -37,56 +37,6 @@ namespace AnonymousStudentReviews.Infrastructure;
 
 public static class InfrastructureServiceExtensions
 {
-    private static string GetConnectionString(
-        IConfiguration configuration,
-        string connectionStringName,
-        string sectionPath)
-    {
-        var fromConnectionStrings = configuration.GetConnectionString(connectionStringName);
-        if (!string.IsNullOrWhiteSpace(fromConnectionStrings))
-        {
-            return fromConnectionStrings;
-        }
-
-        var section = configuration.GetSection(sectionPath);
-        if (!section.Exists())
-        {
-            throw new Exception(
-                $"Neither ConnectionStrings:{connectionStringName} nor {sectionPath} section is configured.");
-        }
-
-        var host = section["Host"];
-        var portRaw = section["Port"];
-        var database = section["Database"];
-        var username = section["Username"];
-        var password = section["Password"];
-
-        if (string.IsNullOrWhiteSpace(host) ||
-            string.IsNullOrWhiteSpace(portRaw) ||
-            string.IsNullOrWhiteSpace(database) ||
-            string.IsNullOrWhiteSpace(username) ||
-            string.IsNullOrWhiteSpace(password))
-        {
-            throw new Exception($"Incomplete database config in {sectionPath}. Required: Host, Port, Database, Username, Password.");
-        }
-
-        if (!int.TryParse(portRaw, out var port))
-        {
-            throw new Exception($"Invalid Port value in {sectionPath}: '{portRaw}'.");
-        }
-
-        var builder = new NpgsqlConnectionStringBuilder
-        {
-            Host = host,
-            Port = port,
-            Database = database,
-            Username = username,
-            Password = password
-        };
-
-        return builder.ConnectionString;
-    }
-
     public static IServiceCollection AddInfrastructureServices(
         this IServiceCollection services,
         IConfiguration configuration,
@@ -108,6 +58,7 @@ public static class InfrastructureServiceExtensions
 
         RegisterEFRepositories(services);
         RegisterServices(services, configuration);
+        RegisterOptions(services, logger, configuration);
 
         logger.LogInformation("{Project} services registered", "Infrastructure");
 
@@ -227,5 +178,90 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IViewToStringRenderer, ViewToStringRenderer>();
         services.AddScoped<IVerificationEmailGenerator, VerificationEmailGenerator>();
+    }
+    
+    private static void RegisterOptions(IServiceCollection services, ILogger logger, IConfiguration configuration)
+    {
+        services.AddOptions<EmailSecretOptions>()
+            .Bind(configuration.GetSection(EmailSecretOptions.SectionName))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+        
+        services.AddOptions<ResendApiOptions>()
+            .Bind(configuration.GetSection(ResendApiOptions.SectionName))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+        
+        services.AddOptions<AccountConfirmationOptions>()
+            .Bind(configuration.GetSection(AccountConfirmationOptions.SectionName))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+        
+        services.AddOptions<OpenIddictOptions>()
+            .Bind(configuration.GetSection(OpenIddictOptions.SectionName))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        services.AddOptions<LoginOptions>()
+            .Bind(configuration.GetSection(LoginOptions.SectionName))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        services.AddOptions<HeaderForwardingOptions>()
+            .Bind(configuration.GetSection(HeaderForwardingOptions.SectionName))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        logger.LogInformation("Infrastructure options registered successfully");
+    }
+    
+    private static string GetConnectionString(
+        IConfiguration configuration,
+        string connectionStringName,
+        string sectionPath)
+    {
+        var fromConnectionStrings = configuration.GetConnectionString(connectionStringName);
+        if (!string.IsNullOrWhiteSpace(fromConnectionStrings))
+        {
+            return fromConnectionStrings;
+        }
+
+        var section = configuration.GetSection(sectionPath);
+        if (!section.Exists())
+        {
+            throw new Exception(
+                $"Neither ConnectionStrings:{connectionStringName} nor {sectionPath} section is configured.");
+        }
+
+        var host = section["Host"];
+        var portRaw = section["Port"];
+        var database = section["Database"];
+        var username = section["Username"];
+        var password = section["Password"];
+
+        if (string.IsNullOrWhiteSpace(host) ||
+            string.IsNullOrWhiteSpace(portRaw) ||
+            string.IsNullOrWhiteSpace(database) ||
+            string.IsNullOrWhiteSpace(username) ||
+            string.IsNullOrWhiteSpace(password))
+        {
+            throw new Exception($"Incomplete database config in {sectionPath}. Required: Host, Port, Database, Username, Password.");
+        }
+
+        if (!int.TryParse(portRaw, out var port))
+        {
+            throw new Exception($"Invalid Port value in {sectionPath}: '{portRaw}'.");
+        }
+
+        var builder = new NpgsqlConnectionStringBuilder
+        {
+            Host = host,
+            Port = port,
+            Database = database,
+            Username = username,
+            Password = password
+        };
+
+        return builder.ConnectionString;
     }
 }

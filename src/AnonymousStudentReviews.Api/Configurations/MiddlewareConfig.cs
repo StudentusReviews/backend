@@ -7,18 +7,16 @@ public static class MiddlewareConfig
         if (!app.Environment.IsDevelopment())
         {
             app.UseForwardedHeaders();
-            app.UseHsts();
         }
 
-        // app.UseHttpsRedirection();
+        app.UseExceptionHandler();
 
         if (app.Environment.IsDevelopment())
         {
             app.UseOpenApi();
             app.UseSwaggerUi();
+            app.MapGet("/", () => Results.Redirect("/swagger"));
         }
-
-        app.UseExceptionHandler();
 
         app.UseStaticFiles();
 

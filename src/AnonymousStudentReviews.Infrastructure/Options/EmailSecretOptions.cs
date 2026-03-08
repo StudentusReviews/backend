@@ -1,9 +1,14 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace AnonymousStudentReviews.Infrastructure.Options;
 
 public class EmailSecretOptions
 {
     public const string SectionName = "EmailSecrets";
 
-    public string EmailVerificationTokenHashKey { get; set; } = string.Empty;
-    public string EmailHashKey { get; set; } = string.Empty;
+    [Required(ErrorMessage = "Missing configuration value for 'EmailSecrets:EmailVerificationTokenHashKey'.")]
+    public string EmailVerificationTokenHashKey { get; init; } = string.Empty;
+    
+    [Required(ErrorMessage = "Missing configuration value for 'EmailSecrets:EmailHashKey'.")]
+    public string EmailHashKey { get; init; } = string.Empty;
 }

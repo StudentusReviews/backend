@@ -95,14 +95,14 @@ public class UserManager : IUserManager
         var emailVerificationTokenString = _emailVerificationTokenGenerator.Generate();
         var emailVerificationTokenStringHash = _emailVerificationTokenHasher.Hash(emailVerificationTokenString);
 
-        var emailVerificationTokenExpirationHours = _accountConfirmationOptions.EmailVerificationTokenExpirationHours;
+        var emailVerificationTokenExpirationMinutes = _accountConfirmationOptions.EmailVerificationTokenExpirationMinutes;
 
         var emailVerificationToken = new Core.Aggregates.EmailVerificationToken.EmailVerificationToken
         {
             Id = Guid.NewGuid(),
             TokenHash = emailVerificationTokenStringHash,
             ExpiresAt =
-                DateTime.UtcNow.AddHours(emailVerificationTokenExpirationHours),
+                DateTime.UtcNow.AddMinutes(emailVerificationTokenExpirationMinutes),
             CreatedAt = DateTime.UtcNow,
             User = user
         };
