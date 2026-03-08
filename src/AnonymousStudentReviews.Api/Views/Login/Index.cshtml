@@ -79,11 +79,11 @@
                 <div class="text-center text-gray-900 dark:text-white">
                     <button
                         type="submit"
-                        class="w-full mt-4 mb-4 py-3 rounded-2xl disabled:opacity-60 disabled:cursor-not-allowed bg-blue-500 hover:bg-blue-700 text-white transition"
+                        class="w-full mt-4 mb-4 py-3 rounded-2xl disabled:opacity-60 disabled:cursor-not-allowed bg-blue-500 hover:bg-blue-700 text-white transition cursor-pointer"
                     >
                         Увійти
                     </button>
-                    <p>Ще не маєте акаунта? <a asp-controller="Registration" asp-action="Index"
+                    <p>Ще не маєте акаунта? <a asp-controller="Registration" asp-action="Register"
                                                asp-route-return-url="@ViewData["ReturnUrl"]"
                                                class="text-blue-500 font-bold hover:underline">Зареєструватися</a>
                     </p>

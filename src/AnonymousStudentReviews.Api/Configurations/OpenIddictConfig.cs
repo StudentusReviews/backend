@@ -36,6 +36,9 @@ public static class OpenIddictConfig
                     CustomOpenIdScopes.UniversityId
                 );
 
+                options.RegisterPromptValues(OpenIddictConstants.PromptValues.Login,
+                    OpenIddictConstants.PromptValues.Create, OpenIddictConstants.PromptValues.Consent);
+
                 options.AllowAuthorizationCodeFlow().AllowRefreshTokenFlow();
 
                 if (builder.Environment.IsDevelopment())

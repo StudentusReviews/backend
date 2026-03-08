@@ -60,7 +60,8 @@ public class AuthorizationController : Controller
         // authentication options shouldn't be used, a specific scheme can be specified here.
         var result = await HttpContext.AuthenticateAsync();
         if (result is not { Succeeded: true } ||
-            ((request.HasPromptValue(PromptValues.Login) || request.MaxAge is 0 ||
+            ((request.HasPromptValue(PromptValues.Login) || request.HasPromptValue(PromptValues.Create) ||
+              request.MaxAge is 0 ||
               (request.MaxAge is not null && result.Properties?.IssuedUtc is not null &&
                TimeProvider.System.GetUtcNow() - result.Properties.IssuedUtc >
                TimeSpan.FromSeconds(request.MaxAge.Value))) &&
@@ -89,13 +90,18 @@ public class AuthorizationController : Controller
             // a challenge to redirect the user agent to the login endpoint.
             TempData["IgnoreAuthenticationChallenge"] = true;
 
+            var returnUrl = Request.PathBase + Request.Path + QueryString.Create(
+                Request.HasFormContentType ? Request.Form : Request.Query);
+
+            if (request.HasPromptValue(PromptValues.Create))
+            {
+                return RedirectToAction("Register", "Registration",
+                    new RouteValueDictionary { ["return-url"] = returnUrl });
+            }
+
             // For scenarios where the default challenge handler configured in the ASP.NET Core
             // authentication options shouldn't be used, a specific scheme can be specified here.
-            return Challenge(new AuthenticationProperties
-            {
-                RedirectUri = Request.PathBase + Request.Path + QueryString.Create(
-                    Request.HasFormContentType ? Request.Form : Request.Query)
-            });
+            return Challenge(new AuthenticationProperties { RedirectUri = returnUrl });
         }
 
         // Retrieve the profile of the logged-in user.

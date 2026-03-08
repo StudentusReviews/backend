@@ -30,7 +30,7 @@ public class RegistrationController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Index([FromForm] RegistrationRequest request,
+    public async Task<IActionResult> Register([FromForm] RegistrationRequest request,
         [FromQuery(Name = "return-url")] string? returnUrl = null)
     {
         ViewData["Title"] = "Реєстрація";
@@ -40,7 +40,7 @@ public class RegistrationController : Controller
         if (!validationResult.IsValid)
         {
             validationResult.AddToModelState(ModelState);
-            return View(request);
+            return View("Index", request);
         }
 
         var result = await _registrationService.HandleAsync(RequestToDto(request, returnUrl));
@@ -48,7 +48,7 @@ public class RegistrationController : Controller
         if (result.IsFailure)
         {
             ViewData["ErrorName"] = "Error";
-            return View();
+            return View("Index");
         }
 
         return View("Sucess");

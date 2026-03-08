@@ -17,7 +17,7 @@
                     Реєстрація
                 </h1>
 
-                <form asp-action="Index" asp-controller="Registration" method="post"
+                <form asp-action="Register" asp-controller="Registration" method="post"
                       asp-route-return-url="@ViewData["ReturnUrl"]"
                       class="space-y-4" id="regForm">
                     @Html.AntiForgeryToken()
@@ -115,13 +115,13 @@
                     <div class="text-center text-gray-900 dark:text-white">
                         <button
                             type="submit"
-                            class="w-full mt-4 mb-4 py-3 rounded-2xl bg-blue-500 hover:bg-blue-700 text-white transition"
+                            class="w-full mt-4 mb-4 py-3 rounded-2xl bg-blue-500 hover:bg-blue-700 text-white transition cursor-pointer"
                         >
                             Створити акаунт
                         </button>
                         <p>Вже маєте акаунт? </p>
-                        <a asp-controller="Login" asp-action="Index"
-                           class="text-blue-500 hover:underline">Увійти</a>
+                        <a asp-controller="Login" asp-action="Index" asp-route-return-url="@ViewData["ReturnUrl"]"
+                           class="text-blue-500 hover:underline cursor-pointer">Увійти</a>
                     </div>
 
                 </form>
