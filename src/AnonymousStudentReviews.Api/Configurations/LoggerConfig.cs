@@ -4,7 +4,7 @@ namespace AnonymousStudentReviews.Api.Configurations;
 
 public static class LoggerConfig
 {
-    public static WebApplicationBuilder AddLoggerConfigs(this WebApplicationBuilder builder)
+    public static WebApplicationBuilder AddLoggerConfig(this WebApplicationBuilder builder)
     {
         builder.Host.UseSerilog();
 
