@@ -8,7 +8,7 @@ public class EmailSecretOptions
 
     [Required(ErrorMessage = "Missing configuration value for 'EmailSecrets:EmailVerificationTokenHashKey'.")]
     public string EmailVerificationTokenHashKey { get; init; } = string.Empty;
-    
+
     [Required(ErrorMessage = "Missing configuration value for 'EmailSecrets:EmailHashKey'.")]
     public string EmailHashKey { get; init; } = string.Empty;
 }
