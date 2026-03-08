@@ -1,8 +1,6 @@
 using System.Text.Json.Serialization;
 
-using AnonymousStudentReviews.Api;
 using AnonymousStudentReviews.Api.Configurations;
-using AnonymousStudentReviews.Api.Options;
 using AnonymousStudentReviews.Infrastructure.Data;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -15,20 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<ApplicationDatabaseContext>();
 
-var corsOptions = new CorsOptions();
-builder.Configuration.GetSection(CorsOptions.SectionName).Bind(corsOptions);
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(ApiConstants.CorsPolicyName,
-        policy =>
-        {
-            policy.WithOrigins(corsOptions.AllowedOrigins.ToArray())
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials();
-        });
-});
+builder.AddCorsConfig();
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -54,7 +39,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-builder.AddLoggerConfigs();
+builder.AddLoggerConfig();
 
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(options =>
