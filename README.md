@@ -1,4 +1,4 @@
-﻿# backend
+# backend
 
 ## Run Locally
 
@@ -41,6 +41,19 @@ The app connects to two PostgreSQL databases. You can override these in your `.e
 ### Migrations
 * `Migrations` - Database migration behavior.
   * `Migrations:ApplyMigrationsOnStartup` (boolean) - Automatically applies pending Entity Framework database migrations on startup. Usually set to true in Development.
+
+### AWS Secrets Manager
+The app supports loading secrets from [AWS Systems Manager Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html) (including values backed by Secrets Manager via SSM) using the `Amazon.Extensions.Configuration.SystemsManager` package. When enabled, all parameters under the configured path are merged into the app's configuration, allowing sensitive values (e.g. database passwords, API keys) to be stored securely in AWS instead of the `.env` file.
+
+AWS Secrets are **only loaded in non-Development environments**. In `appsettings.Development.json`, `Secrets:UseAws` defaults to `false` so local development uses the `.env` file as usual.
+
+* `Secrets` - Controls whether AWS secrets are loaded at startup.
+  * `Secrets:UseAws` (boolean) - Set to `true` to pull configuration from AWS SSM/Secrets Manager. In `appsettings.json` (production) this defaults to `true`; in `appsettings.Development.json` it defaults to `false`.
+
+When `Secrets:UseAws` is `true`, you must also provide:
+* `AwsSecretPath` (string) - The SSM Parameter Store path prefix to load (e.g. `/aws/reference/secretsmanager/my_secret`). Set this in your `.env` file or as an environment variable. The app will throw a startup error if this value is missing.
+
+> **AWS credentials**: The app uses the default AWS credential chain (environment variables `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` / `AWS_SESSION_TOKEN`, shared credentials file, IAM role, etc.). Make sure the runtime environment has an IAM role or credentials with at least `ssm:GetParametersByPath` and `secretsmanager:GetSecretValue` permissions on the configured path.
 
 ### Security and Hashing
 * `EmailSecrets` - Cryptographic keys used for secure operations.

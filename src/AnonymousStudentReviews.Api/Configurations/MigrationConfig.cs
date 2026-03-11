@@ -18,7 +18,7 @@ public static class MigrationConfig
         logger.LogInformation("Migrations applied successfully");
     }
 
-    public static bool ShouldApplyMigrationsOnStartup(IConfiguration configuration, ILogger logger)
+    public static bool ShouldApplyMigrationsOnStartup(this IConfiguration configuration, ILogger logger)
     {
         var applyMigrationsOnStartupString = configuration["Migrations:ApplyMigrationsOnStartup"];
 

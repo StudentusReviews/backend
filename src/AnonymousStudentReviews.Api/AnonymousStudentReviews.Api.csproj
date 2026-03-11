@@ -21,6 +21,7 @@
         <PackageReference Include="Quartz" Version="3.15.1"/>
         <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.15.1"/>
         <PackageReference Include="Serilog.AspNetCore" Version="9.0.0"/>
+        <PackageReference Include="Amazon.Extensions.Configuration.SystemsManager" Version="7.1.0"/>
     </ItemGroup>
 
     <ItemGroup>

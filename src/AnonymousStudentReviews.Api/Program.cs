@@ -15,11 +15,16 @@ builder.AddLoggerConfig();
 
 var appLogger = new SerilogLoggerFactory(Log.Logger).CreateLogger<Program>();
 
+if (!builder.Environment.IsDevelopment() && builder.Configuration.ShouldUseAwsSecrets(appLogger))
+{
+    builder.AddAwsSecretsConfig();
+}
+
 builder.Services.AddServiceConfig(appLogger, builder.Configuration, builder.Environment);
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment() && MigrationConfig.ShouldApplyMigrationsOnStartup(app.Configuration, appLogger))
+if (app.Environment.IsDevelopment() && app.Configuration.ShouldApplyMigrationsOnStartup(appLogger))
 {
     app.UseMigrations(appLogger);
 }
